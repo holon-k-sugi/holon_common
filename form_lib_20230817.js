@@ -90,7 +90,7 @@ class RadioButtons {
     this.list[name].setMark(mark, unmark);
   }
   setInitialValue(groupName, num) {
-    if (hasNotLoaded()) this.list[groupName].setInitialValue(num);
+    this.list[groupName].setInitialValue(num);
   }
 }
 
@@ -100,6 +100,7 @@ class RadioButton {
     this.reverseList = {};
     this.mark = '◯';
     this.unmark = '';
+    this.initialValue = '';
   }
   getAllButtonNameList() {
     return Object.keys(this.buttonList);
@@ -119,7 +120,10 @@ class RadioButton {
     this.unmark = unmark;
   }
   setInitialValue(num) {
-    setV(this.getButtonName[num], this.mark);
+    this.initialValue = num;
+  }
+  initialize() {
+    setV(this.getButtonName(this.initialValue), this.mark);
   }
   buttonExists(num) {
     return this.reverseList[num] != undefined;
@@ -492,6 +496,7 @@ function onLoadRadioButton() {
         });
       });
     });
+    if (hasNotLoaded()) radioButtons.list[groupName].initialize();
   });
   if (hasNotLoaded()) setV('HAS_LOADED', 'true');
 }
