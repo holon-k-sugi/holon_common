@@ -89,6 +89,9 @@ class RadioButtons {
   setMark(name, mark, unmark) {
     this.list[name].setMark(mark, unmark);
   }
+  setInitialValue(groupName, num) {
+    if (hasNotLoaded()) this.list[groupName].setInitialValue(num);
+  }
 }
 
 class RadioButton {
@@ -114,6 +117,9 @@ class RadioButton {
   setMark(mark, unmark) {
     this.mark = mark;
     this.unmark = unmark;
+  }
+  setInitialValue(num) {
+    setV(this.getButtonName[num], this.mark);
   }
   buttonExists(num) {
     return this.reverseList[num] != undefined;
@@ -444,6 +450,10 @@ function calcSubDateFromDate(dateId, subMonth = 0, subDay = 0) {
   return toDateField(result);
 }
 
+function hasNotLoaded() {
+  return inputObjects.objExists('HAS_LOADED') && !getV('HAS_LOADED');
+}
+
 // Load 時実行
 function onLoadCompanyMaster() {
   setV('JGYNSHBIRTHDAY_Y', getMaster('JGYNSHBIRTHDAY').slice(0, 4));
@@ -483,6 +493,7 @@ function onLoadRadioButton() {
       });
     });
   });
+  if (hasNotLoaded()) setV('HAS_LOADED', 'true');
 }
 
 function onLoadDocumentEmployeesList(employees) {
