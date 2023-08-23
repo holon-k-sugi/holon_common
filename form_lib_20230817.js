@@ -99,7 +99,7 @@ class RadioButton {
     this.buttonList = {};
     this.reverseList = {};
     this.mark = '◯';
-    this.unmark = '';
+    this.unmark = '​';
     this.initialValue = '';
   }
   getAllButtonNameList() {
