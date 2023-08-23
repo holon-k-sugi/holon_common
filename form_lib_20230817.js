@@ -123,7 +123,6 @@ class RadioButton {
     this.initialValue = num;
   }
   initialize() {
-    console.log(this.buttonList);
     if (this.initialValue) setV(this.getButtonName(this.initialValue), this.mark);
   }
   buttonExists(num) {
@@ -456,7 +455,7 @@ function calcSubDateFromDate(dateId, subMonth = 0, subDay = 0) {
 }
 
 function hasNotLoaded() {
-  return inputObjects.objExists('HAS_LOADED') && !getV('HAS_LOADED');
+  return inputObjects.objExists('HAS_LOADED') && getV('HAS_LOADED') != $('.iftc_cf_viewerframe > div').length;
 }
 
 // Load 時実行
@@ -499,7 +498,7 @@ function onLoadRadioButton() {
     });
     if (hasNotLoaded()) radioButtons.list[groupName].initialize();
   });
-  if (hasNotLoaded()) setV('HAS_LOADED', 'true');
+  if (hasNotLoaded()) setV('HAS_LOADED', $('.iftc_cf_viewerframe > div').length);
 }
 
 function onLoadDocumentEmployeesList(employees) {
