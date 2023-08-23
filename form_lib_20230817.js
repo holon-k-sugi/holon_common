@@ -123,6 +123,7 @@ class RadioButton {
     this.initialValue = num;
   }
   initialize() {
+    console.log(this.buttonList);
     setV(this.getButtonName(this.initialValue), this.mark);
   }
   buttonExists(num) {
