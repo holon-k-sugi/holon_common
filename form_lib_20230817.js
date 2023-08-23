@@ -124,7 +124,7 @@ class RadioButton {
   }
   initialize() {
     console.log(this.buttonList);
-    setV(this.getButtonName(this.initialValue), this.mark);
+    if (this.initialValue) setV(this.getButtonName(this.initialValue), this.mark);
   }
   buttonExists(num) {
     return this.reverseList[num] != undefined;
