@@ -207,6 +207,8 @@ class CompanyMaster {
       JGYNSHBIRTHDAY_D: 'JGYNSHBIRTHDAY_D',
       TENANT_ID: 'TENANT_ID',
       CREATED_TENANT_ID: 'CREATED_TENANT_ID',
+      ROUKI_ID: 'LSIO_ID',
+      ROUKI_NAME: 'LSIO'
     };
   }
   initialize() {
