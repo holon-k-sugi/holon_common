@@ -228,7 +228,7 @@ class CompanyMaster {
     return getV(this.toMasterName(name));
   }
   setMaster(name) {
-    const exists = [name,this.toMasterName(name)].filter(v=>inputObjects.objExists(v));
+    const exists = [name,this.toMasterName(name)].filter(v=>!inputObjects.objExists(v));
     if(exists.length>0){
       exists.forEach(v=>console.warn(`${v}は存在しないオブジェクト`));
       return;
