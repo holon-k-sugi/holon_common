@@ -3,11 +3,11 @@ class InputObjects {
   }
   initialize() {
     this.list = allObj.reduce((target, id) => {
-      const splitedId = id.split('_');
-      splitedId.shift();
-      const num = +splitedId.pop();
-      const page = +splitedId.pop();
-      const objName = splitedId.join('_');
+      const splitId = id.split('_');
+      splitId.shift();
+      const num = +splitId.pop();
+      const page = +splitId.pop();
+      const objName = splitId.join('_');
       if (!target[objName]) target[objName] = new InputObjectsByName();
       target[objName].register(id, page);
       return target;
@@ -57,9 +57,9 @@ class RadioButtons {
   }
   initialize() {
     this.list = inputObjects.getAllObjNameList().reduce((target, name) => {
-      const splitedName = name.split('_');
-      const end = splitedName.pop();
-      const groupName = splitedName.join('_');
+      const splitName = name.split('_');
+      const end = splitName.pop();
+      const groupName = splitName.join('_');
       if (/^R[0-9]{1,2}$/.test(end)) {
         if (!target[groupName]) target[groupName] = new RadioButton();
         target[groupName].registerButton(`${groupName}_${end}`, +end.slice(1));
@@ -71,9 +71,9 @@ class RadioButtons {
     return Object.keys(this.list);
   }
   onClickRadioButtonL(name, index) {
-    const splitedName = name.split('_');
-    const end = splitedName.pop();
-    const groupName = splitedName.join('_');
+    const splitName = name.split('_');
+    const end = splitName.pop();
+    const groupName = splitName.join('_');
     const preState = getV(...[name, index].filter(v => v != undefined));
     this.list[groupName].getAllButtonNameList().forEach(buttonName => {
       const tmp = [buttonName, index, this.list[groupName].unmark].filter(v => v != undefined);
@@ -214,10 +214,10 @@ class CompanyMaster {
   initialize() {
   }
   toMasterName(name) {
-    const splitedName = name.split('_');
-    if (!(splitedName[0] in this)) return this.OTHER[name];
-    const objPrefix = splitedName.shift();
-    const objSuffix = splitedName.join('_');
+    const splitName = name.split('_');
+    if (!(splitName[0] in this)) return this.OTHER[name];
+    const objPrefix = splitName.shift();
+    const objSuffix = splitName.join('_');
     return this[objPrefix][objSuffix];
   }
   getMaster(name) {
@@ -245,6 +245,7 @@ class CompanyMaster {
       this.setMaster(name);
     });
   }
+
 }
 
 class DocumentEmployees {
@@ -257,46 +258,95 @@ class DocumentEmployees {
       this.list = [];
     }
   }
-  getEmployeesValue(index, key) {
-    if (this.list[index]?.[key] == undefined) return '';
-    return this.list[index][key];
+  getList() {
+    return this.list;
   }
   countEmployees() {
     return this.list.length;
   }
+  contains(index, key) {
+    return this.list[index]?.[key] != undefined;
+  }
+  containsId(id) {
+    return this.list[index].some(v => v.id == id);
+  }
+  makeIdList() {
+    return this.list.map(v => {
+      return { id: v[id] };
+    });
+  }
+  getEmployeesValue(index, key) {
+    const splitKey = key.split('_'); splitKey.pop();
+    const keyPrefix = splitKey.join('_');
+    const splitKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
+    const haveSplit = splitKeyValue.some(v => v == keyPrefix);
+    if (haveSplit) return this.splitEmployeesValue(index, key);
+    return this.list[index]?.[key] == undefined ? '' : this.list[index][key];
+  }
+  splitEmployeesValue(index, key) {
+    const splitKey = key.split('_');
+    const keyNum = +splitKey.pop();
+    const keyName = splitKey.join('_');
+    const notSplitValue = getEmployeesValue(index, keyName);
+    if (notSplitValue != '') return '';
+    if (keyName == 'birthday' || keyName == 'hire_date') {
+      return toWareki(notSplitValue)[keyNum];
+    }
+    if (keyName == 'employment_insurance_number') {
+      return notSplitValue.split('-')[keyNum];
+    }
+    return '';
+  }
 }
 
 class DocumentEmployeesContents {
-  constructor() {
-  }
-  initialize() {
+  constructor(employees) {
     try {
-      this.list = JSON.parse(getV('DOCUMENT_EMPLOYEES_CONTENTS'));
-      if (!Array.isArray(this.list)) this.list = JSON.parse(this.list);
-      if (!Array.isArray(this.list)) this.list = [];
+      this.previous = JSON.parse(getV('PREVIOUS_DOC_EMP_LIST'));
     } catch (e) {
-      this.list = [];
+      this.previous = [];
     }
+    // employees.max の大きさの配列を用意し、PREVIOUS_DOC_EMP_LIST から Id を格納
+    const previousDocEmpContents = [...Array(employees.max ?? 0)].map((_, i) => {
+      if (this.previous.length > i)
+        return { id: this.previous[i].id };
+      else
+        return {};
+    });
+    // 現在の書類の内容と合成
+    Object.keys(employees.list).forEach(key => {
+      [...Array(employees.max ?? 0)].forEach((_, i) => {
+        let objList = employees.list[key](i);
+        if (Array.isArray(objList)) objList = objList[0];
+        if (obj.name != undefined && (obj.page == undefined || obj.page < getP(obj.name)))
+          previousDocEmpContents[i][key] = getV(obj.name, obj.page);
+      });
+    });
+    // DOCUMENT_EMPLOYEES_LIST に存在しない ID のデータを削除
+    const docEmpContents = previousDocEmpContents.filter(v => documentEmployees.containsId(v.id));
+    // DOCUMENT_EMPLOYEES_LIST の内容で上書き
+    docEmpContents.forEach((v, i) => {
+      if (v.id == undefined) v.id = documentEmployees.getEmployeesValue(i, 'id');
+      documentEmployees.getList()[i].forEach(docEmp => {
+        Object.keys(docEmp).forEach(key => {
+          docEmpContents[i][key] = docEmp[key];
+        });
+      });
+    });
+    this.list = docEmpContents;
   }
   getEmployeesValue(index, key) {
     if (this.list[index]?.[key] == undefined) return '';
     return this.list[index][key];
-  }
-  makeSplicedList(documentEmployees) {
-    this.list.splice(0, documentEmployees.countEmployees());//先頭n件を削除
-    const nullIdList = this.list.filter(elm => elm.id == undefined || elm.id == '');//idの存在する要素の削除
-    this.list = [documentEmployees.list, nullIdList].flat();
   }
   countElm() {
     return this.list.length;
   }
 }
-
 const inputObjects = new InputObjects();
 const radioButtons = new RadioButtons();
 const companyMaster = new CompanyMaster();
 const documentEmployees = new DocumentEmployees();
-const documentEmployeesContents = new DocumentEmployeesContents();
 // 汎用関数
 function getV(name, index) {
   if (radioButtons.radioExists(name)) return radioButtons.list[name].getRadioButtonValue(index);
@@ -335,6 +385,9 @@ function setN(...args) {
   if (isNaN(Number(val))) throw new Error(`${name} にセットしようとしている ${val} は数値ではありません`);
   setV(...tmp);
 }
+function getP(name) {
+  return inputObjects.getLengthOfPageListByName(name);
+}
 function toHan(x) { return x.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/[－]/g, "-"); }
 function isCheckBox(id) {
   return $('#' + id).prop('tagName') == 'INPUT' && $('#' + id).attr('type') == 'checkbox';
@@ -350,9 +403,9 @@ function makeSelector(names) {
   return names.map(name => getSelector(name)).filter(v => v).join();
 }
 function getObjectName(evt) {
-  const splitedId = evt.currentTarget.id.split('_');
-  splitedId.shift(); splitedId.pop(); splitedId.pop();
-  return splitedId.join('_');
+  const splitId = evt.currentTarget.id.split('_');
+  splitId.shift(); splitId.pop(); splitId.pop();
+  return splitId.join('_');
 }
 function getCheckValue(name, index = 0) {
   return $('#' + inputObjects.getAllIds(name)[index]).prop('checked');
@@ -477,7 +530,6 @@ function onLoadCompanyMaster() {
     });
   }
 }
-
 function onLoadRadioButton() {
   radioButtons.getAllGroupNameList().forEach(groupName => {
     radioButtons.list[groupName].getAllButtonNameList().forEach(name => {
@@ -497,73 +549,19 @@ function onLoadRadioButton() {
 }
 
 function onLoadDocumentEmployeesList(employees) {
-  if (Object.keys(employees.list).length == 0) return;
-  // list = {full_name:(i)=>[`ITEXT${3000+i}`]}
-  // list = {full_name:[[{name:'ITEXT1000'},{name:'ITEXT1001'}],{name:'ITEXT1002',page:0}]}
-  documentEmployeesContents.makeSplicedList(documentEmployees);
-  const count = documentEmployeesContents.countElm();
+  const docEmpContents = new DocumentEmployeesContents(employees);
+  // 配列を利用して書類の内容を上書き
   Object.keys(employees.list).forEach(key => {
     [...Array(employees.max)].forEach((_, i) => {
       let objList = employees.list[key](i);
       if (!Array.isArray(objList)) objList = [objList];
       objList.forEach(obj => {
-        if (i < count && (obj.page < inputObjects.getLengthOfPageListByName(obj.name) || obj.page == undefined)) setEmployeesValue(key, i, obj);
-        setEventHandlerForDocumentEmployees(employees, obj, objList);
+        if (obj.page < inputObjects.getLengthOfPageListByName(obj.name) || obj.page == undefined)
+          setV(obj.name, obj.page, docEmpContents.getEmployeesValue(i, key));
       });
     });
   });
-}
-
-function setEmployeesValue(key, index, obj) {
-  const splitedKey = key.split('_'); splitedKey.pop();
-  const keyPrefix = splitedKey.join('_');
-  const splitedKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
-  const isSplited = splitedKeyValue.some(v => v == keyPrefix);
-  const keyTmp = isSplited ? keyPrefix : key;
-  const value = documentEmployeesContents.getEmployeesValue(index, keyTmp);
-  setV(obj.name, obj.page, splitEmployeesValue(key, value));
-}
-
-function splitEmployeesValue(key, value) {
-  if (value == '') return value;
-  const splitedKey = key.split('_');
-  const keyNum = +splitedKey.pop();
-  const keyName = splitedKey.join('_');
-  if (value != '' && keyName == 'birthday' || keyName == 'hire_date') {
-    return toWareki(value)[keyNum];
-  }
-  if (keyName == 'employment_insurance_number') {
-    return value.split('-')[keyNum];
-  }
-  return value;
-}
-
-function setEventHandlerForDocumentEmployees(employees, obj, objList) {
-  getIds(obj.name, obj.page).forEach(id => {
-    const event = isCheckBox(id) ? 'click.initialize' : 'change.initialize';
-    $(getSelector(obj.name, obj.page)).on(event, (evt) => {
-      setDocumentEmployeesContents(employees);
-      objList.forEach((_, j) => {
-        if (obj.page < inputObjects.getLengthOfPageListByName(obj.name) && inputObjects.getIdsbyPage(objList[j].name, objList[j].page).some(id => id == evt.currentTarget.id)) {
-          setV(objList[j].name, objList[j].page, evt.currentTarget.value);
-        }
-      });
-    });
-  });
-}
-
-function setDocumentEmployeesContents(employees) {
-  const result = [...Array(employees.max)].map((_, i) => {
-    return { id: documentEmployees.getEmployeesValue(i, 'id') };
-  });
-  const count = Math.max(documentEmployees.countEmployees(), employees.max ?? 0);
-  Object.keys(employees.list).forEach(key => {
-    [...Array(count)].forEach((_, i) => {
-      const obj = employees.list[key](i);
-      if (obj.name != undefined && (obj.page == undefined || (obj.page < inputObjects.getLengthOfPageListByName(obj.name)))) result[i][key] = getV(obj.name, obj.page);
-    });
-  });
-  setV('DOCUMENT_EMPLOYEES_CONTENTS', JSON.stringify(result));
+  setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
 }
 
 function setFocusColor() {
@@ -611,5 +609,4 @@ function initializeInstances() {
   radioButtons.initialize();
   companyMaster.initialize();
   documentEmployees.initialize();
-  documentEmployeesContents.initialize();
 }
