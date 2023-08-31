@@ -326,6 +326,7 @@ class DocumentEmployeesContents {
     const docEmpContents = previousDocEmpContents.filter(v => v.id == undefined || documentEmployees.containsId(v.id));
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
     docEmpContents.forEach((v, i) => {
+      if (documentEmployees.countEmployees() > i) return;
       if (v.id == undefined) v.id = documentEmployees.getEmployeesValue(i, 'id');
       Object.keys(documentEmployees.getList()[i]).forEach(key => {
         docEmpContents[i][key] = documentEmployees.getList()[i][key];
