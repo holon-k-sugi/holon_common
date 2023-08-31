@@ -328,7 +328,7 @@ class DocumentEmployeesContents {
     docEmpContents.forEach((v, i) => {
       if (v.id == undefined) v.id = documentEmployees.getEmployeesValue(i, 'id');
         Object.keys(documentEmployees.getList()[i]).forEach(key => {
-          docEmpContents[i][key] = docEmp[key];
+          docEmpContents[i][key] = documentEmployees.getList()[i][key];
         });
     });
     this.list = docEmpContents;
