@@ -136,7 +136,7 @@ class RadioButton {
     }).filter(v => v).length > 1;
     if (isWrong) this.getAllButtonNameList().forEach(name => {
       const init = $(getSelector(name)).attr('data-init-value');
-      if (init != undefined) setV(name, this.unmark);
+      if (init) setV(name, this.unmark);
     });
   }
 }
