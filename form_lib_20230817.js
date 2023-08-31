@@ -288,6 +288,7 @@ class DocumentEmployees {
     const keyNum = +splitKey.pop();
     const keyName = splitKey.join('_');
     const notSplitValue = this.getEmployeesValue(index, keyName);
+    console.log(index, key);
     if (notSplitValue == '') return '';
     if (keyName == 'birthday' || keyName == 'hire_date') {
       return toWareki(notSplitValue)[keyNum];
