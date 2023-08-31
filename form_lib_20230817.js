@@ -113,7 +113,7 @@ class RadioButton {
   }
   setMark(mark, unmark) {
     this.mark = mark;
-    this.unmark = unmark;
+    if (unmark != '') this.unmark = unmark;
   }
   buttonExists(num) {
     return this.reverseList[num] != undefined;
@@ -365,7 +365,7 @@ const inputObjects = new InputObjects();
 const radioButtons = new RadioButtons();
 const companyMaster = new CompanyMaster();
 const documentEmployees = new DocumentEmployees();
-const documentEmployeesContents = {initialize:()=>undefined};
+const documentEmployeesContents = { initialize: () => undefined };
 // 汎用関数
 function getV(name, index) {
   if (radioButtons.radioExists(name)) return radioButtons.list[name].getRadioButtonValue(index);
