@@ -280,7 +280,6 @@ class DocumentEmployees {
     const keyPrefix = splitKey.join('_');
     const splitKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
     const haveSplit = splitKeyValue.some(v => v == keyPrefix);
-    console.log(index, key, haveSplit);
     if (haveSplit) return this.splitEmployeesValue(index, key);
     return this.list[index]?.[key] == undefined ? '' : this.list[index][key];
   }
@@ -289,7 +288,6 @@ class DocumentEmployees {
     const keyNum = +splitKey.pop();
     const keyName = splitKey.join('_');
     const notSplitValue = this.getEmployeesValue(index, keyName);
-    console.log(index, keyName);
     if (notSplitValue == '') return '';
     if (keyName == 'birthday' || keyName == 'hire_date') {
       return toWareki(notSplitValue)[keyNum];
@@ -329,7 +327,8 @@ class DocumentEmployeesContents {
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
     docEmpContents.forEach((docEmp, i) => {
       Object.keys(docEmp).forEach(key => {
-        docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key)
+        if (documentEmployees.contains(i, key))
+          docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
       });
     });
     this.list = docEmpContents;
@@ -560,7 +559,6 @@ function onLoadDocumentEmployeesList(employees) {
       });
     });
   });
-  console.log(getV('DOCUMENT_EMPLOYEES_LIST'));
   setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
 }
 
