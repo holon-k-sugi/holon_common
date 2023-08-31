@@ -327,9 +327,9 @@ class DocumentEmployeesContents {
     // DOCUMENT_EMPLOYEES_LIST に存在しない ID のデータを削除
     const docEmpContents = previousDocEmpContents.filter(v => v.id == undefined || documentEmployees.containsId(v.id));
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
-    documentEmployees.getList().forEach((docEmp, i) => {
+    docEmpContents.forEach((docEmp, i) => {
       Object.keys(docEmp).forEach(key => {
-        docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
+        docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key)
       });
     });
     this.list = docEmpContents;
