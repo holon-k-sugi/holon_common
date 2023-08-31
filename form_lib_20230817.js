@@ -250,6 +250,7 @@ class CompanyMaster {
 
 class DocumentEmployees {
   constructor() {
+    this.splitKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
   }
   initialize() {
     try {
@@ -265,7 +266,10 @@ class DocumentEmployees {
     return this.list.length;
   }
   contains(index, key) {
-    return this.list[index]?.[key] != undefined;
+    const splitKey = key.split('_'); splitKey.pop();
+    const keyPrefix = splitKey.join('_');
+    const haveSplit = this.splitKeyValue.some(v => v == keyPrefix);
+    return haveSplit || this.list[index]?.[key] != undefined;
   }
   containsId(id) {
     return this.list.some(v => v.id == id);
@@ -278,8 +282,7 @@ class DocumentEmployees {
   getEmployeesValue(index, key) {
     const splitKey = key.split('_'); splitKey.pop();
     const keyPrefix = splitKey.join('_');
-    const splitKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
-    const haveSplit = splitKeyValue.some(v => v == keyPrefix);
+    const haveSplit = this.splitKeyValue.some(v => v == keyPrefix);
     if (haveSplit) return this.splitEmployeesValue(index, key);
     return this.list[index]?.[key] == undefined ? '' : this.list[index][key];
   }
