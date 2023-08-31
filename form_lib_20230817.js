@@ -268,7 +268,7 @@ class DocumentEmployees {
     return this.list[index]?.[key] != undefined;
   }
   containsId(id) {
-    return this.list[index].some(v => v.id == id);
+    return this.list.some(v => v.id == id);
   }
   makeIdList() {
     return this.list.map(v => {
