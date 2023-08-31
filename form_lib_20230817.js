@@ -327,11 +327,9 @@ class DocumentEmployeesContents {
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
     docEmpContents.forEach((v, i) => {
       if (v.id == undefined) v.id = documentEmployees.getEmployeesValue(i, 'id');
-      documentEmployees.getList()[i].forEach(docEmp => {
-        Object.keys(docEmp).forEach(key => {
+        Object.keys(documentEmployees.getList()[i]).forEach(key => {
           docEmpContents[i][key] = docEmp[key];
         });
-      });
     });
     this.list = docEmpContents;
   }
@@ -550,6 +548,7 @@ function onLoadRadioButton() {
 
 function onLoadDocumentEmployeesList(employees) {
   const docEmpContents = new DocumentEmployeesContents(employees);
+  console.log('fuga');
   // 配列を利用して書類の内容を上書き
   Object.keys(employees.list).forEach(key => {
     [...Array(employees.max)].forEach((_, i) => {
@@ -561,6 +560,7 @@ function onLoadDocumentEmployeesList(employees) {
       });
     });
   });
+  console.log('hoge');
   setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
 }
 
