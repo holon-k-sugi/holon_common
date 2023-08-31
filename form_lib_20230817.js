@@ -134,10 +134,8 @@ class RadioButton {
     const isWrong = this.getAllButtonNameList().map(name => {
       return getV(name) == this.mark;
     }).filter(v => v).length > 1;
-    console.log(isWrong);
     if (isWrong) this.getAllButtonNameList().forEach(name => {
       const init = $(getSelector(name)).attr('data-init-value');
-      console.log(name, init, !!init);
       if (!!init) setV(name, this.unmark);
     });
   }
@@ -265,6 +263,10 @@ class DocumentEmployees {
   }
   initialize() {
     try {
+      if (!inputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
+        this.list = [];
+        return;
+      }
       this.list = JSON.parse(getV('DOCUMENT_EMPLOYEES_LIST'));
     } catch (e) {
       this.list = [];
@@ -316,6 +318,10 @@ class DocumentEmployees {
 class DocumentEmployeesContents {
   constructor(employees) {
     try {
+      if (!inputObjects.objExists('PREVIOUS_DOC_EMP_LIST')) {
+        this.previous = [];
+        return;
+      }
       this.previous = JSON.parse(getV('PREVIOUS_DOC_EMP_LIST'));
     } catch (e) {
       this.previous = [];
@@ -563,6 +569,14 @@ function onLoadRadioButton() {
 }
 
 function onLoadDocumentEmployeesList(employees) {
+  if (!inputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
+    console.warn(`DOCUMENT_EMPLOYEES_LISTは存在しないオブジェクト`);
+    return;
+  }
+  if (!inputObjects.objExists('PREVIOUS_DOC_EMP_LIST')) {
+    console.warn(`PREVIOUS_DOC_EMP_LISTは存在しないオブジェクト`);
+    return;
+  }
   const docEmpContents = new DocumentEmployeesContents(employees);
   // 配列を利用して書類の内容を上書き
   Object.keys(employees.list).forEach(key => {
