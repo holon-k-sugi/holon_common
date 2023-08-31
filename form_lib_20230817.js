@@ -548,7 +548,6 @@ function onLoadRadioButton() {
 
 function onLoadDocumentEmployeesList(employees) {
   const docEmpContents = new DocumentEmployeesContents(employees);
-  console.log('fuga');
   // 配列を利用して書類の内容を上書き
   Object.keys(employees.list).forEach(key => {
     [...Array(employees.max)].forEach((_, i) => {
@@ -560,7 +559,7 @@ function onLoadDocumentEmployeesList(employees) {
       });
     });
   });
-  console.log('hoge');
+  console.log(getV('DOCUMENT_EMPLOYEES_LIST'));
   setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
 }
 
