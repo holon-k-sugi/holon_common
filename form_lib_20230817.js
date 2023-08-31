@@ -365,6 +365,7 @@ const inputObjects = new InputObjects();
 const radioButtons = new RadioButtons();
 const companyMaster = new CompanyMaster();
 const documentEmployees = new DocumentEmployees();
+const documentEmployeesContents = {initialize:()=>undefined};
 // 汎用関数
 function getV(name, index) {
   if (radioButtons.radioExists(name)) return radioButtons.list[name].getRadioButtonValue(index);
