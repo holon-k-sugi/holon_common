@@ -323,7 +323,7 @@ class DocumentEmployeesContents {
       });
     });
     // DOCUMENT_EMPLOYEES_LIST に存在しない ID のデータを削除
-    const docEmpContents = previousDocEmpContents.filter(v => v.id != undefined && documentEmployees.containsId(v.id));
+    const docEmpContents = previousDocEmpContents.filter(v => v.id == undefined || documentEmployees.containsId(v.id));
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
     docEmpContents.forEach((v, i) => {
       if (v.id == undefined) v.id = documentEmployees.getEmployeesValue(i, 'id');
