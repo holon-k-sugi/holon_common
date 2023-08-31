@@ -130,6 +130,15 @@ class RadioButton {
       return getV(this.reverseList[num], index) == this.mark;
     });
   }
+  setCorrectMark() {
+    const isWrong = this.getAllButtonNameList().map(name => {
+      return getV(name) == this.mark;
+    }).filter(v => v).length > 1;
+    if (isWrong) this.getAllButtonNameList().forEach(name => {
+      const init = $(getSelector(name)).attr('data-init-value');
+      if (init != undefined) setV(name, this.unmark);
+    });
+  }
 }
 
 class CompanyMaster {
@@ -514,6 +523,7 @@ function onLoadCompanyMaster() {
   setV('JGYNSHBIRTHDAY_Y', getMaster('JGYNSHBIRTHDAY').slice(0, 4));
   setV('JGYNSHBIRTHDAY_M', getMaster('JGYNSHBIRTHDAY').slice(4, 6));
   setV('JGYNSHBIRTHDAY_D', getMaster('JGYNSHBIRTHDAY').slice(6, 8));
+  if (inputObjects.objExists('LSIO') && inputObjects.objExists('ROUKI_NAME')) setV('ROUKI_NAME', getMaster('LSIO').split('労働基準監督署')[0]);
   Object.keys(companyMaster).forEach(type => {
     if (type == 'SHRSH'
       && (getMaster('TENANT_ID') == getMaster('CREATED_TENANT_ID')
@@ -546,6 +556,7 @@ function onLoadRadioButton() {
         });
       });
     });
+    radioButtons.list[groupName].setCorrectMark();
   });
 }
 
