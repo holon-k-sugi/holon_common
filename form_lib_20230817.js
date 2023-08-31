@@ -523,7 +523,7 @@ function onLoadCompanyMaster() {
   setV('JGYNSHBIRTHDAY_Y', getMaster('JGYNSHBIRTHDAY').slice(0, 4));
   setV('JGYNSHBIRTHDAY_M', getMaster('JGYNSHBIRTHDAY').slice(4, 6));
   setV('JGYNSHBIRTHDAY_D', getMaster('JGYNSHBIRTHDAY').slice(6, 8));
-  if (inputObjects.objExists('LSIO') && inputObjects.objExists('ROUKI_NAME')) setV('ROUKI_NAME', getMaster('LSIO').split('労働基準監督署')[0]);
+  if (inputObjects.objExists('LSIO') && inputObjects.objExists('ROUKI_NAME') && getV('LSIO') != '') setV('ROUKI_NAME', getV('LSIO').split('労働基準監督署')[0]);
   Object.keys(companyMaster).forEach(type => {
     if (type == 'SHRSH'
       && (getMaster('TENANT_ID') == getMaster('CREATED_TENANT_ID')
