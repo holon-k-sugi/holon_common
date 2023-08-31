@@ -134,8 +134,10 @@ class RadioButton {
     const isWrong = this.getAllButtonNameList().map(name => {
       return getV(name) == this.mark;
     }).filter(v => v).length > 1;
+    console.log(isWrong);
     if (isWrong) this.getAllButtonNameList().forEach(name => {
       const init = $(getSelector(name)).attr('data-init-value');
+      console.log(init);
       if (init) setV(name, this.unmark);
     });
   }
