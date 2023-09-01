@@ -281,8 +281,7 @@ class DocumentEmployees {
   contains(index, key) {
     const splitKey = key.split('_'); splitKey.pop();
     const keyPrefix = splitKey.join('_');
-    const haveSplit = this.splitKeyValue.some(v => v == keyPrefix);
-    return haveSplit || this.list[index]?.[key] != undefined;
+    return this.list[index]?.[keyPrefix] != undefined || this.list[index]?.[key] != undefined;
   }
   containsId(id) {
     return this.list.some(v => v.id == id);
