@@ -342,10 +342,11 @@ class DocumentEmployeesContents {
       });
     });
     // DOCUMENT_EMPLOYEES_LIST に存在しない ID のデータを削除
-    const docEmpContents = previousDocEmpContents.filter(v => v.id === undefined || documentEmployees.containsId(v.id));
-    const sublength = previousDocEmpContents.length - docEmpContents.length;
+    const subDocEmpcontents = previousDocEmpContents.filter(v => v.id === undefined || documentEmployees.containsId(v.id));
+    const sublength = previousDocEmpContents.length - subDocEmpcontents.length;
+    const docEmpContents = subDocEmpcontents.concat([...Array(sublength)]);
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
-    docEmpContents.concat([...Array(sublength)]).forEach((docEmp, i) => {
+    docEmpContents.forEach((docEmp, i) => {
       Object.keys(docEmp).forEach(key => {
         if (documentEmployees.contains(i, key))
           docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
