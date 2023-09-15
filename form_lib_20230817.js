@@ -38,6 +38,12 @@ class InputObjects {
   objExists(name) {
     return this.list[name] !== undefined;
   }
+  getIndexById(id) {
+    const splitId = id.split('_');
+    splitId.shift(); splitId.pop(); splitId.pop();
+    const objName = splitId.join('_');
+    return this.list[objName].getIndexById(id);
+  }
 }
 
 class InputObjectsByName {
@@ -49,6 +55,9 @@ class InputObjectsByName {
   register(id, page) {
     this.objList.push(id);
     this.pageList[page].push(id);
+  }
+  getIndexById(id) {
+    return this.pageList.findIndex(v => v === id);
   }
 }
 
@@ -433,8 +442,11 @@ function getCheckValue(name, index = 0) {
 function setCheckValue(...args) {
   setV(...args);
 }
-function getNumObj(name) {
-  return inputObjects.getObjByName(name).pageList.filter(v => v.length !== 0).length;
+function getIndexById(id) {
+  return inputObjects.getIndexById(id);
+}
+function getIndexByEvt(id) {
+  return inputObjects.getIndexById(evt.currentTarget.id);
 }
 
 function toWareki(dateString) {
