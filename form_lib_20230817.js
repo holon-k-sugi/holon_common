@@ -445,8 +445,11 @@ function setCheckValue(...args) {
 function getIndexById(id) {
   return inputObjects.getIndexById(id);
 }
-function getIndexByEvt(id) {
+function getIndexByEvt(evt) {
   return inputObjects.getIndexById(evt.currentTarget.id);
+}
+function getValueByEvt(evt) {
+  return $('#' + evt.currentTarget.id).val();
 }
 
 function toWareki(dateString) {
