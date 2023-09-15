@@ -57,6 +57,7 @@ class InputObjectsByName {
     this.pageList[page].push(id);
   }
   getIndexById(id) {
+    console.log(id, this.pageList);
     return this.pageList.findIndex(v => v === id);
   }
 }
