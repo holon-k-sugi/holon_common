@@ -344,7 +344,7 @@ class DocumentEmployeesContents {
     // DOCUMENT_EMPLOYEES_LIST に存在しない ID のデータを削除
     const subDocEmpcontents = previousDocEmpContents.filter(v => v.id === undefined || documentEmployees.containsId(v.id));
     const sublength = previousDocEmpContents.length - subDocEmpcontents.length;
-    const docEmpContents = subDocEmpcontents.concat([...Array(sublength)].map({}));
+    const docEmpContents = subDocEmpcontents.concat([...Array(sublength)].map(V => { }));
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
     docEmpContents.forEach((_, i) => {
       Object.keys(employees.list).forEach(key => {
