@@ -344,10 +344,10 @@ class DocumentEmployeesContents {
     // DOCUMENT_EMPLOYEES_LIST に存在しない ID のデータを削除
     const subDocEmpcontents = previousDocEmpContents.filter(v => v.id === undefined || documentEmployees.containsId(v.id));
     const sublength = previousDocEmpContents.length - subDocEmpcontents.length;
-    const docEmpContents = subDocEmpcontents.concat([...Array(sublength)]);
+    const docEmpContents = subDocEmpcontents.concat([...Array(sublength)].map({}));
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
-    docEmpContents.forEach((docEmp, i) => {
-      Object.keys(docEmp).forEach(key => {
+    docEmpContents.forEach((_, i) => {
+      Object.keys(employees.list).forEach(key => {
         if (documentEmployees.contains(i, key))
           docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
       });
