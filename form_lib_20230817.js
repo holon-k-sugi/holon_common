@@ -417,7 +417,10 @@ function setN(...args) {
 function getP(name) {
   return inputObjects.getLengthOfPageListByName(name);
 }
-function toHan(x) { return x.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/[－]/g, "-"); }
+function toHan(input) {
+  if (typeof input !== 'string') return '';
+  return input.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/[－]/g, "-");
+}
 function isCheckBox(id) {
   return $('#' + id).prop('tagName') === 'INPUT' && $('#' + id).attr('type') === 'checkbox';
 }
