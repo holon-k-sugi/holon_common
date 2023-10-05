@@ -431,6 +431,9 @@ function getSelector(name, index = undefined) {
 function makeSelector(names) {
   return names.map(name => getSelector(name)).filter(v => v).join();
 }
+function getLabelSelector(name, index = undefined) {
+  return getIds(name, index).map(id => '#label' + id).join();
+}
 function getObjectName(evt) {
   const splitId = evt.currentTarget.id.split('_');
   splitId.shift(); splitId.pop(); splitId.pop();
