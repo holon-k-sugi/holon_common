@@ -632,7 +632,7 @@ function configureIcon() {
     if (!inputObjects.objExists(icon.name)) return;
     setV(icon.name, icon.string);
     const selector = getSelector(icon.name);
-    $(selector).prop("disabled", true);
+    // $(selector).prop("disabled", true);
     $(selector).css('font-weight', 'bold');
     $(selector).css('font-family', 'メイリオ');
     const fontSize = 8;
