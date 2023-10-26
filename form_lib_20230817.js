@@ -2,12 +2,15 @@ class InputObjects {
   constructor() {
   }
   initialize() {
+    const maxPageNum = 50;
+    this.objListByPage = [...Array(maxPageNum)].map(v => []);
     this.list = allObj.reduce((target, id) => {
       const splitId = id.split('_');
       splitId.shift();
       const num = +splitId.pop();
       const page = +splitId.pop();
       const objName = splitId.join('_');
+      this.objListByPage[page].push({ name: objName, id: id });
       if (!target[objName]) target[objName] = new InputObjectsByName();
       target[objName].register(id, page);
       return target;
@@ -43,6 +46,9 @@ class InputObjects {
     splitId.shift(); splitId.pop(); splitId.pop();
     const objName = splitId.join('_');
     return this.list[objName].getIndexById(id);
+  }
+  getObjListByPage(page) {
+    return this.objListByPage[page];
   }
 }
 
@@ -613,6 +619,47 @@ function onLoadDocumentEmployeesList(employees) {
     });
   });
   setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
+}
+
+function configureIcon() {
+  const iconObj = [
+    { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)' },
+    { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)' },
+    { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)' },
+    { name: 'COPY_PAGE_BUTTON', string: '1ページ目コピー', color: 'rgba(0,30,100,1)' }
+  ];
+  iconObj.forEach(icon => {
+    if (!inputObjects.objExists(icon.name)) return;
+    setV(icon.name, icon.string);
+    const selector = getSelector(icon.name);
+    console.log(selector);
+    $(selector).prop("disabled", true);
+    $(selector).css('font-weight', 'bold');
+    $(selector).css('font-family', 'メイリオ');
+    const fontSize = 8;
+    $(selector).css('font-size', `${fontSize}pt`);
+    $(selector).css('color', 'white');
+    $(selector).css('background', icon.color);
+    $(selector).css('border-radius', '5px');
+    $(selector).css('text-align', 'center');
+    $(selector).css('width', `${(icon.string.length + 2) * fontSize}pt`);
+    $(selector).css('height', `${fontSize * 2}pt`);
+    [...document.styleSheets].forEach(ss => {
+      const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1);
+      result.forEach(x => x.style.visibility = '');
+    });
+  });
+}
+
+function onClickCopyPageButton() {
+  $(getSelector('COPY_PAGE_BUTTON')).on('change', (evt) => {
+    const splitId = evt.currentTarget.id.split('_');
+    splitId.shift(); splitId.pop();
+    const page = +splitId.pop();
+    inputObjects.getObjListByPage(page).forEach(obj => {
+      setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
+    });
+  });
 }
 
 function setFocusColor() {
