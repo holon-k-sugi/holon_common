@@ -632,7 +632,6 @@ function configureIcon() {
     if (!inputObjects.objExists(icon.name)) return;
     setV(icon.name, icon.string);
     const selector = getSelector(icon.name);
-    console.log(selector);
     $(selector).prop("disabled", true);
     $(selector).css('font-weight', 'bold');
     $(selector).css('font-family', 'メイリオ');
@@ -656,6 +655,7 @@ function onClickCopyPageButton() {
     const splitId = evt.currentTarget.id.split('_');
     splitId.shift(); splitId.pop();
     const page = +splitId.pop();
+    console.log(evt.currentTarget.id, page);
     inputObjects.getObjListByPage(page).forEach(obj => {
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
