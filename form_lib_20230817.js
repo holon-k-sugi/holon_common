@@ -73,7 +73,7 @@ class IconObjects {
       { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)' },
       { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)' },
       { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)' },
-      { name: 'COPY_PAGE_BUTTON', string: '1ページ目コピー', color: 'rgba(0,30,100,1)' }
+      { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)' }
     ];
   }
   initialize() {
@@ -417,7 +417,7 @@ class DocumentEmployeesContents {
 
 class LazyEvaluationFunctions {
   constructor() {
-    this.onLoad = () => {console.warn('lazyEvaluationFunctions.onLoad は未定義')};
+    this.onLoad = () => { console.warn('lazyEvaluationFunctions.onLoad は未定義') };
   }
   setOnLoad(func) {
     this.onLoad = func;
