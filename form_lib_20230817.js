@@ -668,6 +668,7 @@ function onClickCopyPageButton() {
     inputObjects.getObjListByPage(page).forEach(obj => {
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
+    onLoad();
   });
 }
 
