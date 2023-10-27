@@ -676,7 +676,6 @@ function onClickCopyPageButton() {
     const splitId = evt.currentTarget.id.split('_');
     splitId.shift(); splitId.pop();
     const page = +splitId.pop();
-    console.log(evt.currentTarget.id, page);
     inputObjects.getObjListByPage(page).forEach(obj => {
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
