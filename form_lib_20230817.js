@@ -324,6 +324,7 @@ class DocumentEmployees {
     } catch (e) {
       this.list = [];
     }
+    this.objNameSet = new Set();
   }
   getList() {
     return this.list;
@@ -378,7 +379,6 @@ class DocumentEmployeesContents {
     } catch (e) {
       this.previous = [];
     }
-    this.objNameSet = new Set();
     // employees.max の大きさの配列を用意し、PREVIOUS_DOC_EMP_LIST から Id を格納
     const previousDocEmpContents = [...Array(employees.max ?? 0)].map((_, i) => {
       if (this.previous.length > i)
@@ -406,7 +406,7 @@ class DocumentEmployeesContents {
           docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
           let objs = employees.list[key](i);
           if (!Array.isArray(obj)) objs = [objs];
-          objs.forEach(obj => this.objNameSet.add(obj.name));
+          objs.forEach(obj => documentEmployees.objNameSet.add(obj.name));
         }
       });
     });
@@ -683,7 +683,7 @@ function onClickCopyPageButton() {
     splitId.shift(); splitId.pop();
     const page = +splitId.pop();
     inputObjects.getObjListByPage(page).forEach(obj => {
-      if (documentEmployeesContents.objNameSet.has(obj.name)) return;
+      if (documentEmployees.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
     lazyEvaluationFunctions.onLoad();
