@@ -94,7 +94,7 @@ class IconObjects {
       $(selector).css('text-align', 'center');
       $(selector).css('width', `${(icon.string.length + 2) * fontSize}pt`);
       $(selector).css('height', `${fontSize * 2}pt`);
-      const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? getIdsbyPage(name, page) : '';
+      const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsbyPage(icon.name, 0) : '';
       [...document.styleSheets].forEach(ss => {
         const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => name === rule.selectorText).reduce((a, b) => a || b));
         result.forEach(x => x.style.visibility = '');
