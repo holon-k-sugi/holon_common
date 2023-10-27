@@ -683,7 +683,7 @@ function onClickCopyPageButton() {
     splitId.shift(); splitId.pop();
     const page = +splitId.pop();
     inputObjects.getObjListByPage(page).forEach(obj => {
-      if (documentEmployees.objNameSet.has(obj.name)) return;
+      if (documentEmployeesContents.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
     lazyEvaluationFunctions.onLoad();
