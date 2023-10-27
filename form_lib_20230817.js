@@ -67,6 +67,43 @@ class InputObjectsByName {
   }
 }
 
+class IconObjects(){
+  constructor() {
+    this.list = [
+      { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)' },
+      { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)' },
+      { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)' },
+      { name: 'COPY_PAGE_BUTTON', string: '1ページ目コピー', color: 'rgba(0,30,100,1)' }
+    ];
+  }
+  initialize() {
+    this.list.forEach(icon => {
+      if (!inputObjects.objExists(icon.name)) return;
+      setV(icon.name, icon.string);
+      const selector = getSelector(icon.name);
+      $(selector).prop('type', 'button');
+      $(selector).prop('tabindex', '-1');
+      $(selector).css('font-weight', 'bold');
+      $(selector).css('font-family', 'メイリオ');
+      const fontSize = 8;
+      $(selector).css('font-size', `${fontSize}pt`);
+      $(selector).css('color', 'white');
+      $(selector).css('background', icon.color);
+      $(selector).css('border-radius', '5px');
+      $(selector).css('text-align', 'center');
+      $(selector).css('width', `${(icon.string.length + 2) * fontSize}pt`);
+      $(selector).css('height', `${fontSize * 2}pt`);
+      [...document.styleSheets].forEach(ss => {
+        const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1);
+        result.forEach(x => x.style.visibility = '');
+      });
+    });
+  }
+  getNameList(){
+    return this.list.map(v => v.name);
+  }
+}
+
 class RadioButtons {
   constructor() {
   }
@@ -382,6 +419,7 @@ const radioButtons = new RadioButtons();
 const companyMaster = new CompanyMaster();
 const documentEmployees = new DocumentEmployees();
 const documentEmployeesContents = { initialize: () => undefined };
+const iconObjects = new IconObjects();
 // 汎用関数
 function getV(name, index) {
   if (radioButtons.radioExists(name)) return radioButtons.list[name].getRadioButtonValue(index);
@@ -621,36 +659,6 @@ function onLoadDocumentEmployeesList(employees) {
   setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
 }
 
-function configureIcon() {
-  const iconObj = [
-    { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)' },
-    { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)' },
-    { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)' },
-    { name: 'COPY_PAGE_BUTTON', string: '1ページ目コピー', color: 'rgba(0,30,100,1)' }
-  ];
-  iconObj.forEach(icon => {
-    if (!inputObjects.objExists(icon.name)) return;
-    setV(icon.name, icon.string);
-    const selector = getSelector(icon.name);
-    $(selector).prop('type', 'button');
-    $(selector).prop('tabindex', '-1');
-    $(selector).css('font-weight', 'bold');
-    $(selector).css('font-family', 'メイリオ');
-    const fontSize = 8;
-    $(selector).css('font-size', `${fontSize}pt`);
-    $(selector).css('color', 'white');
-    $(selector).css('background', icon.color);
-    $(selector).css('border-radius', '5px');
-    $(selector).css('text-align', 'center');
-    $(selector).css('width', `${(icon.string.length + 2) * fontSize}pt`);
-    $(selector).css('height', `${fontSize * 2}pt`);
-    [...document.styleSheets].forEach(ss => {
-      const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1);
-      result.forEach(x => x.style.visibility = '');
-    });
-  });
-}
-
 function onClickCopyPageButton() {
   $(getSelector('COPY_PAGE_BUTTON')).on('click', (evt) => {
     const splitId = evt.currentTarget.id.split('_');
@@ -665,6 +673,7 @@ function onClickCopyPageButton() {
 
 function setFocusColor() {
   const fieldTabIdSelector = inputObjects.getAllObjNameList().map(name => {
+    if (iconObjects.getNameList().map(v => v === name).reduce((a, b) => a || b)) return [];
     return inputObjects.getAllIds(name).map(id => {
       if ($(`#${id} `).attr('tabindex') > 0) return `#${id} `;
     }).filter(v => v).join();
@@ -708,4 +717,5 @@ function initializeInstances() {
   radioButtons.initialize();
   companyMaster.initialize();
   documentEmployees.initialize();
+  iconObjects.initialize();
 }
