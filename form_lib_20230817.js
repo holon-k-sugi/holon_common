@@ -417,6 +417,7 @@ class DocumentEmployeesContents {
 
 class LazyEvaluationFunctions {
   constructor() {
+    this.onLoad = () => {console.warn('lazyEvaluationFunctions.onLoad は未定義')};
   }
   setOnLoad(func) {
     this.onLoad = func;
