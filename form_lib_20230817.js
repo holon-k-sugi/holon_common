@@ -88,7 +88,7 @@ class IconObjects {
       const fontSize = 8;
       $(selector).css('font-size', `${fontSize}pt`);
       $(selector).css('color', icon.iconType === 'label' ? icon.color : 'white');
-      $(selector).css('background', icon.iconType === 'label' ? 'white' : icon.color);                                                                                                                                                                                                                                                                                                         
+      $(selector).css('background', icon.iconType === 'label' ? 'white' : icon.color);
       $(selector).css('border', icon.iconType === 'label' ? `solid 2px ${icon.color}` : 'white');
       $(selector).css('border-radius', '5px');
       $(selector).css('text-align', 'center');
@@ -378,6 +378,7 @@ class DocumentEmployeesContents {
     } catch (e) {
       this.previous = [];
     }
+    this.objNameSet = new Set();
     // employees.max の大きさの配列を用意し、PREVIOUS_DOC_EMP_LIST から Id を格納
     const previousDocEmpContents = [...Array(employees.max ?? 0)].map((_, i) => {
       if (this.previous.length > i)
@@ -401,8 +402,12 @@ class DocumentEmployeesContents {
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
     docEmpContents.forEach((_, i) => {
       Object.keys(employees.list).forEach(key => {
-        if (documentEmployees.contains(i, key))
+        if (documentEmployees.contains(i, key)) {
           docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
+          let objs = employees.list[key](i);
+          if (!Array.isArray(obj)) objs = [objs];
+          objs.forEach(obj => this.objNameSet.add(obj.name));
+        }
       });
     });
     this.list = docEmpContents;
@@ -418,10 +423,10 @@ class DocumentEmployeesContents {
 
 class LazyEvaluationFunctions {
   constructor() {
-    this.onLoad = () => { console.warn('lazyEvaluationFunctions.onLoad は未定義') };
   }
-  setOnLoad(func) {
-    this.onLoad = func;
+  setFunction(name, func) {
+    if (func === undefined) this[name] = () => { console.warn(`lazyEvaluationFunctions.${name} は未定義`) };
+    this[name] = func;
   }
 }
 
@@ -678,6 +683,7 @@ function onClickCopyPageButton() {
     splitId.shift(); splitId.pop();
     const page = +splitId.pop();
     inputObjects.getObjListByPage(page).forEach(obj => {
+      if (documentEmployees.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
     lazyEvaluationFunctions.onLoad();
