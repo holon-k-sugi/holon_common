@@ -414,12 +414,23 @@ class DocumentEmployeesContents {
     return this.list.length;
   }
 }
+
+class LazyEvaluationFunctions {
+  constructor() {
+  }
+  setOnLoad(func) {
+    this.onLoad = func;
+  }
+}
+
 const inputObjects = new InputObjects();
 const radioButtons = new RadioButtons();
 const companyMaster = new CompanyMaster();
 const documentEmployees = new DocumentEmployees();
 const documentEmployeesContents = { initialize: () => undefined };
 const iconObjects = new IconObjects();
+const lazyEvaluationFunctions = new LazyEvaluationFunctions();
+
 // 汎用関数
 function getV(name, index) {
   if (radioButtons.radioExists(name)) return radioButtons.list[name].getRadioButtonValue(index);
@@ -668,7 +679,7 @@ function onClickCopyPageButton() {
     inputObjects.getObjListByPage(page).forEach(obj => {
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
-    onLoad();
+    lazyEvaluationFunctions.onLoad();
   });
 }
 
