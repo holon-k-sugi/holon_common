@@ -87,9 +87,9 @@ class IconObjects {
       $(selector).css('font-family', 'メイリオ');
       const fontSize = 8;
       $(selector).css('font-size', `${fontSize}pt`);
-      $(selector).css('color', icon.iconType === 'button' ? icon.color : 'white');
-      $(selector).css('background', icon.iconType === 'button' ? 'white' : icon.color);                                                                                                                                                                                                                                                                                                         
-      $(selector).css('border', icon.iconType === 'button' ? `solid 2px ${icon.color}` : 'white');
+      $(selector).css('color', icon.iconType === 'label' ? icon.color : 'white');
+      $(selector).css('background', icon.iconType === 'label' ? 'white' : icon.color);                                                                                                                                                                                                                                                                                                         
+      $(selector).css('border', icon.iconType === 'label' ? `solid 2px ${icon.color}` : 'white');
       $(selector).css('border-radius', '5px');
       $(selector).css('text-align', 'center');
       $(selector).css('width', `${(icon.string.length + 2) * fontSize}pt`);
