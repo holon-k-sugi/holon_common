@@ -70,10 +70,10 @@ class InputObjectsByName {
 class IconObjects {
   constructor() {
     this.list = [
-      { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)' },
-      { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)' },
-      { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)' },
-      { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)' }
+      { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label' },
+      { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label' },
+      { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label' },
+      { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button' }
     ];
   }
   initialize() {
@@ -87,8 +87,9 @@ class IconObjects {
       $(selector).css('font-family', 'メイリオ');
       const fontSize = 8;
       $(selector).css('font-size', `${fontSize}pt`);
-      $(selector).css('color', 'white');
-      $(selector).css('background', icon.color);
+      $(selector).css('color', icon.type === 'button' ? icon.color : 'white');
+      $(selector).css('background', icon.type === 'button' ? 'white' : icon.color);
+      $(selector).css('border', icon.type === 'button' ? `solid 2px ${icon.color}` : 'white');
       $(selector).css('border-radius', '5px');
       $(selector).css('text-align', 'center');
       $(selector).css('width', `${(icon.string.length + 2) * fontSize}pt`);
