@@ -67,7 +67,7 @@ class InputObjectsByName {
   }
 }
 
-class IconObjects(){
+class IconObjects {
   constructor() {
     this.list = [
       { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)' },
@@ -99,7 +99,7 @@ class IconObjects(){
       });
     });
   }
-  getNameList(){
+  getNameList() {
     return this.list.map(v => v.name);
   }
 }
