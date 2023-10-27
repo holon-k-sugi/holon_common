@@ -88,7 +88,7 @@ class IconObjects {
       const fontSize = 8;
       $(selector).css('font-size', `${fontSize}pt`);
       $(selector).css('color', icon.type === 'button' ? icon.color : 'white');
-      $(selector).css('background', icon.type === 'button' ? 'white' : icon.color);
+      $(selector).css('background', icon.type === 'button' ? 'white' : icon.color);                                                                                                                                                                                                                                                                                                         
       $(selector).css('border', icon.type === 'button' ? `solid 2px ${icon.color}` : 'white');
       $(selector).css('border-radius', '5px');
       $(selector).css('text-align', 'center');
