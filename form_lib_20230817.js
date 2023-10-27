@@ -673,7 +673,7 @@ function onClickCopyPageButton() {
 
 function setFocusColor() {
   const fieldTabIdSelector = inputObjects.getAllObjNameList().map(name => {
-    if (iconObjects.getNameList().map(v => v === name).reduce((a, b) => a || b)) return [];
+    if (iconObjects.getNameList().map(v => v === name).reduce((a, b) => a || b)) return;
     return inputObjects.getAllIds(name).map(id => {
       if ($(`#${id} `).attr('tabindex') > 0) return `#${id} `;
     }).filter(v => v).join();
