@@ -96,7 +96,7 @@ class IconObjects {
       $(selector).css('height', `${fontSize * 2}pt`);
       const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsbyPage(icon.name, 0) : [];
       [...document.styleSheets].forEach(ss => {
-        const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => name === rule.selectorText).reduce((a, b) => a || b, false));
+        const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => `#${name}` === rule.selectorText).reduce((a, b) => a || b, false));
         result.forEach(x => x.style.visibility = '');
       });
     });
