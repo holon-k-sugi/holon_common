@@ -69,10 +69,10 @@ class InputObjectsByName {
 
 class PageList {
   constructor() {
-    this.list = $('#iftc_cf_page_');
-    console.log(this.list);
   }
   initialize() {
+    this.list = $('#iftc_cf_page_');
+    console.log(this.list);
   }
 }
 
@@ -747,5 +747,6 @@ function initializeInstances() {
   radioButtons.initialize();
   companyMaster.initialize();
   documentEmployees.initialize();
+  pageList.initialize();
   iconObjects.initialize();
 }
