@@ -67,6 +67,15 @@ class InputObjectsByName {
   }
 }
 
+class PageList {
+  constructor() {
+    this.list = $('#iftc_cf_page_');
+    console.log(this.list);
+  }
+  initialize() {
+  }
+}
+
 class IconObjects {
   constructor() {
     this.list = [
@@ -436,6 +445,7 @@ const radioButtons = new RadioButtons();
 const companyMaster = new CompanyMaster();
 const documentEmployees = new DocumentEmployees();
 const documentEmployeesContents = { initialize: () => undefined };
+const pageList = new PageList();
 const iconObjects = new IconObjects();
 const lazyEvaluationFunctions = new LazyEvaluationFunctions();
 
