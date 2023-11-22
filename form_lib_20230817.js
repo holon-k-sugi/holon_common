@@ -71,44 +71,74 @@ class PageList {
   constructor() {
   }
   initialize() {
-    this.list = $('#iftc_cf_page_');
-    console.log(this.list);
+    this.list = $('[id$="iftc_cf_page_"]');
+    const initialPageCount = this.getInitialPageCount();
+    this.front = this.list.filter((v, i) => {
+      return i >= initialPageCount || ['hidden', 'rear'].map(s => {
+        return v.class.indexOf(s) > -1;
+      }).reduce((a, b) => a || b);
+    });
+  }
+  indexToSelector(index) {
+    return this.list[index];
+  }
+  getInitialPageCount() {
+    const tmp = new Set();
+    return this.list.findIndex(v => {
+      if (tmp.has(v.class)) return true;
+      tmp.add(v.class);
+      return false;
+    });
   }
 }
 
 class IconObjects {
   constructor() {
-    this.list = [
-      { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label' },
-      { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label' },
-      { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label' },
-      { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button' }
-    ];
+    this.list = {
+      acroosYears: { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label' },
+      addPage: { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label' },
+      inputEmployees: { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label' },
+      copyPage1: { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button' },
+      csvNum: { name: 'SHOW_CSV_NUM_BUTTON', string: 'CSV番号表示', color: 'rgba(68,201,194,1)', iconType: 'button' }
+    };
   }
-  initialize() {
+  showIcon(iconSetting) {
+    if (iconSetting.acroosYears) this.setPage('acroosYears', [1]);
+    this.setPage('addPage', iconSetting.addPage);
+    this.setPage('inputEmployees', iconSetting.inputEmployees);
+    this.setPage('csvNum', [1]);
+    this.setPage('copyPage1', pageList.front);
     this.list.forEach(icon => {
-      if (!inputObjects.objExists(icon.name)) return;
-      setV(icon.name, icon.string);
-      const selector = getSelector(icon.name);
-      $(selector).prop('type', 'button');
-      $(selector).prop('tabindex', '-1');
-      $(selector).css('font-weight', 'bold');
-      $(selector).css('font-family', 'メイリオ');
+      if (incon.pages) return;
+      const iconDiv = $('<div>');
+      iconDiv.text(icon.string);
+      iconDiv.prop('type', 'button');
+      iconDiv.prop('tabindex', '-1');
+      iconDiv.css('font-weight', 'bold');
+      iconDiv.css('font-family', 'メイリオ');
       const fontSize = 8;
-      $(selector).css('font-size', `${fontSize}pt`);
-      $(selector).css('color', icon.iconType === 'label' ? icon.color : 'white');
-      $(selector).css('background', icon.iconType === 'label' ? 'white' : icon.color);
-      $(selector).css('border', icon.iconType === 'label' ? `solid 2px ${icon.color}` : 'white');
-      $(selector).css('border-radius', '5px');
-      $(selector).css('text-align', 'center');
-      $(selector).css('width', `${(icon.string.length + 2) * fontSize}pt`);
-      $(selector).css('height', `${fontSize * 2}pt`);
-      const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
-      [...document.styleSheets].forEach(ss => {
-        const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => `#${name}` === rule.selectorText).reduce((a, b) => a || b, false));
-        result.forEach(x => x.style.visibility = '');
+      iconDiv.css('font-size', `${fontSize}pt`);
+      iconDiv.css('color', icon.iconType === 'label' ? icon.color : 'white');
+      iconDiv.css('background', icon.iconType === 'label' ? 'white' : icon.color);
+      iconDiv.css('border', icon.iconType === 'label' ? `solid 2px ${icon.color}` : 'white');
+      iconDiv.css('border-radius', '5px');
+      iconDiv.css('text-align', 'center');
+      iconDiv.css('width', `${(icon.string.length + 2) * fontSize}pt`);
+      iconDiv.css('height', `${fontSize * 2}pt`);
+      incon.pages.forEach(page => {
+        page.after(csvDiv);
       });
+
+      // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
+      // [...document.styleSheets].forEach(ss => {
+      //   const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => `#${name}` === rule.selectorText).reduce((a, b) => a || b, false));
+      //   result.forEach(x => x.style.visibility = '');
+      // });
     });
+  }
+  setPage(name, units) {
+    if (!Array.isArray(units) || units.length === 0) return;
+    this.list[name].page = units.map(unit => pageList.indexToSelector(unit));
   }
   getNameList() {
     return this.list.map(v => v.name);
@@ -688,6 +718,10 @@ function onLoadDocumentEmployeesList(employees) {
   setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
 }
 
+function onLoadIcon(iconSetting) {
+  iconObjects.showIcon(iconSetting);
+}
+
 function onClickCopyPageButton() {
   $(getSelector('COPY_PAGE_BUTTON')).on('click', (evt) => {
     const splitId = evt.currentTarget.id.split('_');
@@ -748,5 +782,4 @@ function initializeInstances() {
   companyMaster.initialize();
   documentEmployees.initialize();
   pageList.initialize();
-  iconObjects.initialize();
 }
