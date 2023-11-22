@@ -71,7 +71,7 @@ class PageList {
   constructor() {
   }
   initialize() {
-    this.list = $('[id$="iftc_cf_page_"]');
+    this.list = $('[id^="iftc_cf_page_"]');
     const initialPageCount = this.getInitialPageCount();
     this.front = this.list.filter((v, i) => {
       return i >= initialPageCount || ['hidden', 'rear'].map(s => {
