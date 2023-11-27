@@ -105,7 +105,7 @@ class IconObjects {
     this.setPage('csvNum', [1]);
     this.setPage('copyPage1', pageList.front);
     this.list.forEach(icon => {
-      // if (incon.pages) return;
+      if (incon.pages) return;
       const iconDiv = $('<div>');
       iconDiv.text(icon.string);
       iconDiv.prop('type', 'button');
@@ -121,6 +121,7 @@ class IconObjects {
       iconDiv.css('text-align', 'center');
       iconDiv.css('width', `${(icon.string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
+      console.log(incon.pages);
       incon.pages.after(csvDiv);
 
       // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
