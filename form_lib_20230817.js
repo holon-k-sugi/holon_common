@@ -107,7 +107,7 @@ class IconObjects {
     this.setPage('copyPage1', pageList.front);
     Object.keys(this.list).forEach(key => {
       console.log(this.list[key].pages);
-      if (this.list[key].pages) return;
+      if (!this.list[key].pages) return;
       const iconDiv = $('<div>');
       iconDiv.text(this.list[key].string);
       iconDiv.prop('type', 'button');
