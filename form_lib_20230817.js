@@ -135,6 +135,7 @@ class IconObjects {
   setPage(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit));
+    console.log(name, this.list[name].pages);
   }
   getNameList() {
     return Object.keys(this.list).map(key => this.list[key].name);
