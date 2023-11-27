@@ -105,7 +105,7 @@ class IconObjects {
     this.setPage('csvNum', [1]);
     this.setPage('copyPage1', pageList.front);
     this.list.forEach(icon => {
-      if (incon.pages) return;
+      // if (incon.pages) return;
       const iconDiv = $('<div>');
       iconDiv.text(icon.string);
       iconDiv.prop('type', 'button');
