@@ -71,15 +71,9 @@ class PageList {
   constructor() {
   }
   initialize() {
-    this.list = $('[id^="iftc_cf_page_"]');
-    console.log(this.list);
+    this.list = $(`[id^="iftc_cf_page_"]`);
     const initialPageCount = this.getInitialPageCount();
-    this.front = this.list.filter(i => {
-      return i >= initialPageCount || ['hidden', 'rear'].map(s => {
-        console.log(this, this.class);
-        return this.class.indexOf(s) > -1;
-      }).reduce((a, b) => a || b);
-    });
+    this.front = $(`[id^="iftc_cf_page_"] [class~="hidden"],[class~="rear"] :gt(${initialPageCount})`);
   }
   indexToSelector(index) {
     return this.list[index];
