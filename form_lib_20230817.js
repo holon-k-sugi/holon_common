@@ -137,7 +137,7 @@ class IconObjects {
     this.list[name].page = units.map(unit => pageList.indexToSelector(unit));
   }
   getNameList() {
-    return this.list.map(v => v.name);
+    return Object.keys(this.list).map(key => this.list[key].name);
   }
 }
 
