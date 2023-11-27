@@ -105,25 +105,25 @@ class IconObjects {
     this.setPage('inputEmployees', iconSetting.inputEmployees);
     this.setPage('csvNum', [1]);
     this.setPage('copyPage1', pageList.front);
-    this.list.forEach(icon => {
-      console.log(incon.pages);
-      if (incon.pages) return;
+    Object.keys(this.list).forEach(key => {
+      console.log(this.list[key].pages);
+      if (this.list[key].pages) return;
       const iconDiv = $('<div>');
-      iconDiv.text(icon.string);
+      iconDiv.text(this.list[key].string);
       iconDiv.prop('type', 'button');
       iconDiv.prop('tabindex', '-1');
       iconDiv.css('font-weight', 'bold');
       iconDiv.css('font-family', 'メイリオ');
       const fontSize = 8;
       iconDiv.css('font-size', `${fontSize}pt`);
-      iconDiv.css('color', icon.iconType === 'label' ? icon.color : 'white');
-      iconDiv.css('background', icon.iconType === 'label' ? 'white' : icon.color);
-      iconDiv.css('border', icon.iconType === 'label' ? `solid 2px ${icon.color}` : 'white');
+      iconDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
+      iconDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
+      iconDiv.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
       iconDiv.css('border-radius', '5px');
       iconDiv.css('text-align', 'center');
-      iconDiv.css('width', `${(icon.string.length + 2) * fontSize}pt`);
+      iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
-      incon.pages.after(csvDiv);
+      this.list[key].pages.after(csvDiv);
 
       // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
       // [...document.styleSheets].forEach(ss => {
