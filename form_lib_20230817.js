@@ -75,6 +75,7 @@ class PageList {
     const initialPageCount = this.getInitialPageCount();
     this.front = this.list.filter((v, i) => {
       return i >= initialPageCount || ['hidden', 'rear'].map(s => {
+        console.log(v.class);
         return v.class.indexOf(s) > -1;
       }).reduce((a, b) => a || b);
     });
