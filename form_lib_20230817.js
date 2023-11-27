@@ -121,9 +121,7 @@ class IconObjects {
       iconDiv.css('text-align', 'center');
       iconDiv.css('width', `${(icon.string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
-      incon.pages.forEach(page => {
-        page.after(csvDiv);
-      });
+      incon.pages.after(csvDiv);
 
       // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
       // [...document.styleSheets].forEach(ss => {
