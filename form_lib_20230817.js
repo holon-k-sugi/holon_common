@@ -99,6 +99,7 @@ class IconObjects {
     };
   }
   showIcon(iconSetting) {
+    console.log('hoge');
     if (iconSetting.acroosYears) this.setPage('acroosYears', [1]);
     this.setPage('addPage', iconSetting.addPage);
     this.setPage('inputEmployees', iconSetting.inputEmployees);
