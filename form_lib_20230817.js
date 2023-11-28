@@ -83,6 +83,7 @@ class PageList {
     return Object.values(this.list).findIndex(v => {
       if (tmp.has(v.class)) return true;
       tmp.add(v.class);
+      console.log(tmp);
       return false;
     });
   }
