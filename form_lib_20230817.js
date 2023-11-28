@@ -73,7 +73,7 @@ class PageList {
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
     const initialPageCount = this.getInitialPageCount();
-    this.front = $(`[id^="iftc_cf_page_"] [class~="hidden"],[class~="rear"] :gt(${initialPageCount})`);
+    this.front = $(`[id^="iftc_cf_page_"] :gt(${initialPageCount})`).not('[class~="hidden"],[class~="rear"]');
   }
   indexToSelector(index) {
     return this.list.eq(index);
