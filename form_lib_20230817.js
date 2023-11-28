@@ -82,6 +82,8 @@ class PageList {
     const tmp = new Set();
     console.log(this.list);
     const ret = Object.values(this.list).findIndex(v => {
+      console.log(v);
+      console.log(v.classList);
       if (tmp.has(v.class)) return true;
       tmp.add(v.class);
       console.log(tmp);
