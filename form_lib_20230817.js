@@ -76,7 +76,7 @@ class PageList {
     this.front = $(`[id^="iftc_cf_page_"] [class~="hidden"],[class~="rear"] :gt(${initialPageCount})`);
   }
   indexToSelector(index) {
-    return this.list[index];
+    return this.list.eq(index);
   }
   getInitialPageCount() {
     const tmp = new Set();
