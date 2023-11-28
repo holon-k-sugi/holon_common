@@ -123,7 +123,9 @@ class IconObjects {
       iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
       console.log(this.list[key].pages);
-      this.list[key].pages.after(iconDiv);
+      this.list[key].pages.forEach(page => {
+        page.after(iconDiv);
+      });
 
       // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
       // [...document.styleSheets].forEach(ss => {
@@ -135,7 +137,6 @@ class IconObjects {
   setPage(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit));
-    console.log(name, this.list[name].pages);
   }
   getNameList() {
     return Object.keys(this.list).map(key => this.list[key].name);
