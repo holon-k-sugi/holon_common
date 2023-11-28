@@ -100,11 +100,11 @@ class IconObjects {
   }
   showIcon(iconSetting) {
     console.log('hoge');
-    if (iconSetting.acroosYears) this.setPage('acroosYears', [1]);
+    if (iconSetting.acroosYears) this.setPage('acroosYears', [2]);
     this.setPage('addPage', iconSetting.addPage);
     this.setPage('inputEmployees', iconSetting.inputEmployees);
-    this.setPage('csvNum', [1]);
-    this.setPage('copyPage1', pageList.front);
+    this.setPage('csvNum', [2]);
+    this.list.copyPage1.pages = [pageList.front];
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
       const iconDiv = $('<div>');
@@ -122,7 +122,7 @@ class IconObjects {
       iconDiv.css('text-align', 'center');
       iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
-      console.log(key,this.list[key].pages);
+      console.log(key, this.list[key].pages);
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
@@ -136,7 +136,7 @@ class IconObjects {
   }
   setPage(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
-    this.list[name].pages = units.map(unit => pageList.indexToSelector(unit));
+    this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
   }
   getNameList() {
     return Object.keys(this.list).map(key => this.list[key].name);
