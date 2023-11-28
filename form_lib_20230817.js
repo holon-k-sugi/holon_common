@@ -123,7 +123,7 @@ class IconObjects {
       iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
       console.log(this.list[key].pages);
-      this.list[key].pages.after(csvDiv);
+      this.list[key].pages.after(iconDiv);
 
       // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
       // [...document.styleSheets].forEach(ss => {
