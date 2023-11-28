@@ -124,7 +124,7 @@ class IconObjects {
       iconDiv.css('height', `${fontSize * 2}pt`);
       console.log(this.list[key].pages);
       this.list[key].pages.forEach(page => {
-        page.append(iconDiv);
+        page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
 
       // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
