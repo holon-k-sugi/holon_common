@@ -80,12 +80,14 @@ class PageList {
   }
   getInitialPageCount() {
     const tmp = new Set();
-    return Object.values(this.list).findIndex(v => {
+    console.log(this.list);
+    const ret = Object.values(this.list).findIndex(v => {
       if (tmp.has(v.class)) return true;
       tmp.add(v.class);
       console.log(tmp);
       return false;
     });
+    return ret === -1 ? Object.values(this.list).length : ret;
   }
 }
 
