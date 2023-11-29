@@ -114,17 +114,17 @@ class IconObjects {
     const fontSize = 8;
     if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0) {
       this.setPages('addPage', iconSetting.addPage);
-      this.setPosition('addPage', `${position}pt`, `${position}pt`);
+      this.setPosition('addPage', position, position);
     }
     if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0) {
       this.setPages('inputEmployees', iconSetting.inputEmployees);
-      this.setPosition('inputEmployees', `${position + fontSize * 10}pt`, `${position}pt`);
+      this.setPosition('inputEmployees', position + fontSize * 10, position);
     }
 
-    this.setPosition('copyPage1', `${595 - position - (this.list.copyPage1.string.length + 2) * fontSize}pt`, `${position}pt`);
+    this.setPosition('copyPage1', 595 - position - (this.list.copyPage1.string.length + 2) * fontSize, position);
 
     this.setPages('csvNum', [2]);
-    this.setPosition('csvNum', `${595 - position - (this.list.csvNum.string.length + 2) * fontSize}pt`, `${position}pt`);
+    this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize, position);
 
     this.list.copyPage1.pages = [pageList.front];
     Object.keys(this.list).forEach(key => {
