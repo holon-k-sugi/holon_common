@@ -82,8 +82,7 @@ class PageList {
     const tmp = new Set();
     console.log(this.list);
     const ret = Object.values(this.list).findIndex(v => {
-      console.log(v);
-      console.log(v.classList);
+      const str = v.classList.values;
       if (tmp.has(v.class)) return true;
       tmp.add(v.class);
       console.log(tmp);
@@ -105,10 +104,28 @@ class IconObjects {
   }
   showIcon(iconSetting) {
     console.log('hoge');
-    if (iconSetting.acroosYears) this.setPage('acroosYears', [2]);
-    this.setPage('addPage', iconSetting.addPage);
-    this.setPage('inputEmployees', iconSetting.inputEmployees);
-    this.setPage('csvNum', [2]);
+    if (iconSetting.acroosYears) {
+      this.setPages('acroosYears', [2]);
+      const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
+      this.setPosition('acroosYears', `${position - Number(inputArea.left.split('pt')[0])}pt`, `${position - Number(inputArea.top.split('pt')[0])}pt`);
+    }
+
+    const position = 13;
+    const fontSize = 8;
+    if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0) {
+      this.setPages('addPage', iconSetting.addPage);
+      this.setPosition('addPage', `${position}pt`, `${position}pt`);
+    }
+    if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0) {
+      this.setPages('inputEmployees', iconSetting.inputEmployees);
+      this.setPosition('inputEmployees', `${position + fontSize * 10}pt`, `${position}pt`);
+    }
+
+    this.setPosition('copyPage1', `${595 - position - (this.list.copyPage1.string.length + 2) * fontSize}pt`, `${position}pt`);
+
+    this.setPages('csvNum', [2]);
+    this.setPosition('csvNum', `${595 - position - (this.list.csvNum.string.length + 2) * fontSize}pt`, `${position}pt`);
+
     this.list.copyPage1.pages = [pageList.front];
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
@@ -118,7 +135,6 @@ class IconObjects {
       iconDiv.prop('tabindex', '-1');
       iconDiv.css('font-weight', 'bold');
       iconDiv.css('font-family', 'メイリオ');
-      const fontSize = 8;
       iconDiv.css('font-size', `${fontSize}pt`);
       iconDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
       iconDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
@@ -139,9 +155,13 @@ class IconObjects {
       // });
     });
   }
-  setPage(name, units) {
+  setPages(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
+  }
+  setPosition(name, left, top) {
+    this.list[name].left = `${left}pt`;
+    this.list[name].top = `${top}pt`;
   }
   getNameList() {
     return Object.keys(this.list).map(key => this.list[key].name);
