@@ -143,6 +143,8 @@ class IconObjects {
       iconDiv.css('text-align', 'center');
       iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
+      iconDiv.css('top', this.list[key].top);
+      iconDiv.css('left', this.list[key].left);
       console.log(key, this.list[key].pages);
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
