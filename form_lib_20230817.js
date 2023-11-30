@@ -107,7 +107,7 @@ class IconObjects {
     if (iconSetting.acroosYears) {
       this.setPages('acroosYears', [2]);
       const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
-      this.setPosition('acroosYears', `${position - Number(inputArea.left.split('pt')[0])}pt`, `${position - Number(inputArea.top.split('pt')[0])}pt`);
+      this.setPosition('acroosYears', position - Number(inputArea.left.split('pt')[0]), position - Number(inputArea.top.split('pt')[0]));
     }
 
     const position = 13;
@@ -124,7 +124,8 @@ class IconObjects {
     this.setPosition('copyPage1', 595 - position - (this.list.copyPage1.string.length + 2) * fontSize, position);
 
     this.setPages('csvNum', [2]);
-    this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize, position);
+    const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
+    this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize - Number(inputArea.left.split('pt')[0]), position);
 
     this.list.copyPage1.pages = [pageList.front];
     Object.keys(this.list).forEach(key => {
@@ -146,7 +147,7 @@ class IconObjects {
       iconDiv.css('top', this.list[key].top);
       iconDiv.css('left', this.list[key].left);
       iconDiv.css('left', this.list[key].left);
-      iconDiv.addClass(name);
+      iconDiv.addClass(this.list[key].name);
       console.log(key, this.list[key].pages);
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
@@ -158,16 +159,16 @@ class IconObjects {
       //   result.forEach(x => x.style.visibility = '');
       // });
     });
-    Object.keys(this.list).forEach(key => {
-      const selector = `#${this.list[key].name}`;
-      const propStr = ['left', 'top'].map(prop => {
-        return `${prop}:${this.list[key][prop]}`
-      })
-      styleSheet.insertRule(
-        `${selector}{${propStr}}`,
-        styleSheet.cssRules.length,
-      );
-    });
+    // Object.keys(this.list).forEach(key => {
+    //   const selector = `#${this.list[key].name}`;
+    //   const propStr = ['left', 'top'].map(prop => {
+    //     return `${prop}:${this.list[key][prop]}`
+    //   })
+    //   styleSheet.insertRule(
+    //     `${selector}{${propStr}}`,
+    //     styleSheet.cssRules.length,
+    //   );
+    // });
   }
   setPages(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
