@@ -148,7 +148,7 @@ class IconObjects {
       iconDiv.css('left', this.list[key].left);
       iconDiv.css('left', this.list[key].left);
       iconDiv.addClass(this.list[key].name);
-      console.log(iconDiv);
+      console.log(key, iconDiv);
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
