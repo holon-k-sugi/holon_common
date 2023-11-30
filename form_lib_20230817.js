@@ -128,6 +128,9 @@ class IconObjects {
     this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
 
     this.list.copyPage1.pages = [pageList.front];
+    var style = document.createElement("style");
+    document.head.appendChild(style);
+    const sheet = style.sheet;
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
       const iconDiv = $('<div>');
@@ -146,26 +149,19 @@ class IconObjects {
       iconDiv.css('height', `${fontSize * 2}pt`);
       iconDiv.css('top', this.list[key].top);
       iconDiv.css('left', this.list[key].left);
-      iconDiv.css('left', this.list[key].left);
       iconDiv.addClass(this.list[key].name);
-      console.log(key, iconDiv);
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
+
       const selector = `#${this.list[key].name}`;
       const propStr = ['left', 'top'].map(prop => {
         return `${prop}:${this.list[key][prop]}`
       })
-      const styleSheet = document.styleSheets[0];
-      styleSheet.insertRule(
+      sheet.insertRule(
         `${selector}{${propStr}}`,
-        styleSheet.cssRules.length
+        sheet.cssRules.length
       );
-      // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
-      // [...document.styleSheets].forEach(ss => {
-      //   const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => `#${name}` === rule.selectorText).reduce((a, b) => a || b, false));
-      //   result.forEach(x => x.style.visibility = '');
-      // });
     });
   }
   setPages(name, units) {
