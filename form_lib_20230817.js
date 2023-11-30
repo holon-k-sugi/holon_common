@@ -125,6 +125,8 @@ class IconObjects {
 
     this.setPages('csvNum', [2]);
     const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
+    console.log(inputArea);
+    console.log(inputArea.css('left').split('pt')[0]);
     this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
 
     this.list.copyPage1.pages = [pageList.front];
