@@ -95,7 +95,7 @@ class PageList {
 class IconObjects {
   constructor() {
     this.list = {
-      acroosYears: { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label' },
+      acrossYears: { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label' },
       addPage: { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label' },
       inputEmployees: { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label' },
       copyPage1: { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button' },
@@ -104,10 +104,10 @@ class IconObjects {
   }
   showIcon(iconSetting) {
     console.log('hoge');
-    if (iconSetting.acroosYears) {
-      this.setPages('acroosYears', [2]);
+    if (iconSetting.acrossYears) {
+      this.setPages('acrossYears', [2]);
       const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
-      this.setPosition('acroosYears', position - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
+      this.setPosition('acrossYears', position - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
     }
 
     const position = 13;
@@ -149,20 +149,20 @@ class IconObjects {
       iconDiv.css('height', `${fontSize * 2}pt`);
       iconDiv.css('top', this.list[key].top);
       iconDiv.css('left', this.list[key].left);
+      iconDiv.css('position', absolute);
       iconDiv.attr('id', this.list[key].name);
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
-
-      const selector = `#${this.list[key].name}`;
-      const propStr = ['left', 'top'].map(prop => {
-        return `${prop}:${this.list[key][prop]};`
-      }).join('');
-      console.log(`${selector}{${propStr}}`);
-      sheet.insertRule(
-        `${selector}{${propStr}}`,
-        sheet.cssRules.length
-      );
+    //   const selector = `#${this.list[key].name}`;
+    //   const propStr = ['left', 'top'].map(prop => {
+    //     return `${prop}:${this.list[key][prop]};`
+    //   }).join('');
+    //   console.log(`${selector}{${propStr}}`);
+    //   sheet.insertRule(
+    //     `${selector}{${propStr}position: absolute;}`,
+    //     sheet.cssRules.length
+    //   );
     });
   }
   setPages(name, units) {
