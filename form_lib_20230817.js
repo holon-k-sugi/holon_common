@@ -107,7 +107,7 @@ class IconObjects {
     const position = 13;
     if (iconSetting.acrossYears) {
       this.setPages('acrossYears', [2]);
-      const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
+      const inputArea = this.list['acrossYears'].pages.children('[class~="iftc_cf_inputitems"]');
       this.setPosition('acrossYears', position - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
     }
 
@@ -124,7 +124,7 @@ class IconObjects {
     this.setPosition('copyPage1', 595 - position - (this.list.copyPage1.string.length + 2) * fontSize, position);
 
     this.setPages('csvNum', [2]);
-    const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
+    const inputArea = this.list['csvNum'].pages.children('[class~="iftc_cf_inputitems"]');
     console.log(inputArea);
     console.log(inputArea.css('left').split('pt')[0]);
     this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
