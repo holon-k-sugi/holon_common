@@ -152,23 +152,20 @@ class IconObjects {
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
-
+      const selector = `#${this.list[key].name}`;
+      const propStr = ['left', 'top'].map(prop => {
+        return `${prop}:${this.list[key][prop]}`
+      })
+      document.styleSheets.insertRule(
+        `${selector}{${propStr}}`,
+        styleSheet.cssRules.length
+      );
       // const objNamesOf1page = icon.name === 'COPY_PAGE_BUTTON' ? inputObjects.getIdsByIndex(icon.name, 0) : [];
       // [...document.styleSheets].forEach(ss => {
       //   const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => `#${name}` === rule.selectorText).reduce((a, b) => a || b, false));
       //   result.forEach(x => x.style.visibility = '');
       // });
     });
-    // Object.keys(this.list).forEach(key => {
-    //   const selector = `#${this.list[key].name}`;
-    //   const propStr = ['left', 'top'].map(prop => {
-    //     return `${prop}:${this.list[key][prop]}`
-    //   })
-    //   styleSheet.insertRule(
-    //     `${selector}{${propStr}}`,
-    //     styleSheet.cssRules.length,
-    //   );
-    // });
   }
   setPages(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
