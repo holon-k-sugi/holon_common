@@ -104,13 +104,13 @@ class IconObjects {
   }
   showIcon(iconSetting) {
     console.log('hoge');
+    const position = 13;
     if (iconSetting.acrossYears) {
       this.setPages('acrossYears', [2]);
       const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
       this.setPosition('acrossYears', position - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
     }
 
-    const position = 13;
     const fontSize = 8;
     if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0) {
       this.setPages('addPage', iconSetting.addPage);
