@@ -157,7 +157,7 @@ class IconObjects {
       const selector = `#${this.list[key].name}`;
       const propStr = ['left', 'top'].map(prop => {
         return `${prop}:${this.list[key][prop]};`
-      });
+      }).join('');
       console.log(`${selector}{${propStr}}`);
       sheet.insertRule(
         `${selector}{${propStr}}`,
