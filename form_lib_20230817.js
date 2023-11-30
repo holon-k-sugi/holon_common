@@ -107,7 +107,7 @@ class IconObjects {
     if (iconSetting.acroosYears) {
       this.setPages('acroosYears', [2]);
       const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
-      this.setPosition('acroosYears', position - Number(inputArea.left.split('pt')[0]), position - Number(inputArea.top.split('pt')[0]));
+      this.setPosition('acroosYears', position - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
     }
 
     const position = 13;
@@ -125,7 +125,7 @@ class IconObjects {
 
     this.setPages('csvNum', [2]);
     const inputArea = pageList.indexToSelector(2).children('[class~="iftc_cf_inputitems"]');
-    this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize - Number(inputArea.left.split('pt')[0]), position);
+    this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
 
     this.list.copyPage1.pages = [pageList.front];
     Object.keys(this.list).forEach(key => {
