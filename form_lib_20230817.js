@@ -145,6 +145,8 @@ class IconObjects {
       iconDiv.css('height', `${fontSize * 2}pt`);
       iconDiv.css('top', this.list[key].top);
       iconDiv.css('left', this.list[key].left);
+      iconDiv.css('left', this.list[key].left);
+      iconDiv.addClass(name);
       console.log(key, this.list[key].pages);
       this.list[key].pages.forEach(page => {
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
@@ -155,6 +157,16 @@ class IconObjects {
       //   const result = [...ss.cssRules].filter(rule => rule.selectorText && rule.selectorText.indexOf(icon.name) !== -1 && !objNamesOf1page.map(name => `#${name}` === rule.selectorText).reduce((a, b) => a || b, false));
       //   result.forEach(x => x.style.visibility = '');
       // });
+    });
+    Object.keys(this.list).forEach(key => {
+      const selector = `#${this.list[key].name}`;
+      const propStr = ['left', 'top'].map(prop => {
+        return `${prop}:${this.list[key][prop]}`
+      })
+      styleSheet.insertRule(
+        `${selector}{${propStr}}`,
+        styleSheet.cssRules.length,
+      );
     });
   }
   setPages(name, units) {
