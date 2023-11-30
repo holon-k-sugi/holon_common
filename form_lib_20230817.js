@@ -156,7 +156,8 @@ class IconObjects {
       const propStr = ['left', 'top'].map(prop => {
         return `${prop}:${this.list[key][prop]}`
       })
-      document.styleSheets.insertRule(
+      const styleSheet = document.styleSheets;
+      styleSheet.insertRule(
         `${selector}{${propStr}}`,
         styleSheet.cssRules.length
       );
