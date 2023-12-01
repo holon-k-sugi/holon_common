@@ -73,8 +73,6 @@ class PageList {
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
     const initialPageCount = this.getInitialPageCount();
-    console.log(initialPageCount);
-    console.log($(`[id^="iftc_cf_page_"]:gt(${initialPageCount - 1})`));
     this.front = $(`[id^="iftc_cf_page_"]:gt(${initialPageCount - 1})`).not('[class~="hidden"],[class~="rear"]');
   }
   indexToSelector(index) {
@@ -83,14 +81,11 @@ class PageList {
   getInitialPageCount() {
     const tmp = new Set();
     const ret = Object.values(this.list).findIndex(v => {
-      console.log([...v.classList.values()]);
       const str = [...v.classList.values()].find(v => v.indexOf('iftc_cf_form_') > -1);
       if (tmp.has(str)) return true;
       tmp.add(str);
-      console.log(tmp);
       return false;
     });
-    console.log(tmp);
     return ret === -1 ? Object.values(this.list).length : ret;
   }
 }
@@ -106,7 +101,6 @@ class IconObjects {
     };
   }
   showIcon(iconSetting) {
-    console.log('hoge');
     const margin = 13;
     const fontSize = 8;
     if (iconSetting.acrossYears) {
@@ -121,12 +115,12 @@ class IconObjects {
       this.setPages('inputEmployees', iconSetting.inputEmployees);
       this.setMargin('inputEmployees', margin + fontSize * 10, margin);
     }
+    this.setPages('copyPage1', [pageList.front]);
     this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
 
     this.setPages('csvNum', [2]);
     this.setPosition('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
-    this.setPages('csvNum', [pageList.front]);
 
     var style = document.createElement("style");
     Object.keys(this.list).forEach(key => {
