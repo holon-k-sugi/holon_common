@@ -83,11 +83,8 @@ class PageList {
   getInitialPageCount() {
     const tmp = new Set();
     const ret = Object.values(this.list).findIndex(v => {
-      console.log([...v.classList.values()]);
-      const str = [...v.classList.values()].find(v => { v.indexOf('iftc_cf_page_') > -1 });
-      console.log(str);
-      if (tmp.has(str)) return true;
-      tmp.add(str);
+      if (tmp.has(v.id)) return true;
+      tmp.add(v.id);
       return false;
     });
     return ret === -1 ? Object.values(this.list).length : ret;
