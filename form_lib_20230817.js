@@ -82,9 +82,9 @@ class PageList {
   }
   getInitialPageCount() {
     const tmp = new Set();
-    console.log(this.list);
     const ret = Object.values(this.list).findIndex(v => {
       const str = v.classList.values;
+      console.log('values', v.classList.values);
       if (tmp.has(v.class)) return true;
       tmp.add(v.class);
       console.log(tmp);
@@ -126,7 +126,7 @@ class IconObjects {
     this.setPosition('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
     this.setPages('csvNum', [pageList.front]);
-    
+
     var style = document.createElement("style");
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
