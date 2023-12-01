@@ -142,7 +142,7 @@ class IconObjects {
       iconDiv.attr('id', this.list[key].name);
       iconDiv.css('position', 'absolute');
       this.list[key].pages.forEach(page => {
-        this.setPosition(key, margin, page);
+        this.setPosition(key, page);
         iconDiv.css('top', this.list[key].top);
         iconDiv.css('left', this.list[key].left);
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
@@ -154,14 +154,14 @@ class IconObjects {
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
   }
   setMargin(name, left, top) {
-    this.list[name].left = left;
-    this.list[name].top = top;
+    this.list[name].margin.left = left;
+    this.list[name].margin.top = top;
   }
-  setPosition(name, margin, page) {
-    Object.keys(margin).forEach((key, i) => {
+  setPosition(name, page) {
+    Object.keys(this.list[name].margin).forEach((key, i) => {
       console.log(page.children('[class~="iftc_cf_inputitems"]').css(key));
       const inputAreaPos = Number(page.children('[class~="iftc_cf_inputitems"]').css(key).split('pt'));
-      this.list[name][key] = `${margin[key] - inputAreaPos}pt`;
+      this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
     });
   }
   getNameList() {
