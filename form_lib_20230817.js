@@ -72,7 +72,6 @@ class PageList {
   }
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
-    console.log(this.list);
     this.addPages = this.getIndexOfAddPages();
   }
   indexToSelector(index) {
@@ -164,6 +163,7 @@ class IconObjects {
   setPosition(name, page) {
     Object.keys(this.list[name].margin).forEach((key, i) => {
       const inputAreaPos = Number(page.children('[class~="iftc_cf_inputitems"]').get()[0].style[key].split('pt'));
+      console.log(inputAreaPos);
       this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
     });
   }
