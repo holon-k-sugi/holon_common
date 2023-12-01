@@ -73,6 +73,8 @@ class PageList {
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
     const initialPageCount = this.getInitialPageCount();
+    console.log(initialPageCount);
+    console.log($(`[id^="iftc_cf_page_"]:gt(${initialPageCount})`));
     this.front = $(`[id^="iftc_cf_page_"]:gt(${initialPageCount})`).not('[class~="hidden"],[class~="rear"]');
   }
   indexToSelector(index) {
@@ -104,35 +106,28 @@ class IconObjects {
   }
   showIcon(iconSetting) {
     console.log('hoge');
-    const position = 13;
+    const margin = 13;
+    const fontSize = 8;
     if (iconSetting.acrossYears) {
       this.setPages('acrossYears', [2]);
-      const inputArea = this.list['acrossYears'].pages.children('[class~="iftc_cf_inputitems"]');
-      this.setPosition('acrossYears', position - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
+      this.setMargin('acrossYears', margin, margin);
     }
-
-    const fontSize = 8;
     if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0) {
       this.setPages('addPage', iconSetting.addPage);
-      this.setPosition('addPage', position, position);
+      this.setMargin('acrossYears', margin, margin);
     }
     if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0) {
       this.setPages('inputEmployees', iconSetting.inputEmployees);
-      this.setPosition('inputEmployees', position + fontSize * 10, position);
+      this.setMargin('inputEmployees', margin + fontSize * 10, margin);
     }
-
-    this.setPosition('copyPage1', 595 - position - (this.list.copyPage1.string.length + 2) * fontSize, position);
+    this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
 
     this.setPages('csvNum', [2]);
-    const inputArea = this.list['csvNum'].pages.children('[class~="iftc_cf_inputitems"]');
-    console.log(inputArea);
-    console.log(inputArea.css('left').split('pt')[0]);
-    this.setPosition('csvNum', 595 - position - (this.list.csvNum.string.length + 2) * fontSize - Number(inputArea.css('left').split('pt')[0]), position - Number(inputArea.css('top').split('pt')[0]));
+    this.setPosition('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
-    this.list.copyPage1.pages = [pageList.front];
+    this.setPages('csvNum', [pageList.front]);
+    
     var style = document.createElement("style");
-    document.head.appendChild(style);
-    const sheet = style.sheet;
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
       const iconDiv = $('<div>');
@@ -149,31 +144,29 @@ class IconObjects {
       iconDiv.css('text-align', 'center');
       iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
-      iconDiv.css('top', this.list[key].top);
-      iconDiv.css('left', this.list[key].left);
-      iconDiv.css('position', 'absolute');
       iconDiv.attr('id', this.list[key].name);
+      iconDiv.css('position', 'absolute');
       this.list[key].pages.forEach(page => {
+        this.setPosition(key, margin);
+        iconDiv.css('top', this.list[key].top);
+        iconDiv.css('left', this.list[key].left);
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
-    //   const selector = `#${this.list[key].name}`;
-    //   const propStr = ['left', 'top'].map(prop => {
-    //     return `${prop}:${this.list[key][prop]};`
-    //   }).join('');
-    //   console.log(`${selector}{${propStr}}`);
-    //   sheet.insertRule(
-    //     `${selector}{${propStr}position: absolute;}`,
-    //     sheet.cssRules.length
-    //   );
     });
   }
   setPages(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
   }
-  setPosition(name, left, top) {
-    this.list[name].left = `${left}pt`;
-    this.list[name].top = `${top}pt`;
+  setMargin(name, left, top) {
+    this.list[name].left = left;
+    this.list[name].top = top;
+  }
+  setPosition(name, margin) {
+    Object.keys(margin).forEach((key, i) => {
+      const inputAreaPos = Number(page.children('[class~="iftc_cf_inputitems"]').css(key).split('pt'));
+      this.list[name][key] = `${margin[key] - inputAreaPos}pt`;
+    });
   }
   getNameList() {
     return Object.keys(this.list).map(key => this.list[key].name);
