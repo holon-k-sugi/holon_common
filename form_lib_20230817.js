@@ -72,6 +72,7 @@ class PageList {
   }
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
+    console.log(this.list);
     this.addPages = this.getIndexOfAddPages();
   }
   indexToSelector(index) {
@@ -80,7 +81,8 @@ class PageList {
   getIndexOfAddPages() {
     const tmp = new Set();
     const ret = Object.values(this.list)
-      .map(v => console.log(v.classList) || [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1))
+      .filter(v => v.classList)
+      .map(v => [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1))
       .map((str, i) => {
         if (tmp.has(str)) return i + 1;
         tmp.add(str);
