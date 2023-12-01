@@ -162,11 +162,7 @@ class IconObjects {
   }
   setPosition(name, page) {
     Object.keys(this.list[name].margin).forEach((key, i) => {
-      const inputAreaPos = Number(page.children('[class~="iftc_cf_inputitems"]').get()[0].style[key].split('pt'));
-      console.log(page.children('[class~="iftc_cf_inputitems"]').get());
-      console.log(page.children('[class~="iftc_cf_inputitems"]').get()[0]);
-      console.log(page.children('[class~="iftc_cf_inputitems"]').get()[0].style);
-      console.log(inputAreaPos);
+      const inputAreaPos = Number(window.getComputedStyle(page.children('[class~="iftc_cf_inputitems"]').get()[0]).getPropertyValue(key).split('pt'));
       this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
     });
   }
