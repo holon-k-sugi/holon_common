@@ -84,11 +84,13 @@ class PageList {
     const tmp = new Set();
     const ret = Object.values(this.list).findIndex(v => {
       console.log([...v.classList.values()]);
-      const str = [...v.classList.values()].find(v => { v.indexOf('iftc_cf_form_') > -1 });
+      const str = [...v.classList.values()].find(v => v.indexOf('iftc_cf_form_') > -1);
       if (tmp.has(str)) return true;
       tmp.add(str);
+      console.log(tmp);
       return false;
     });
+    console.log(tmp);
     return ret === -1 ? Object.values(this.list).length : ret;
   }
 }
