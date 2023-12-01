@@ -80,8 +80,7 @@ class PageList {
   }
   getIndexOfAddPages() {
     const tmp = new Set();
-    const ret = Object.values(this.list)
-      .filter(v => v.classList)
+    const ret = [...this.list]
       .map(v => [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1))
       .map((str, i) => {
         if (tmp.has(str)) return i + 1;
