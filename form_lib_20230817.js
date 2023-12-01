@@ -72,21 +72,21 @@ class PageList {
   }
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
-    const initialPageCount = this.getInitialPageCount();
-    this.front = $(`[id^="iftc_cf_page_"]:gt(${initialPageCount - 1})`).not('[class~="hidden"],[class~="rear"]');
+    this.addPages = this.getIndexOfAddPages();
   }
   indexToSelector(index) {
     return this.list.eq(index);
   }
-  getInitialPageCount() {
+  getIndexOfAddPages() {
     const tmp = new Set();
-    const ret = Object.values(this.list).findIndex(v => {
-      const str = [...v.classList.values()].find(v => v.indexOf('iftc_cf_form_') > -1);
-      if (tmp.has(str)) return true;
-      tmp.add(str);
-      return false;
-    });
-    return ret === -1 ? Object.values(this.list).length : ret;
+    const ret = Object.values(this.list)
+      .map(v => [...v.classList.values()].find(v => v.indexOf('iftc_cf_form_') > -1))
+      .map((str, i) => {
+        if (tmp.has(str)) return i + 1;
+        tmp.add(str);
+        return false;
+      }).filter(v => v !== false);
+    return ret;
   }
 }
 
@@ -115,8 +115,10 @@ class IconObjects {
       this.setPages('inputEmployees', iconSetting.inputEmployees);
       this.setMargin('inputEmployees', margin + fontSize * 10, margin);
     }
-    this.setPages('copyPage1', [pageList.front]);
-    this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
+    if (pageList.addPages.length > 0) {
+      this.setPages('copyPage1', pageList.addPages);
+      this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
+    }
 
     this.setPages('csvNum', [2]);
     this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
