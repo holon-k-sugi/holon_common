@@ -134,8 +134,8 @@ class IconObjects {
       iconDiv.css('font-size', `${fontSize}pt`);
       iconDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
       iconDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
-      iconDiv.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
-      iconDiv.css('border-radius', '5px');
+      iconDiv.css('border', this.list[key].iconType === 'label' ? `solid 2pt ${this.list[key].color}` : 'white');
+      iconDiv.css('border-radius', '5pt');
       iconDiv.css('text-align', 'center');
       iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       iconDiv.css('height', `${fontSize * 2}pt`);
@@ -158,8 +158,8 @@ class IconObjects {
     this.list[name].top = top;
   }
   setPosition(name, margin, page) {
-    console.log();
     Object.keys(margin).forEach((key, i) => {
+      console.log(page.children('[class~="iftc_cf_inputitems"]').css(key));
       const inputAreaPos = Number(page.children('[class~="iftc_cf_inputitems"]').css(key).split('pt'));
       this.list[name][key] = `${margin[key] - inputAreaPos}pt`;
     });
