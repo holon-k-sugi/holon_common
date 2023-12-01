@@ -109,7 +109,7 @@ class IconObjects {
     }
     if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0) {
       this.setPages('addPage', iconSetting.addPage);
-      this.setMargin('acrossYears', margin, margin);
+      this.setMargin('addPage', margin, margin);
     }
     if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0) {
       this.setPages('inputEmployees', iconSetting.inputEmployees);
