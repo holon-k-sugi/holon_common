@@ -83,6 +83,7 @@ class PageList {
   getInitialPageCount() {
     const tmp = new Set();
     const ret = Object.values(this.list).findIndex(v => {
+      console.log(v.id);
       if (tmp.has(v.id)) return true;
       tmp.add(v.id);
       return false;
