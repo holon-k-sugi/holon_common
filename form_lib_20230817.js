@@ -119,7 +119,7 @@ class IconObjects {
     this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
 
     this.setPages('csvNum', [2]);
-    this.setPosition('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
+    this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
 
     var style = document.createElement("style");
@@ -142,7 +142,7 @@ class IconObjects {
       iconDiv.attr('id', this.list[key].name);
       iconDiv.css('position', 'absolute');
       this.list[key].pages.forEach(page => {
-        this.setPosition(key, margin);
+        this.setPosition(key, margin, page);
         iconDiv.css('top', this.list[key].top);
         iconDiv.css('left', this.list[key].left);
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
@@ -157,7 +157,8 @@ class IconObjects {
     this.list[name].left = left;
     this.list[name].top = top;
   }
-  setPosition(name, margin) {
+  setPosition(name, margin, page) {
+    console.log();
     Object.keys(margin).forEach((key, i) => {
       const inputAreaPos = Number(page.children('[class~="iftc_cf_inputitems"]').css(key).split('pt'));
       this.list[name][key] = `${margin[key] - inputAreaPos}pt`;
