@@ -154,6 +154,7 @@ class IconObjects {
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
   }
   setMargin(name, left, top) {
+    this.list[name].margin = {};
     this.list[name].margin.left = left;
     this.list[name].margin.top = top;
   }
