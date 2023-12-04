@@ -162,12 +162,17 @@ class IconObjects {
   }
   setPosition(name, page) {
     const getPtValueFromStylesheets = (selector) => {
-      [...document.styleSheets].forEach(styleSheet => {
-        [...styleSheet.cssRules].forEach(rule => {
-          if (rule.selectorText === selector) return rule.style;
+      let result;
+      [...document.styleSheets].some(styleSheet => {
+        return [...styleSheet.cssRules].some(rule => {
+          if (rule.selectorText === selector) {
+            result = rule.style;
+            return true;
+          }
+          return false;
         });
       });
-      return null;
+      return result;
     };
 
     Object.keys(this.list[name].margin).forEach((key, i) => {
