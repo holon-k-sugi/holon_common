@@ -127,32 +127,34 @@ class IconObjects {
     var style = document.createElement("style");
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
-      const iconDiv = $('<div>', {
+      const iconSvg = $('<svg>', {
         'display': 'flex',
         'justify-content': 'center',
-        'align-items': 'center',
-        'alignment-baseline': 'central',
-        'text-anchor': 'middle'
+        'align-items': 'center'
       });
-      iconDiv.text(this.list[key].string);
-      iconDiv.prop('type', 'button');
-      iconDiv.prop('tabindex', '-1');
-      iconDiv.css('font-weight', 'bold');
-      iconDiv.css('font-family', 'メイリオ');
-      iconDiv.css('font-size', `${fontSize}pt`);
-      iconDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
-      iconDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
-      iconDiv.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
-      iconDiv.css('border-radius', '5px');
-      iconDiv.css('text-align', 'center');
-      iconDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
-      iconDiv.css('height', `${fontSize * 2}pt`);
-      iconDiv.attr('id', this.list[key].name);
-      iconDiv.css('position', 'absolute');
+      iconSvg.prop('type', 'button');
+      iconSvg.prop('tabindex', '-1');
+      iconSvg.css('font-weight', 'bold');
+      iconSvg.css('font-family', 'メイリオ');
+      iconSvg.css('font-size', `${fontSize}pt`);
+      iconSvg.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
+      iconSvg.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
+      iconSvg.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
+      iconSvg.css('border-radius', '5px');
+      iconSvg.css('text-align', 'center');
+      iconSvg.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
+      iconSvg.css('height', `${fontSize * 2}pt`);
+      iconSvg.attr('id', this.list[key].name);
+      iconSvg.css('position', 'absolute');
+      const svg = $('<svg>', { 'display': 'flex', 'justify-content': 'center', 'align-items': 'center' });
+      const text = $('<text>', { x: '50%', y: '50%', 'alignment-baseline': 'central', 'text-anchor': 'middle' });
+      text.text(this.list[key].string);
+      svg.append(text);
+      csvDiv.append(svg);
       this.list[key].pages.forEach(page => {
         this.setPosition(key, page);
-        iconDiv.css('top', this.list[key].top);
-        iconDiv.css('left', this.list[key].left);
+        iconSvg.css('top', this.list[key].top);
+        iconSvg.css('left', this.list[key].left);
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
     });
