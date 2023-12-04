@@ -132,7 +132,7 @@ class IconObjects {
       csvDiv.prop('tabindex', '-1');
       csvDiv.css('font-weight', 'bold');
       csvDiv.css('font-family', 'ヒラギノ角ゴ');
-      csvDiv.css('padding', `${fontSize / 2}pt`);
+      csvDiv.css('padding', `${fontSize / 2}pt, 0pt`);
       csvDiv.css('font-size', `${fontSize}pt`);
       csvDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
       csvDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
