@@ -127,7 +127,13 @@ class IconObjects {
     var style = document.createElement("style");
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
-      const iconDiv = $('<div>');
+      const iconDiv = $('<div>', {
+        'display': 'flex',
+        'justify-content': 'center',
+        'align-items': 'center',
+        'alignment-baseline': 'central',
+        'text-anchor': 'middle'
+      });
       iconDiv.text(this.list[key].string);
       iconDiv.prop('type', 'button');
       iconDiv.prop('tabindex', '-1');
