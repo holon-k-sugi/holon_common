@@ -171,11 +171,11 @@ class IconObjects {
     };
 
     Object.keys(this.list[name].margin).forEach((key, i) => {
-      console.log($(`#${page.attr('id')}`));
-      console.log(getPtValueFromStylesheets(`#${page.attr('id')}`));
+      const id = $(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`).attr('id');
+      console.log(getPtValueFromStylesheets(`#${id}`));
       // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key]);
       // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key].split('pt'));
-      const inputAreaPos = Number(getPtValueFromStylesheets(`#${page.attr('id')}`)[key].split('pt'));
+      const inputAreaPos = Number(getPtValueFromStylesheets(`#${id}`)[key].split('pt'));
       this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
     });
   }
