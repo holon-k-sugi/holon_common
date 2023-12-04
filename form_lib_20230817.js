@@ -132,6 +132,7 @@ class IconObjects {
       csvDiv.prop('tabindex', '-1');
       csvDiv.css('font-weight', 'bold');
       csvDiv.css('font-family', 'メイリオ');
+      csvDiv.css('padding', `${fontSize / 2}pt`);
       csvDiv.css('font-size', `${fontSize}pt`);
       csvDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
       csvDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
@@ -142,11 +143,7 @@ class IconObjects {
       csvDiv.css('height', `${fontSize * 2}pt`);
       csvDiv.attr('id', this.list[key].name);
       csvDiv.css('position', 'absolute');
-      const svg = $('<svg>', { 'display': 'flex', 'justify-content': 'center', 'align-items': 'center' });
-      const text = $('<text>', { x: '50%', y: '50%', 'alignment-baseline': 'central', 'text-anchor': 'middle' });
-      text.text(this.list[key].string);
-      svg.append(text);
-      csvDiv.append(svg);
+      csvDiv.text(this.list[key].string);
       this.list[key].pages.forEach(page => {
         this.setPosition(key, page);
         csvDiv.css('top', this.list[key].top);
