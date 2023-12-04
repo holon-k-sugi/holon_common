@@ -171,9 +171,10 @@ class IconObjects {
     };
 
     Object.keys(this.list[name].margin).forEach((key, i) => {
-      const id = $(`#${page.attr('id')} > [id~="iftc_cf_inputarea"]`).attr('id');
+      const id = $(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`).attr('id');
       console.log($(`#${page.attr('id')}`));
-      console.log($(`#${page.attr('id')} > [id~="iftc_cf_inputarea"]`));
+      console.log($(`#${page.attr('id')}`).children());
+      console.log($(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`));
       console.log(id);
       console.log(getPtValueFromStylesheets(`#${id}`));
       // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key]);
