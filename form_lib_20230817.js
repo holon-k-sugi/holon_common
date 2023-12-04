@@ -151,7 +151,7 @@ class IconObjects {
         this.setPosition(key, page);
         csvDiv.css('top', this.list[key].top);
         csvDiv.css('left', this.list[key].left);
-        page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
+        page.children('[class~="iftc_cf_inputitems"]').append(csvDiv);
       });
     });
   }
