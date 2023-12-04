@@ -171,6 +171,7 @@ class IconObjects {
     };
 
     Object.keys(this.list[name].margin).forEach((key, i) => {
+      console.log($(`#${page.attr('id')}`));
       console.log(getPtValueFromStylesheets(`#${page.attr('id')}`));
       // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key]);
       // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key].split('pt'));
