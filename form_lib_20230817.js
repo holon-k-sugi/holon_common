@@ -127,25 +127,21 @@ class IconObjects {
     var style = document.createElement("style");
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
-      const iconSvg = $('<svg>', {
-        'display': 'flex',
-        'justify-content': 'center',
-        'align-items': 'center'
-      });
-      iconSvg.prop('type', 'button');
-      iconSvg.prop('tabindex', '-1');
-      iconSvg.css('font-weight', 'bold');
-      iconSvg.css('font-family', 'メイリオ');
-      iconSvg.css('font-size', `${fontSize}pt`);
-      iconSvg.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
-      iconSvg.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
-      iconSvg.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
-      iconSvg.css('border-radius', '5px');
-      iconSvg.css('text-align', 'center');
-      iconSvg.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
-      iconSvg.css('height', `${fontSize * 2}pt`);
-      iconSvg.attr('id', this.list[key].name);
-      iconSvg.css('position', 'absolute');
+      const csvDiv = $('<div>');
+      csvDiv.prop('type', 'button');
+      csvDiv.prop('tabindex', '-1');
+      csvDiv.css('font-weight', 'bold');
+      csvDiv.css('font-family', 'メイリオ');
+      csvDiv.css('font-size', `${fontSize}pt`);
+      csvDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
+      csvDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
+      csvDiv.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
+      csvDiv.css('border-radius', '5px');
+      csvDiv.css('text-align', 'center');
+      csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
+      csvDiv.css('height', `${fontSize * 2}pt`);
+      csvDiv.attr('id', this.list[key].name);
+      csvDiv.css('position', 'absolute');
       const svg = $('<svg>', { 'display': 'flex', 'justify-content': 'center', 'align-items': 'center' });
       const text = $('<text>', { x: '50%', y: '50%', 'alignment-baseline': 'central', 'text-anchor': 'middle' });
       text.text(this.list[key].string);
@@ -153,8 +149,8 @@ class IconObjects {
       csvDiv.append(svg);
       this.list[key].pages.forEach(page => {
         this.setPosition(key, page);
-        iconSvg.css('top', this.list[key].top);
-        iconSvg.css('left', this.list[key].left);
+        csvDiv.css('top', this.list[key].top);
+        csvDiv.css('left', this.list[key].left);
         page.children('[class~="iftc_cf_inputitems"]').append(iconDiv);
       });
     });
