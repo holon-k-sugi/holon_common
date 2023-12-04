@@ -161,8 +161,20 @@ class IconObjects {
     this.list[name].margin.top = top;
   }
   setPosition(name, page) {
+    const getPtValueFromStylesheets = (selector) => {
+      [...document.styleSheets].forEach(styleSheet => {
+        [...styleSheet.cssRules].forEach(rule => {
+          if (rule.selectorText === selector) return rule.style;
+        });
+      });
+      return null;
+    };
+
     Object.keys(this.list[name].margin).forEach((key, i) => {
-      const inputAreaPos = Number(window.getComputedStyle(page.children('[class~="iftc_cf_inputitems"]').get()[0]).getPropertyValue(key).split('pt'));
+      const inputAreaPos = Number(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key].split('pt'));
+      console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key].split('pt'));
+      console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key]);
+      console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`));
       this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
     });
   }
