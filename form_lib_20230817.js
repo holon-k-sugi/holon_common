@@ -140,7 +140,7 @@ class IconObjects {
       csvDiv.css('border-radius', '5px');
       csvDiv.css('text-align', 'center');
       csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
-      csvDiv.css('height', `${fontSize * 2}pt`);
+      csvDiv.css('height', `${fontSize}pt`);
       csvDiv.attr('id', this.list[key].name);
       csvDiv.css('position', 'absolute');
       csvDiv.text(this.list[key].string);
