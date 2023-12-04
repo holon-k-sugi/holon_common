@@ -133,7 +133,7 @@ class IconObjects {
       csvDiv.css('cursor', this.list[key].iconType === 'button' ? 'pointer' : 'default');
       csvDiv.css('font-weight', 'bold');
       csvDiv.css('font-family', 'ヒラギノ角ゴ');
-      csvDiv.css('padding', `${fontSize / 2}pt ${fontSize}pt`);
+      csvDiv.css('padding', `${fontSize / 2}pt 0pt`);
       csvDiv.css('font-size', `${fontSize}pt`);
       csvDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
       csvDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
@@ -141,7 +141,7 @@ class IconObjects {
       csvDiv.css('border-radius', '5px');
       csvDiv.css('text-align', 'center');
       csvDiv.css('display', 'inline-block');
-      // csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
+      csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       // csvDiv.css('height', `${fontSize}pt`);
       csvDiv.attr('id', this.list[key].name);
       csvDiv.css('position', 'absolute');
