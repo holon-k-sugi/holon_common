@@ -182,8 +182,8 @@ class IconObjects {
       console.log($(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`));
       console.log(id);
       console.log(getPtValueFromStylesheets(`#${id}`));
-      // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key]);
-      // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key].split('pt'));
+      console.log(getPtValueFromStylesheets(`#${id}`)[key]);
+      console.log(getPtValueFromStylesheets(`#${id}`)[key].split('pt'));
       const inputAreaPos = Number(getPtValueFromStylesheets(`#${id}`)[key].split('pt'));
       this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
     });
