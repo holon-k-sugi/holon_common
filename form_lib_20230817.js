@@ -171,7 +171,7 @@ class IconObjects {
     };
 
     Object.keys(this.list[name].margin).forEach((key, i) => {
-      const id = $(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`).attr('id');
+      const id = $(`#${page.attr('id')} [class~="iftc_cf_inputarea"]`).attr('id');
       console.log(getPtValueFromStylesheets(`#${id}`));
       // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key]);
       // console.log(getPtValueFromStylesheets(`#${page.attr('id')} [class~="iftc_cf_inputitems"]`)[key].split('pt'));
