@@ -140,6 +140,7 @@ class IconObjects {
       csvDiv.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
       csvDiv.css('border-radius', '5px');
       csvDiv.css('text-align', 'center');
+      csvDiv.css('display', 'inline-block');
       // csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
       // csvDiv.css('height', `${fontSize}pt`);
       csvDiv.attr('id', this.list[key].name);
