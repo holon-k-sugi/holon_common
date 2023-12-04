@@ -133,7 +133,7 @@ class IconObjects {
       csvDiv.css('cursor', this.list[key].iconType === 'button' ? 'pointer' : 'default');
       csvDiv.css('font-weight', 'bold');
       csvDiv.css('font-family', 'ヒラギノ角ゴ');
-      csvDiv.css('padding', `${fontSize / 2}pt 0pt`);
+      csvDiv.css('padding', `2pt 0pt`);
       csvDiv.css('font-size', `${fontSize}pt`);
       csvDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
       csvDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
