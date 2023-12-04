@@ -130,6 +130,7 @@ class IconObjects {
       const csvDiv = $('<div>');
       csvDiv.prop('type', 'button');
       csvDiv.prop('tabindex', '-1');
+      csvDiv.css('cursor', this.list[key].iconType === 'button' ? 'pointer' : 'default');
       csvDiv.css('font-weight', 'bold');
       csvDiv.css('font-family', 'ヒラギノ角ゴ');
       csvDiv.css('padding', `${fontSize / 2}pt 0pt`);
