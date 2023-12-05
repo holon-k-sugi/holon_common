@@ -811,6 +811,58 @@ function visualizeObj(captionList = [], inputList = [], labelList = []) {
   });
 }
 
+function toggleCSVLabel() {
+  let isVisible = false;
+  return () => {
+    isVisible = !isVisible;
+    $('.csv-num').css('visibility', !isVisible ? 'hidden' : '');
+  }
+}
+
+function createCSVLabel() {
+  const callToggleCSVLabel = toggleCSVLabel();
+  $('#SHOW_CSV_NUM_BUTTON').on('click', (evt) => {
+    callToggleCSVLabel();
+  });
+  const xmlDataMap = JSON.parse($('input[name="xmlDataMap"]').val());
+  const csvObjs = Object.keys(xmlDataMap).filter(key => {
+    return xmlDataMap[key].split('_')[0] === 'OBJ';
+  }).map(key => key);
+  const cssPrp = {
+    'background': 'rgba(68,201,194,1)',
+    'color': 'white',
+    'position': 'absolute',
+    'align-items': 'center',
+    'font-weight': 'bold',
+    'font-family': 'メイリオ',
+    'display': 'flex',
+    'justify-content': 'center',
+    'align-items': 'center'
+  };
+  // CSV項目の中で hidden に設定されているオブジェクトを探す
+  const hiddenObj = csvObjs.map((csv, i) => {
+    const isHidden = [...document.styleSheets].some(ss => {
+      return [...ss.cssRules].some(rule => rule.selectorText && rule.selectorText.indexOf(csv) !== -1 && rule.style.visibility === 'hidden');
+    });
+    return isHidden ? undefined : csv;
+  });
+  hiddenObj.forEach((csv, i) => {
+    if (csv === undefined) return;
+    const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
+      if (cur === 'visibility') target.css(cur, 'hidden');
+      else target.css(cur, $(getSelector(csv)).css(cur));
+      return target;
+    }, $('<div>'));
+    const fontSize = Math.min(($(getSelector(csv)).css('width').split('px')[0] - 2) / (i.toString().length), $(getSelector(csv)).css('height').split('px')[0] - 2);
+    csvDiv.css('line-height', `${$(getSelector(csv)).css('height').split('px')[0]}px`);
+    csvDiv.css('font-size', `${fontSize}px`);
+    csvDiv.addClass('csv-num');
+    Object.keys(cssPrp).forEach(key => csvDiv.css(key, cssPrp[key]));
+    csvDiv.text(i + 1);
+    $(getSelector(csv)).after(csvDiv);
+  });
+}
+
 function makeArray(num, prefix, first, deference) {
   return [...Array(num)].map((_, i) => `${prefix}${first + i * deference} `);
 }
