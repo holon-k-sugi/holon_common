@@ -97,7 +97,7 @@ class IconObjects {
       addPage: { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label' },
       inputEmployees: { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label' },
       copyPage1: { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button' },
-      csvNum: { name: 'SHOW_CSV_NUM_BUTTON', string: 'CSV番号表示', color: 'rgba(68,201,194,1)', iconType: 'button' }
+      csvNum: { name: 'SHOW_CSV_NUM_BUTTON', string: 'CSV番号を表示する', color: 'rgba(68,201,194,1)', iconType: 'button' }
     };
   }
   showIcon(iconSetting) {
@@ -142,7 +142,6 @@ class IconObjects {
       csvDiv.css('text-align', 'center');
       csvDiv.css('display', 'inline-block');
       csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
-      // csvDiv.css('height', `${fontSize}pt`);
       csvDiv.attr('id', this.list[key].name);
       csvDiv.css('position', 'absolute');
       csvDiv.text(this.list[key].string);
@@ -814,7 +813,7 @@ function toggleCSVLabel() {
   let isVisible = false;
   return () => {
     isVisible = !isVisible;
-    $('#SHOW_CSV_NUM_BUTTON').text(!isVisible ? 'CSV番号表示' : 'CSV番号非表示');
+    $('#SHOW_CSV_NUM_BUTTON').text(!isVisible ? 'CSV番号を表示する' : 'CSV番号を隠す');
     $('.csv-num').css('visibility', !isVisible ? 'hidden' : '');
   }
 }
