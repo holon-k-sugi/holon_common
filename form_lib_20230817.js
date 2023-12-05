@@ -768,9 +768,8 @@ function onLoadIcon(iconSetting) {
 
 function onClickCopyPageButton() {
   $('#COPY_PAGE_BUTTON').on('click', (evt) => {
-    const splitId = evt.currentTarget.id.split('_');
-    splitId.shift(); splitId.pop();
-    const page = +splitId.pop();
+    const parent = evt.currentTarget.parent();
+    const page = parent.id.split('_')[3] - 1;
     inputObjects.getObjListByPage(page).forEach(obj => {
       if (documentEmployees.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
