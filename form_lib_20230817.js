@@ -814,6 +814,7 @@ function toggleCSVLabel() {
   let isVisible = false;
   return () => {
     isVisible = !isVisible;
+    $('#SHOW_CSV_NUM_BUTTON').text(!isVisible ? 'CSV番号表示' : 'CSV番号非表示');
     $('.csv-num').css('visibility', !isVisible ? 'hidden' : '');
   }
 }
