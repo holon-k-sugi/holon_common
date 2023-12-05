@@ -767,7 +767,7 @@ function onLoadIcon(iconSetting) {
 }
 
 function onClickCopyPageButton() {
-  $(getSelector('COPY_PAGE_BUTTON')).on('click', (evt) => {
+  $('#COPY_PAGE_BUTTON').on('click', (evt) => {
     const splitId = evt.currentTarget.id.split('_');
     splitId.shift(); splitId.pop();
     const page = +splitId.pop();
