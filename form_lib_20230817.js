@@ -881,7 +881,7 @@ function createCSVLabel() {
       else target.css(cur, $(getSelector(csv)).css(cur));
       return target;
     }, $('<div>'));
-    const fontSize = Math.min(($(getSelector(csv)).css('width').split('px')[0] - 2) / ((i + 1).toString().length), $(getSelector(csv)).css('height').split('px')[0] - 2);
+    const fontSize = Math.min(($(getSelector(csv)).css('width').split('px')[0]) / ((i + 1).toString().length), $(getSelector(csv)).css('height').split('px')[0] - 2);
     csvDiv.css('line-height', `${$(getSelector(csv)).css('height').split('px')[0]}px`);
     csvDiv.css('font-size', `${fontSize}px`);
     csvDiv.addClass('csv-num');
