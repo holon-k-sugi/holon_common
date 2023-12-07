@@ -107,10 +107,9 @@ class PageList {
     return ret;
   }
   isFrontPage(units) {
-    console.log(units, this.frontPages);
     return units.map(unit => {
       const isFront = this.frontPages.some(v => unit === v);
-      if (!isFront) console.warn(`ユニット番号 ${unit} は隠しページまたは裏面`);
+      if (!isFront) console.warn(`ユニット番号 ${unit} は隠しページまたは裏面なのでアイコンまたはボタンを表示できません。`);
       return isFront;
     }).reduce((a, b) => a || b);
   }
@@ -193,7 +192,6 @@ class IconObjects {
     this.list[name].margin.top = top;
   }
   setPosition(name, page) {
-    console.log(name, page);
     const getPtValueFromStylesheets = (selector) => {
       let result;
       [...document.styleSheets].some(styleSheet => {
