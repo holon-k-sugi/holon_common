@@ -99,7 +99,7 @@ class PageList {
           class: [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1)
         }
       }).map((obj, i) => {
-        if (notFrontPageWord.map(w => obj.id.indexOf(w) > -1).reduce((a, b) => a || b)) return false;
+        if (notFrontPageWord.map(w => obj.class.indexOf(w) > -1).reduce((a, b) => a || b)) return false;
         if (tmp.has(obj.class)) return false;
         tmp.add(obj.class);
         return i + 1;
