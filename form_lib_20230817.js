@@ -876,12 +876,12 @@ function createCSVLabel() {
   });
   visibleObj.forEach((csv, i) => {
     if (csv === undefined) return;
-    const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
-      if (cur === 'visibility') target.css(cur, 'hidden');
-      else target.css(cur, $(getSelector(csv)).css(cur));
-      return target;
-    }, $('<div>'));
     $(getSelector(csv)).each((_, elm) => {
+      const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
+        if (cur === 'visibility') target.css(cur, 'hidden');
+        else target.css(cur, $(elm).css(cur));
+        return target;
+      }, $('<div>'));
       const fontSize = Math.min(($(elm).css('width').split('px')[0]) / ((i + 1).toString().length), $(elm).css('height').split('px')[0] - 2);
       csvDiv.css('line-height', `${$(elm).css('height').split('px')[0] - 2}px`);
       csvDiv.css('padding', `2px 0px 0px`);
