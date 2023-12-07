@@ -94,8 +94,9 @@ class PageList {
     const notFrontPageWord = ['hidden', 'rear'];
     const ret = [...this.list]
       .map(v => {
+        console.log(v);
         return {
-          id: v.attr('id'),
+          id: v.id,
           class: [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1)
         }
       }).map((obj, i) => {
