@@ -853,7 +853,7 @@ function createCSVLabel() {
     callToggleCSVLabel();
   });
   const xmlDataMap = JSON.parse($('input[name="xmlDataMap"]').val());
-  const csvObjs = Object.keys(xmlDataMap).filter(key => {
+  const allCsvObj = Object.keys(xmlDataMap).filter(key => {
     return xmlDataMap[key].split('_')[0] === 'OBJ';
   }).map(key => key);
   const cssPrp = {
@@ -867,28 +867,30 @@ function createCSVLabel() {
     'justify-content': 'center',
     'align-items': 'center'
   };
-  // CSV項目の中で hidden に設定されているオブジェクトを探す
-  const hiddenObj = csvObjs.map((csv, i) => {
+  // CSV項目の中で hidden に設定されているオブジェクトを udefined に設定する。
+  const visibleObj = allCsvObj.map((csv, i) => {
     const isHidden = [...document.styleSheets].some(ss => {
       return [...ss.cssRules].some(rule => rule.selectorText && rule.selectorText.indexOf(csv) !== -1 && rule.style.visibility === 'hidden');
     });
     return isHidden ? undefined : csv;
   });
-  hiddenObj.forEach((csv, i) => {
+  visibleObj.forEach((csv, i) => {
     if (csv === undefined) return;
     const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
       if (cur === 'visibility') target.css(cur, 'hidden');
       else target.css(cur, $(getSelector(csv)).css(cur));
       return target;
     }, $('<div>'));
-    const fontSize = Math.min(($(getSelector(csv)).css('width').split('px')[0]) / ((i + 1).toString().length), $(getSelector(csv)).css('height').split('px')[0] - 2);
-    csvDiv.css('line-height', `${$(getSelector(csv)).css('height').split('px')[0]-2}px`);
-    csvDiv.css('padding', `2px 0px 0px`);
-    csvDiv.css('font-size', `${fontSize}px`);
-    csvDiv.addClass('csv-num');
-    Object.keys(cssPrp).forEach(key => csvDiv.css(key, cssPrp[key]));
-    csvDiv.text(i + 1);
-    $(getSelector(csv)).after(csvDiv);
+    $(getSelector(csv)).each((_, elm) => {
+      const fontSize = Math.min(($(elm).css('width').split('px')[0]) / ((i + 1).toString().length), $(elm).css('height').split('px')[0] - 2);
+      csvDiv.css('line-height', `${$(elm).css('height').split('px')[0] - 2}px`);
+      csvDiv.css('padding', `2px 0px 0px`);
+      csvDiv.css('font-size', `${fontSize}px`);
+      csvDiv.addClass('csv-num');
+      Object.keys(cssPrp).forEach(key => csvDiv.css(key, cssPrp[key]));
+      csvDiv.text(i + 1);
+      $(elm).after(csvDiv);
+    });
   });
 }
 
