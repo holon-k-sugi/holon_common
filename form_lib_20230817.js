@@ -73,6 +73,7 @@ class PageList {
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
     this.addPages = this.getIndexOfAddPages();
+    this.frontPages = this.getIndexOfFrontPages();
   }
   indexToSelector(index) {
     return this.list.eq(index);
@@ -87,6 +88,30 @@ class PageList {
         return false;
       }).filter(v => v !== false);
     return ret;
+  }
+  getIndexOfFrontPages() {
+    const tmp = new Set();
+    const notFrontPageWord = ['hidden', 'rear'];
+    const ret = [...this.list]
+      .map(v => {
+        return {
+          id: v.attr('id'),
+          class: [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1)
+        }
+      }).map((obj, i) => {
+        if (notFrontPageWord.map(w => obj.id.indexOf(w) > -1).redeuce((a, b) => a || b)) return false;
+        if (tmp.has(obj.class)) return false;
+        tmp.add(obj.class);
+        return i + 1;
+      }).filter(v => v !== false);
+    return ret;
+  }
+  isFrontPage(units) {
+    return units.map(unit => {
+      const isFront = this.frontPages.some(v => unit === v);
+      if (!isFront) console.warn(`ユニット番号 ${unit} は隠しページまたは裏面`);
+      return isFront;
+    }).reduce((a, b) => a || b);
   }
 }
 
@@ -107,11 +132,11 @@ class IconObjects {
       this.setPages('acrossYears', [2]);
       this.setMargin('acrossYears', margin, margin);
     }
-    if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0) {
+    if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage)) {
       this.setPages('addPage', iconSetting.addPage);
       this.setMargin('addPage', margin, margin);
     }
-    if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0) {
+    if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees)) {
       this.setPages('inputEmployees', iconSetting.inputEmployees);
       this.setMargin('inputEmployees', margin + fontSize * 10, margin);
     }
@@ -123,8 +148,6 @@ class IconObjects {
     this.setPages('csvNum', [2]);
     this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
-
-    var style = document.createElement("style");
     Object.keys(this.list).forEach(key => {
       if (!this.list[key].pages) return;
       const csvDiv = $('<div>');
@@ -153,6 +176,12 @@ class IconObjects {
       });
     });
   }
+  isFrontPage(units) {
+    units.some(unit => {
+      pageList.indexToSelector(unit - 1);
+    });
+  }
+
   setPages(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
