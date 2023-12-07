@@ -94,7 +94,6 @@ class PageList {
     const notFrontPageWord = ['hidden', 'rear'];
     const ret = [...this.list]
       .map(v => {
-        console.log(v);
         return {
           id: v.id,
           class: [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1)
@@ -193,6 +192,7 @@ class IconObjects {
     this.list[name].margin.top = top;
   }
   setPosition(name, page) {
+    console.log(name, page);
     const getPtValueFromStylesheets = (selector) => {
       let result;
       [...document.styleSheets].some(styleSheet => {
