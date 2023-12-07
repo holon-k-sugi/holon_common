@@ -107,6 +107,7 @@ class PageList {
     return ret;
   }
   isFrontPage(units) {
+    console.log(units, this.frontPages);
     return units.map(unit => {
       const isFront = this.frontPages.some(v => unit === v);
       if (!isFront) console.warn(`ユニット番号 ${unit} は隠しページまたは裏面`);
