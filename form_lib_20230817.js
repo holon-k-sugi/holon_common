@@ -885,7 +885,7 @@ function createCSVLabel() {
     tmpDiv.css('font-size', maxFontSizePt);
     tmpDiv.attr('id', 'tmp-div')
     $('#iftc_cf_page_1').after(tmpDiv);
-    const maxFontSizePx = $('#tmp-div').css('font-size').split('px');
+    const maxFontSizePx = $('#tmp-div').css('font-size').split('px')[0];
     $(getSelector(csv)).each((_, elm) => {
       const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
         if (cur === 'visibility') target.css(cur, 'hidden');
