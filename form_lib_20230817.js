@@ -895,6 +895,7 @@ function createCSVLabel() {
       const minFontSize = Math.min(($(elm).css('width').split('px')[0]) / ((i + 1).toString().length), $(elm).css('height').split('px')[0] - 2);
       const fontSize = Math.min(minFontSize, maxFontSizePx);
       const topPadding = 2;
+      console.log(fontSize, minFontSize, maxFontSizePx);
       csvDiv.css('line-height', `${$(elm).css('height').split('px')[0] - topPadding}px`);
       csvDiv.css('padding', `${topPadding}px 0px 0px`);
       csvDiv.css('font-size', `${fontSize}px`);
