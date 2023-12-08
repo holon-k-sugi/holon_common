@@ -149,30 +149,32 @@ class IconObjects {
     this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
     Object.keys(this.list).forEach(key => {
-      if (!this.list[key].pages) return;
+      const target = this.list[key];
+      if (!target.pages) return;
       const csvDiv = $('<div>');
       csvDiv.prop('type', 'button');
       csvDiv.prop('tabindex', '-1');
-      csvDiv.css('cursor', this.list[key].iconType === 'button' ? 'pointer' : 'default');
+      csvDiv.css('cursor', target.iconType === 'button' ? 'pointer' : 'default');
       csvDiv.css('font-weight', 'bold');
-      csvDiv.css('font-family', 'ヒラギノ角ゴ');
+      csvDiv.css('font-family', 'メイリオ');
       csvDiv.css('padding', `2pt 0pt`);
       csvDiv.css('font-size', `${fontSize}pt`);
-      csvDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
-      csvDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
-      csvDiv.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
+      csvDiv.css('color', target.iconType === 'label' ? target.color : 'white');
+      csvDiv.css('background', target.iconType === 'label' ? 'white' : target.color);
+      csvDiv.css('border', target.iconType === 'label' ? `solid 2px ${target.color}` : 'white');
       csvDiv.css('border-radius', '5px');
       csvDiv.css('text-align', 'center');
       csvDiv.css('display', 'inline-block');
-      csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
-      csvDiv.attr('id', this.list[key].name);
+      csvDiv.css('width', `${(target.string.length + 2) * fontSize}pt`);
+      csvDiv.attr('id', target.name);
       csvDiv.css('position', 'absolute');
-      csvDiv.text(this.list[key].string);
-      this.list[key].pages.forEach(page => {
+      csvDiv.text(target.string);
+      target.pages.forEach(page => {
+        const $tmp = csvDiv.clone();
         this.setPosition(key, page);
-        csvDiv.css('top', this.list[key].top);
-        csvDiv.css('left', this.list[key].left);
-        page.children('[class~="iftc_cf_inputitems"]').append(csvDiv);
+        $tmp.css('top', target.top);
+        $tmp.css('left', target.left);
+        page.children('[class~="iftc_cf_inputitems"]').append($tmp);
       });
     });
   }
