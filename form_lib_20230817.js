@@ -897,7 +897,6 @@ function createCSVLabel() {
       const minFontSize = Math.min(($(elm).css('width').split('px')[0]) / ((i + 1).toString().length), $(elm).css('height').split('px')[0] - 2);
       const fontSize = Math.min(minFontSize, maxFontSizePx);
       const topPadding = 2;
-      console.log(fontSize, minFontSize, maxFontSizePx);
       csvDiv.css('line-height', `${$(elm).css('height').split('px')[0] - topPadding}px`);
       csvDiv.css('padding', `${topPadding}px 0px 0px`);
       csvDiv.css('font-size', `${fontSize}px`);
@@ -915,7 +914,9 @@ function makeArray(num, prefix, first, deference) {
 
 function showDocInfo() {
   console.log(`フォーム名：${$('input[name="jobName"]').val()} `);
-  console.log(`ライブラリ名：${$('script[src*="form_lib"]').attr('src').split('/').find(v => v.indexOf('form_lib_') > -1).split('?')[0]} `);
+  const libUrl = $('script[src*="form_lib"]').attr('src').split('?')[0].split('/');
+  console.log(`ライブラリ名：${libUrl.find(v => v.indexOf('form_lib_') > -1)} `);
+  console.log(`ライブラリVer：${libUrl[libUrl.length - 2]} `);
 }
 
 function initializeInstances() {
