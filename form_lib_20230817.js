@@ -880,15 +880,23 @@ function createCSVLabel() {
   });
   visibleObj.forEach((csv, i) => {
     if (csv === undefined) return;
+    const maxFontSizePt = '14pt';
+    const tmpDiv = $('<div>');
+    tmpDiv.css('font-size', maxFontSizePt);
+    tmpDiv.attr('id', 'tmp-div')
+    $('#iftc_cf_page_1').after(tmpDiv);
+    const maxFontSizePx = $('#tmp-div').css('font-size').split('px');
     $(getSelector(csv)).each((_, elm) => {
       const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
         if (cur === 'visibility') target.css(cur, 'hidden');
         else target.css(cur, $(elm).css(cur));
         return target;
       }, $('<div>'));
-      const fontSize = Math.min(($(elm).css('width').split('px')[0]) / ((i + 1).toString().length), $(elm).css('height').split('px')[0] - 2);
-      csvDiv.css('line-height', `${$(elm).css('height').split('px')[0] - 2}px`);
-      csvDiv.css('padding', `2px 0px 0px`);
+      const minFontSize = Math.min(($(elm).css('width').split('px')[0]) / ((i + 1).toString().length), $(elm).css('height').split('px')[0] - 2);
+      const fontSize = Math.min(minFontSize, maxFontSizePx);
+      const topPadding = 2;
+      csvDiv.css('line-height', `${$(elm).css('height').split('px')[0] - topPadding}px`);
+      csvDiv.css('padding', `${topPadding}px 0px 0px`);
       csvDiv.css('font-size', `${fontSize}px`);
       csvDiv.addClass('csv-num');
       Object.keys(cssPrp).forEach(key => csvDiv.css(key, cssPrp[key]));
