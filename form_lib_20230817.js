@@ -876,10 +876,13 @@ function createCSVLabel() {
       return undefined;
     }
     const isHidden = [...document.styleSheets].some(ss => {
-      console.warn(`CSV番号 ${i + 1} 番: ${csv} は欄外のオブジェクト`);
       return [...ss.cssRules].some(rule => rule.selectorText && rule.selectorText.indexOf(csv) !== -1 && rule.style.visibility === 'hidden');
     });
-    return isHidden ? undefined : csv;
+    if (isHidden) {
+      console.warn(`CSV番号 ${i + 1} 番: ${csv} は欄外のオブジェクト`);
+      return undefined;
+    }
+    return csv;
   });
   visibleObj.forEach((csv, i) => {
     if (csv === undefined) return;
