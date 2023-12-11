@@ -870,13 +870,13 @@ function createCSVLabel() {
     'align-items': 'center'
   };
   // CSV項目の中で hidden に設定されているオブジェクトを udefined に設定する。
-  console.log(allCsvObj);
   const visibleObj = allCsvObj.map((csv, i) => {
     if (!inputObjects.objExists(csv)) {
       console.warn(`CSV番号 ${i + 1} 番: ${csv} は存在しないオブジェクト`);
       return undefined;
     }
     const isHidden = [...document.styleSheets].some(ss => {
+      console.warn(`CSV番号 ${i + 1} 番: ${csv} は欄外のオブジェクト`);
       return [...ss.cssRules].some(rule => rule.selectorText && rule.selectorText.indexOf(csv) !== -1 && rule.style.visibility === 'hidden');
     });
     return isHidden ? undefined : csv;
