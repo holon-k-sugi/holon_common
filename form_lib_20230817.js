@@ -797,7 +797,7 @@ function onLoadIcon(iconSetting) {
 }
 
 function onClickCopyPageButton() {
-  $('#COPY_PAGE_BUTTON').on('click', (evt) => {
+  $(document).on('click','#COPY_PAGE_BUTTON', (evt) => {
     const parent = $(evt.currentTarget).parent();
     const page = parent.attr('id').split('_')[3] - 1;
     inputObjects.getObjListByPage(page).forEach(obj => {
