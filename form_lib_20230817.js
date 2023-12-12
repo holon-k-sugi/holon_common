@@ -921,7 +921,7 @@ function showDocInfo() {
   console.log(`フォーム名：${formName.slice(0, 1) === 'J' ? formName.slice(1) : formName} `);
   const libUrl = $('script[src*="form_lib"]').attr('src').split('?')[0].split('/');
   console.log(`ライブラリ名：${libUrl.find(v => v.indexOf('form_lib_') > -1)} `);
-  const ver = [...Array(libUrl.length)].find((_, i) => libUrl[i].indexOf('@') > -1);
+  const ver = libUrl.find(v => v.indexOf('@') > -1);
   console.log(`ライブラリVer：${ver === undefined ? 'なし' : ver} `);
 }
 
