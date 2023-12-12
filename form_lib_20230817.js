@@ -797,7 +797,7 @@ function onLoadIcon(iconSetting) {
 }
 
 function onClickCopyPageButton() {
-  $(document).on('click','#COPY_PAGE_BUTTON', (evt) => {
+  $(document).on('click', '#COPY_PAGE_BUTTON', (evt) => {
     const parent = $(evt.currentTarget).parent();
     const page = parent.attr('id').split('_')[3] - 1;
     inputObjects.getObjListByPage(page).forEach(obj => {
@@ -917,10 +917,12 @@ function makeArray(num, prefix, first, deference) {
 }
 
 function showDocInfo() {
-  console.log(`フォーム名：${$('input[name="jobName"]').val()} `);
+  const formName = $('input[name="jobName"]').val();
+  console.log(`フォーム名：${formName.slice(0, 1) === 'J' ? formName.slice(1) : formName} `);
   const libUrl = $('script[src*="form_lib"]').attr('src').split('?')[0].split('/');
   console.log(`ライブラリ名：${libUrl.find(v => v.indexOf('form_lib_') > -1)} `);
-  console.log(`ライブラリVer：${libUrl[libUrl.length - 2]} `);
+  const ver = [...Array(libUrl.length)].find((_, i) => libUrl[i].indexOf('@') > -1);
+  console.log(`ライブラリVer：${ver === undefined ? 'なし' : ver} `);
 }
 
 function initializeInstances() {
