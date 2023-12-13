@@ -73,6 +73,7 @@ class PageList {
   initialize() {
     this.list = $(`[id^="iftc_cf_page_"]`);
     this.addPages = this.getIndexOfAddPages();
+    this.frontPages = this.getIndexOfFrontPages();
   }
   indexToSelector(index) {
     return this.list.eq(index);
@@ -87,6 +88,30 @@ class PageList {
         return false;
       }).filter(v => v !== false);
     return ret;
+  }
+  getIndexOfFrontPages() {
+    const tmp = new Set();
+    const notFrontPageWord = ['hidden', 'rear'];
+    const ret = [...this.list]
+      .map(v => {
+        return {
+          id: v.id,
+          class: [...v.classList.values()].find(s => s.indexOf('iftc_cf_form_') > -1)
+        }
+      }).map((obj, i) => {
+        if (notFrontPageWord.map(w => obj.class.indexOf(w) > -1).reduce((a, b) => a || b)) return false;
+        if (tmp.has(obj.class)) return false;
+        tmp.add(obj.class);
+        return i + 1;
+      }).filter(v => v !== false);
+    return ret;
+  }
+  isFrontPage(units) {
+    return units.map(unit => {
+      const isFront = this.frontPages.some(v => unit === v);
+      if (!isFront) console.warn(`ユニット番号 ${unit} は隠しページまたは裏面なのでアイコンまたはボタンを表示できません。`);
+      return isFront;
+    }).reduce((a, b) => a || b);
   }
 }
 
@@ -107,11 +132,11 @@ class IconObjects {
       this.setPages('acrossYears', [2]);
       this.setMargin('acrossYears', margin, margin);
     }
-    if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0) {
+    if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage)) {
       this.setPages('addPage', iconSetting.addPage);
       this.setMargin('addPage', margin, margin);
     }
-    if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0) {
+    if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees)) {
       this.setPages('inputEmployees', iconSetting.inputEmployees);
       this.setMargin('inputEmployees', margin + fontSize * 10, margin);
     }
@@ -123,36 +148,42 @@ class IconObjects {
     this.setPages('csvNum', [2]);
     this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
-
-    var style = document.createElement("style");
     Object.keys(this.list).forEach(key => {
-      if (!this.list[key].pages) return;
+      const target = this.list[key];
+      if (!target.pages) return;
       const csvDiv = $('<div>');
       csvDiv.prop('type', 'button');
       csvDiv.prop('tabindex', '-1');
-      csvDiv.css('cursor', this.list[key].iconType === 'button' ? 'pointer' : 'default');
+      csvDiv.css('cursor', target.iconType === 'button' ? 'pointer' : 'default');
       csvDiv.css('font-weight', 'bold');
-      csvDiv.css('font-family', 'ヒラギノ角ゴ');
+      csvDiv.css('font-family', 'メイリオ');
       csvDiv.css('padding', `2pt 0pt`);
       csvDiv.css('font-size', `${fontSize}pt`);
-      csvDiv.css('color', this.list[key].iconType === 'label' ? this.list[key].color : 'white');
-      csvDiv.css('background', this.list[key].iconType === 'label' ? 'white' : this.list[key].color);
-      csvDiv.css('border', this.list[key].iconType === 'label' ? `solid 2px ${this.list[key].color}` : 'white');
+      csvDiv.css('color', target.iconType === 'label' ? target.color : 'white');
+      csvDiv.css('background', target.iconType === 'label' ? 'white' : target.color);
+      csvDiv.css('border', target.iconType === 'label' ? `solid 2px ${target.color}` : 'white');
       csvDiv.css('border-radius', '5px');
       csvDiv.css('text-align', 'center');
       csvDiv.css('display', 'inline-block');
-      csvDiv.css('width', `${(this.list[key].string.length + 2) * fontSize}pt`);
-      csvDiv.attr('id', this.list[key].name);
+      csvDiv.css('width', `${(target.string.length + 2) * fontSize}pt`);
+      csvDiv.attr('id', target.name);
       csvDiv.css('position', 'absolute');
-      csvDiv.text(this.list[key].string);
-      this.list[key].pages.forEach(page => {
+      csvDiv.text(target.string);
+      target.pages.forEach(page => {
+        const $tmp = csvDiv.clone();
         this.setPosition(key, page);
-        csvDiv.css('top', this.list[key].top);
-        csvDiv.css('left', this.list[key].left);
-        page.children('[class~="iftc_cf_inputitems"]').append(csvDiv);
+        $tmp.css('top', target.top);
+        $tmp.css('left', target.left);
+        page.children('[class~="iftc_cf_inputitems"]').append($tmp);
       });
     });
   }
+  isFrontPage(units) {
+    units.some(unit => {
+      pageList.indexToSelector(unit - 1);
+    });
+  }
+
   setPages(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
     this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
@@ -766,7 +797,7 @@ function onLoadIcon(iconSetting) {
 }
 
 function onClickCopyPageButton() {
-  $('#COPY_PAGE_BUTTON').on('click', (evt) => {
+  $(document).on('click', '#COPY_PAGE_BUTTON', (evt) => {
     const parent = $(evt.currentTarget).parent();
     const page = parent.attr('id').split('_')[3] - 1;
     inputObjects.getObjListByPage(page).forEach(obj => {
@@ -824,7 +855,7 @@ function createCSVLabel() {
     callToggleCSVLabel();
   });
   const xmlDataMap = JSON.parse($('input[name="xmlDataMap"]').val());
-  const csvObjs = Object.keys(xmlDataMap).filter(key => {
+  const allCsvObj = Object.keys(xmlDataMap).filter(key => {
     return xmlDataMap[key].split('_')[0] === 'OBJ';
   }).map(key => key);
   const cssPrp = {
@@ -838,27 +869,46 @@ function createCSVLabel() {
     'justify-content': 'center',
     'align-items': 'center'
   };
-  // CSV項目の中で hidden に設定されているオブジェクトを探す
-  const hiddenObj = csvObjs.map((csv, i) => {
+  // CSV項目の中で hidden に設定されているオブジェクトを udefined に設定する。
+  const visibleObj = allCsvObj.map((csv, i) => {
+    if (!inputObjects.objExists(csv)) {
+      console.warn(`CSV番号 ${i + 1} 番: ${csv} は存在しないオブジェクト`);
+      return undefined;
+    }
     const isHidden = [...document.styleSheets].some(ss => {
       return [...ss.cssRules].some(rule => rule.selectorText && rule.selectorText.indexOf(csv) !== -1 && rule.style.visibility === 'hidden');
     });
-    return isHidden ? undefined : csv;
+    if (isHidden) {
+      console.warn(`CSV番号 ${i + 1} 番: ${csv} は欄外のオブジェクト`);
+      return undefined;
+    }
+    return csv;
   });
-  hiddenObj.forEach((csv, i) => {
+  visibleObj.forEach((csv, i) => {
     if (csv === undefined) return;
-    const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
-      if (cur === 'visibility') target.css(cur, 'hidden');
-      else target.css(cur, $(getSelector(csv)).css(cur));
-      return target;
-    }, $('<div>'));
-    const fontSize = Math.min(($(getSelector(csv)).css('width').split('px')[0] - 2) / (i.toString().length), $(getSelector(csv)).css('height').split('px')[0] - 2);
-    csvDiv.css('line-height', `${$(getSelector(csv)).css('height').split('px')[0]}px`);
-    csvDiv.css('font-size', `${fontSize}px`);
-    csvDiv.addClass('csv-num');
-    Object.keys(cssPrp).forEach(key => csvDiv.css(key, cssPrp[key]));
-    csvDiv.text(i + 1);
-    $(getSelector(csv)).after(csvDiv);
+    const maxFontSizePt = '14pt';
+    const tmpDiv = $('<div>');
+    tmpDiv.css('font-size', maxFontSizePt);
+    tmpDiv.attr('id', 'tmp-div')
+    $('#iftc_cf_page_1').after(tmpDiv);
+    const maxFontSizePx = Number($('#tmp-div').css('font-size').split('px')[0]);
+    $(getSelector(csv)).each((_, elm) => {
+      const csvDiv = ['width', 'left', 'top', 'visibility'].reduce((target, cur) => {
+        if (cur === 'visibility') target.css(cur, 'hidden');
+        else target.css(cur, $(elm).css(cur));
+        return target;
+      }, $('<div>'));
+      const minFontSize = Math.min(($(elm).css('width').split('px')[0]) / ((i + 1).toString().length), $(elm).css('height').split('px')[0] - 2);
+      const fontSize = Math.min(minFontSize, maxFontSizePx);
+      const topPadding = 2;
+      csvDiv.css('line-height', `${$(elm).css('height').split('px')[0] - topPadding}px`);
+      csvDiv.css('padding', `${topPadding}px 0px 0px`);
+      csvDiv.css('font-size', `${fontSize}px`);
+      csvDiv.addClass('csv-num');
+      Object.keys(cssPrp).forEach(key => csvDiv.css(key, cssPrp[key]));
+      csvDiv.text(i + 1);
+      $(elm).after(csvDiv);
+    });
   });
 }
 
@@ -867,8 +917,12 @@ function makeArray(num, prefix, first, deference) {
 }
 
 function showDocInfo() {
-  console.log(`フォーム名：${$('input[name="jobName"]').val()} `);
-  console.log(`ライブラリ名：${$('script[src*="form_lib"]').attr('src').split('/').find(v => v.indexOf('form_lib_') > -1).split('?')[0]} `);
+  const formName = $('input[name="jobName"]').val();
+  console.log(`フォーム名：${formName.slice(0, 1) === 'J' ? formName.slice(1) : formName} `);
+  const libUrl = $('script[src*="form_lib"]').attr('src').split('?')[0].split('/');
+  console.log(`ライブラリ名：${libUrl.find(v => v.indexOf('form_lib_') > -1)} `);
+  const ver = libUrl.find(v => v.indexOf('@') > -1);
+  console.log(`ライブラリVer：${ver === undefined ? 'なし' : ver} `);
 }
 
 function initializeInstances() {
