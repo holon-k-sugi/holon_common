@@ -20,7 +20,10 @@ class InputObjects {
     return Object.keys(this.list);
   }
   getObjByName(name) {
-    if (this.list[name] === undefined) throw new Error(`${name} は存在しないオブジェクト`);
+    if (this.list[name] === undefined) {
+      console.warn(`${name} は存在しないオブジェクト`);
+      return new InputObjectsByName();
+    }
     return this.list[name];
   }
   getAllIds(name) {
@@ -30,12 +33,18 @@ class InputObjects {
     return this.getObjByName(name).pageList.filter(v => v.length !== 0).length;
   }
   getIdsbyPage(name, page) {
-    if (this.getObjByName(name).pageList[page] === undefined) throw new Error(`${page} ページ目に ${name} は存在しない`);
+    if (this.getObjByName(name).pageList[page] === undefined) {
+      console.warn(`${page} ページ目に ${name} は存在しない`);
+      return [];
+    }
     return this.getObjByName(name).pageList[page];
   }
   getIdsByIndex(name, index) {
     const list = this.getObjByName(name).pageList.filter(v => v.length !== 0);
-    if (list[index] === undefined) throw new Error(`${name} が存在するページ数は ${index + 1} より少ない`);
+    if (list[index] === undefined) {
+      console.warn(`${name} が存在するページ数は ${index + 1} より少ない`);
+      return [];
+    }
     return list[index];
   }
   objExists(name) {
@@ -368,7 +377,7 @@ class CompanyMaster {
   getMaster(name) {
     if (!inputObjects.objExists(this.toMasterName(name))) {
       console.warn(`${this.toMasterName(name)}は存在しないオブジェクト`);
-      return;
+      return '';
     }
     return getV(this.toMasterName(name));
   }
@@ -552,13 +561,17 @@ function getN(name, i) {
   return hankakuNumber;
 }
 function setN(...args) {
-  if (args.length > 3) throw new Error(`引数が多すぎます。`);
+  if (args.length > 3) {
+    console.warn(`引数が多すぎます。`);
+    return;
+  }
   const name = args[0];
   const index = args.length === 3 ? args[1] : undefined;
   const val = args.slice(-1)[0];
-  const tmp = [name, index, val === '' ? '' : Number(val).toLocaleString('ja-JP')].filter(v => v !== undefined);
-  if (isNaN(Number(val))) throw new Error(`${name} にセットしようとしている ${val} は数値ではありません`);
-  setV(...tmp);
+  if (isNaN(Number(val))) console.warn(`${name} にセットしようとしている ${val} は数値ではありません`);
+  const tmp = isNaN(Number(val)) ? val.toString().replace(/[^0-9]/g, '') : Number(val).toLocaleString('ja-JP');
+  const ret = [name, index, val === '' ? '' : tmp].filter(v => v !== undefined);
+  setV(...ret);
 }
 function getP(name) {
   return inputObjects.getLengthOfPageListByName(name);
