@@ -563,7 +563,7 @@ class DMXMapping {
       return xmlDataMap[key].split('_')[0] === 'JS';
     }).map(key => key);
     this.JSObjList.forEach(obj => {
-      if (!inputObjects.objExists(csv)) console.warn(`DMXMapping: ${obj} は不要なマッピング`);
+      if (!inputObjects.objExists(obj)) console.warn(`DMXMapping: ${obj} は不要なマッピング`);
     });
   }
   getCSVObjList() {
