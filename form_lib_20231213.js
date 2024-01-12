@@ -555,12 +555,12 @@ class DMXMapping {
   constructor() {
   }
   initialize() {
-    const xmlDataMap = JSON.parse($('input[name="xmlDataMap"]').val());
-    this.CSVObjList = Object.keys(xmlDataMap).filter(key => {
-      return xmlDataMap[key].split('_')[0] === 'OBJ';
+    this.xmlDataMap = JSON.parse($('input[name="xmlDataMap"]').val());
+    this.CSVObjList = Object.keys(this.xmlDataMap).filter(key => {
+      return this.xmlDataMap[key].split('_')[0] === 'OBJ';
     }).map(key => key);
-    this.JSObjList = Object.keys(xmlDataMap).filter(key => {
-      return xmlDataMap[key].split('_')[0] === 'JS';
+    this.JSObjList = Object.keys(this.xmlDataMap).filter(key => {
+      return this.xmlDataMap[key].split('_')[0] === 'JS';
     }).map(key => key);
     this.JSObjList.forEach(obj => {
       if (!inputObjects.objExists(obj)) console.warn(`DMXMapping: ${obj} は不要なマッピング`);
@@ -571,6 +571,12 @@ class DMXMapping {
   }
   getJSObjList() {
     return this.JSObjList;
+  }
+  getUnmappedObjList() {
+    console.log('マッピングされてない項目');
+    inputObjects.getAllObjNameList().forEach(name => {
+      if (this.xmlDataMap[name] === undefined) console.log(`${name}`);
+    });
   }
 }
 
@@ -965,7 +971,11 @@ function showDocInfo() {
   const libUrl = $('script[src*="form_lib"]').attr('src').split('?')[0].split('/');
   console.log(`ライブラリ名：${libUrl.find(v => v.indexOf('form_lib_') > -1)} `);
   const ver = libUrl.find(v => v.indexOf('@') > -1);
-  console.log(`ライブラリVer：${ver === undefined ? 'なし' : ver} `);
+  console.log(`ライブラリVer: ${ver === undefined ? 'なし' : ver} `);
+}
+
+function getUnmappedObjList() {
+  dmxMapping.getUnmappedObjList();
 }
 
 function initializeInstances() {
