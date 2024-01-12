@@ -551,6 +551,29 @@ class DocumentEmployeesContents {
   }
 }
 
+class DMXMapping {
+  constructor() {
+  }
+  initialize() {
+    const xmlDataMap = JSON.parse($('input[name="xmlDataMap"]').val());
+    this.CSVObjList = Object.keys(xmlDataMap).filter(key => {
+      return xmlDataMap[key].split('_')[0] === 'OBJ';
+    }).map(key => key);
+    this.JSObjList = Object.keys(xmlDataMap).filter(key => {
+      return xmlDataMap[key].split('_')[0] === 'JS';
+    }).map(key => key);
+    this.JSObjList.forEach(obj => {
+      if (!inputObjects.objExists(csv)) console.warn(`DMXMapping: ${obj} は不要なマッピング`);
+    });
+  }
+  getCSVObjList() {
+    return this.CSVObjList;
+  }
+  getJSObjList() {
+    return this.JSObjList;
+  }
+}
+
 class LazyEvaluationFunctions {
   constructor() {
   }
@@ -568,6 +591,7 @@ const documentEmployeesContents = { initialize: () => undefined };
 const pageList = new PageList();
 const iconObjects = new IconObjects();
 const lazyEvaluationFunctions = new LazyEvaluationFunctions();
+const dmxMapping = new DMXMapping();
 
 // 汎用関数
 function getV(name, index) {
@@ -876,10 +900,7 @@ function createCSVLabel() {
   $('#SHOW_CSV_NUM_BUTTON').on('click', (evt) => {
     callToggleCSVLabel();
   });
-  const xmlDataMap = JSON.parse($('input[name="xmlDataMap"]').val());
-  const allCsvObj = Object.keys(xmlDataMap).filter(key => {
-    return xmlDataMap[key].split('_')[0] === 'OBJ';
-  }).map(key => key);
+  const csvObjList = dmxMapping.getCSVObjList();
   const cssPrp = {
     'background': 'rgba(68,201,194,1)',
     'color': 'white',
@@ -892,7 +913,7 @@ function createCSVLabel() {
     'align-items': 'center'
   };
   // CSV項目の中で hidden に設定されているオブジェクトを udefined に設定する。
-  const visibleObj = allCsvObj.map((csv, i) => {
+  const visibleObj = csvObjList.map((csv, i) => {
     if (!inputObjects.objExists(csv)) {
       console.warn(`CSV番号 ${i + 1} 番: ${csv} は存在しないオブジェクト`);
       return undefined;
@@ -953,4 +974,5 @@ function initializeInstances() {
   companyMaster.initialize();
   documentEmployees.initialize();
   pageList.initialize();
+  dmxMapping.initialize();
 }
