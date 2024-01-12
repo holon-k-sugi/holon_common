@@ -530,6 +530,7 @@ class DocumentEmployeesContents {
         if (documentEmployees.contains(i, key)) {
           docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
           let objs = employees.list[key](i);
+          if (!objs) return;
           if (!Array.isArray(objs)) objs = [objs];
           objs.forEach(obj => documentEmployees.objNameSet.add(obj.name));
         }
