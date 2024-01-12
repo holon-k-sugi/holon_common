@@ -513,6 +513,7 @@ class DocumentEmployeesContents {
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         let obj = employees.list[key](i);
+        if (!obj) return;
         if (Array.isArray(obj)) obj = obj[0];
         if (!obj?.name) return;
         if (obj.page === undefined || obj.page < getP(obj.name))
@@ -796,6 +797,7 @@ function onLoadDocumentEmployeesList(employees) {
   Object.keys(employees.list).forEach(key => {
     [...Array(employees.max)].forEach((_, i) => {
       let objList = employees.list[key](i);
+      if (!objList) return;
       if (!Array.isArray(objList)) objList = [objList];
       objList.forEach(obj => {
         if (!obj?.name) return;
