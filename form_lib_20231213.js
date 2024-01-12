@@ -265,6 +265,7 @@ class RadioButtons {
   setMark(name, mark, unmark) {
     if (this.list[name] === undefined) {
       console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
+      return;
     }
     this.list[name].setMark(mark, unmark);
   }
