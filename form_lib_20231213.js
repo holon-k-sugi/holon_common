@@ -797,6 +797,7 @@ function onLoadDocumentEmployeesList(employees) {
       let objList = employees.list[key](i);
       if (!Array.isArray(objList)) objList = [objList];
       objList.forEach(obj => {
+        if (!obj.name) return;
         if (obj.page < inputObjects.getLengthOfPageListByName(obj.name) || obj.page === undefined)
           setV(obj.name, obj.page, docEmpContents.getEmployeesValue(i, key));
       });
