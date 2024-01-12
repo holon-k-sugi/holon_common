@@ -514,7 +514,8 @@ class DocumentEmployeesContents {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         let obj = employees.list[key](i);
         if (Array.isArray(obj)) obj = obj[0];
-        if (obj.name !== undefined && (obj.page === undefined || obj.page < getP(obj.name)))
+        if (!obj.name) return;
+        if (obj.page === undefined || obj.page < getP(obj.name))
           previousDocEmpContents[i][key] = getV(obj.name, obj.page);
       });
     });
