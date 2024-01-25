@@ -879,7 +879,7 @@ function setFocusColor() {
 }
 
 function visualizeObj(captionList = [], inputList = [], labelList = []) {
-  const log = (n) => console.log(`visualizeObj: ${n} は存在しないラベル`);
+  const log = (n) => console.warn(`visualizeObj: ${n} は存在しないラベル`);
   [...document.styleSheets].some(ss => {
     const captionObj = captionList.map(n => {
       if (inputObjects.objExists(n)) return getSelector(n);
