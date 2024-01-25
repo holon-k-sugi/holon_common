@@ -879,12 +879,22 @@ function setFocusColor() {
 }
 
 function visualizeObj(captionList = [], inputList = [], labelList = []) {
+  const log = (n) => console.log(`visualizeObj: ${n} は存在しないラベル`);
   [...document.styleSheets].some(ss => {
-    const captionObj = captionList.map(n => getSelector(n)).join().split(',');
+    const captionObj = captionList.map(n => {
+      if (inputObjects.objExists(n)) getSelector(n);
+      else log(n);
+    }).join().split(',');
     $(captionObj.join()).prop("disabled", true);
     $(captionObj.join()).css('font-weight', 'bold');
-    const inputObj = inputList.map(n => getSelector(n)).join().split(',');
-    const lableObj = labelList.map(n => getLabelSelector(n));
+    const inputObj = inputList.map(n => {
+      if (inputObjects.objExists(n)) getSelector(n);
+      else log(n);
+    }).join().split(',');
+    const lableObj = labelList.map(n => {
+      if (inputObjects.objExists(n)) getLabelSelector(n);
+      else log(n);
+    });
     const names = [captionObj, inputObj, lableObj].flat();
     const result = names.map(name => [...ss.cssRules].find(rule => rule.selectorText && rule.selectorText.indexOf(name) !== -1));
     result.forEach(x => { if (x) x.style.visibility = ''; });
