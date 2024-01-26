@@ -975,6 +975,31 @@ function makeArray(num, prefix, first, deference) {
   return [...Array(num)].map((_, i) => `${prefix}${first + i * deference} `);
 }
 
+function textBoxToSelectBox(names = [], options = []) {
+  names.forEach(n => {
+    const selector = getSelector(n);
+    const tmp = getV(n);
+    $(selector).replaceWith($('<select></select>', $(selector).attrAll()));
+    options.forEach(([name, value],i) => {
+      if(value) $(selector).append($('<option>').html(name)).val(value);
+      else $(selector).append($('<option>').html(name));
+    });
+    $(selector).val(tmp);
+  });
+}
+
+function defineAttrAll() {
+  (function ($) {
+    $.fn.attrAll = function () {
+      const attr = this.get(0).attributes;
+      return [...Array(attr.length)].reduce((acc, _, i) => {
+        acc[attr[i].name] = attr[i].value;
+        return acc;
+      }, {});
+    };
+  })(jQuery);
+}
+
 function showDocInfo() {
   const formName = $('input[name="jobName"]').val();
   console.log(`フォーム名：${formName.slice(0, 1) === 'J' ? formName.slice(1) : formName} `);
@@ -995,4 +1020,5 @@ function initializeInstances() {
   documentEmployees.initialize();
   pageList.initialize();
   dmxMapping.initialize();
+  defineAttrAll();
 }
