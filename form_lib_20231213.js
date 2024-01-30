@@ -262,12 +262,26 @@ class RadioButtons {
   radioExists(name) {
     return this?.list?.[name] !== undefined;
   }
+  getRadioGroup(name) {
+    if (!this.radioExists(name)) {
+      console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
+      return;
+    }
+    return this.list[name];
+  }
   setMark(name, mark, unmark) {
-    if (this.list[name] === undefined) {
+    if (!this.radioExists(name)) {
       console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
       return;
     }
     this.list[name].setMark(mark, unmark);
+  }
+  coountButtons(name) {
+    if (!this.radioExists(name)) {
+      console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
+      return;
+    }
+    return this.list[name].buttonList.length;
   }
 }
 
@@ -980,8 +994,8 @@ function textBoxToSelectBox(names = [], options = []) {
     const selector = getSelector(n);
     const tmp = getV(n);
     $(selector).replaceWith($('<select></select>', $(selector).attrAll()));
-    options.forEach(([name, value],i) => {
-      if(value) $(selector).append($('<option>').html(name)).val(value);
+    options.forEach(([name, value], i) => {
+      if (value) $(selector).append($('<option>').html(name)).val(value);
       else $(selector).append($('<option>').html(name));
     });
     $(selector).val(tmp);
