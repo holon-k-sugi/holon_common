@@ -333,7 +333,7 @@ class RadioButton {
       if (!!init) setV(name, this.unmark);
     });
   }
-  countButtons(){
+  countButtons() {
     return Object.keys(this.buttonList).length;
   }
 }
@@ -1002,6 +1002,36 @@ function textBoxToSelectBox(names = [], options = []) {
       else $(selector).append($('<option>').html(name));
     });
     $(selector).val(tmp);
+  });
+}
+
+/**
+ * OBJ_XXXX と JS_OBJ_XXXX のマッピングを入れ替えた際に値の受け渡しを行う。
+ * @param  {...any} args[0] - 古いマッピングのオブジェクト名
+ * @param  {...any} args[1] - 新しいマッピングのオブジェクト名
+ * 追加ページの場合は下記の利用方法となる。
+ * @param  {...any} args[0] - 古いマッピングのオブジェクト名
+ * @param  {...any} args[1] - 古いマッピングのオブジェクト名のページインデックス
+ * @param  {...any} args[2] - 新しいマッピングのオブジェクト名
+ * @param  {...any} args[3] - 新しいマッピングのオブジェクト名のページインデックス
+ */
+function setValueFromOldObjToNewObj(...args) {
+  const oldObj = args[0];
+  const oldObjIndex = args.length === 2 ? undefined : args[1];
+  const newObj = args.length === 2 ? args[1] : args[2];
+  const newObjIndex = args.length === 2 ? undefined : args[3];
+  const isRadio = radioButtons.radioExists(newObj);
+  const suffix = i => isRadio ? `_R${i + 1}` : '';
+  const loopCount = isRadio ? radioButtons.countButtons(oldObj) : 1;
+  [...Array(loopCount)].forEach((_, i) => {
+    setV(`${newObj}${suffix(i)}`, newObjIndex, getV(`${oldObj}${suffix(i)}`, oldObjIndex));
+  });
+  const selector = isRadio ? makeSelector(radioButtons.getRadioGroup(newObj).getAllButtonNameList()) : getSelector(newObj);
+  const event = isRadio ? 'click' : 'click change';
+  $(selector).on(event, () => {
+    [...Array(loopCount)].forEach((_, i) => {
+      setV(`${oldObj}${suffix(i)}`, oldObjIndex, getV(`${newObj}${suffix(i)}`, newObjIndex));
+    });
   });
 }
 
