@@ -264,7 +264,7 @@ class RadioButtons {
   }
   getRadioGroup(name) {
     if (!this.radioExists(name)) {
-      console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
+      console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
       return;
     }
     return this.list[name];
@@ -276,12 +276,12 @@ class RadioButtons {
     }
     this.list[name].setMark(mark, unmark);
   }
-  coountButtons(name) {
+  countButtons(name) {
     if (!this.radioExists(name)) {
-      console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
+      console.warn(`countButtons: ${name} は存在しないラジオボタングループ`);
       return;
     }
-    return this.list[name].buttonList.length;
+    return this.getRadioGroup(name).countButtons();
   }
 }
 
@@ -332,6 +332,9 @@ class RadioButton {
       const init = $(getSelector(name)).attr('data-init-value');
       if (!!init) setV(name, this.unmark);
     });
+  }
+  countButtons(){
+    return Object.keys(this.buttonList).length;
   }
 }
 
