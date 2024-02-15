@@ -83,6 +83,7 @@ class PageList {
     this.list = $(`[id^="iftc_cf_page_"]`);
     this.addPages = this.getIndexOfAddPages();
     this.frontPages = this.getIndexOfFrontPages();
+    this.length = this.list.length;
   }
   indexToSelector(index) {
     return this.list.eq(index);
@@ -122,70 +123,85 @@ class PageList {
       return isFront;
     }).reduce((a, b) => a || b);
   }
+  getLength() {
+    return this.length;
+  }
 }
 
 class IconObjects {
   constructor() {
-    this.list = {
-      acrossYears: { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label' },
-      addPage: { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label' },
-      inputEmployees: { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label' },
-      copyPage1: { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button' },
-      csvNum: { name: 'SHOW_CSV_NUM_BUTTON', string: 'CSV番号を表示する', color: 'rgba(68,201,194,1)', iconType: 'button' }
+    this.iconList = {
+      acrossYears: { name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label', isEnabled: (iconSetting) => iconSetting.acrossYears, getPages: () => [2] },
+      addPage: { name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label', isEnabled: (iconSetting) => Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage), getPages: (iconSetting) => iconSetting.addPage },
+      inputEmployees: { name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label', isEnabled: (iconSetting) => Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees), getPages: (iconSetting) => iconSetting.inputEmployees },
+      copyPage1: { name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button', isEnabled: (iconSetting) => pageList.addPages.length > 0, getPages: () => pageList.addPages },
+      csvNum: { name: 'SHOW_CSV_NUM_BUTTON', string: 'CSV番号を表示する', color: 'rgba(68,201,194,1)', iconType: 'button', isEnabled: (iconSetting) => true, getPages: () => [2] }
     };
   }
   showIcon(iconSetting) {
     const margin = 13;
     const fontSize = 8;
+    const iconsByPage = [...Array(pageList.getLength())].map(_ => Array());
+
     if (iconSetting.acrossYears) {
-      this.setPages('acrossYears', [2]);
       this.setMargin('acrossYears', margin, margin);
     }
     if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage)) {
-      this.setPages('addPage', iconSetting.addPage);
       this.setMargin('addPage', margin, margin);
     }
     if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees)) {
-      this.setPages('inputEmployees', iconSetting.inputEmployees);
       this.setMargin('inputEmployees', margin + fontSize * 10, margin);
     }
     if (pageList.addPages.length > 0) {
-      this.setPages('copyPage1', pageList.addPages);
       this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
     }
-
-    this.setPages('csvNum', [2]);
     this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
-    Object.keys(this.list).forEach(key => {
-      const target = this.list[key];
-      if (!target.pages) return;
-      const csvDiv = $('<div>');
-      csvDiv.prop('type', 'button');
-      csvDiv.prop('tabindex', '-1');
-      csvDiv.css('cursor', target.iconType === 'button' ? 'pointer' : 'default');
-      csvDiv.css('font-weight', 'bold');
-      csvDiv.css('font-family', 'メイリオ');
-      csvDiv.css('padding', `2pt 0pt`);
-      csvDiv.css('font-size', `${fontSize}pt`);
-      csvDiv.css('color', target.iconType === 'label' ? target.color : 'white');
-      csvDiv.css('background', target.iconType === 'label' ? 'white' : target.color);
-      csvDiv.css('border', target.iconType === 'label' ? `solid 2px ${target.color}` : 'white');
-      csvDiv.css('border-radius', '5px');
-      csvDiv.css('text-align', 'center');
-      csvDiv.css('display', 'inline-block');
-      csvDiv.css('width', `${(target.string.length + 2) * fontSize}pt`);
-      csvDiv.attr('id', target.name);
-      csvDiv.css('position', 'absolute');
-      csvDiv.text(target.string);
-      target.pages.forEach(page => {
-        const $tmp = csvDiv.clone();
-        this.setPosition(key, page);
-        $tmp.css('top', target.top);
-        $tmp.css('left', target.left);
-        page.children('[class~="iftc_cf_inputitems"]').append($tmp);
-      });
+    Object.keys(this.iconList).forEach(iconName => {
+      const target = list[iconName];
+      if (target.isEnabled(iconSetting)) {
+        this.setPages(key, target.getPages(iconSetting));
+        target.getPages(iconSetting).forEach(index => iconsByPage[index - 1].push(key));
+      }
     });
+    Object.keys(iconsByPage).forEach(icons => {
+      if (icons.length === 0) return;
+
+      const $labelsDiv = $('<div>');
+      $labelsDiv.css('text-align', 'left');
+      $labelsDiv.css('width', '50%');
+      const $buttonsDiv = $('<div>');
+      $buttonsDiv.css('text-align', 'right');
+      $buttonsDiv.css('width', '50%');
+      
+      icons.forEach(icon => {
+        const iconDiv = this.#makeIconDiv(this.iconList[icon]);
+        const $tmp = iconDiv.clone();
+        if (this.iconList[icon] === 'label') {
+          $labelsDiv.append($tmp);
+        }
+        if (this.iconList[icon] === 'button') {
+          $buttonsDiv.append($tmp);
+        }
+      });
+      const $iconsDiv = $('<div>');
+      $iconsDiv.css('display','flex');
+      $iconsDiv.append($labelsDiv);
+      $iconsDiv.append($buttonsDiv);
+      pageList.indexToSelector(index - 1).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
+    });
+    // this.iconsByPage.forEach((icons, index) => {
+    //   if (icons.length === 0) return;
+    //   const defaultMargine = 13;
+    //   icons.forEach((margine, name, i) => {
+    //     Object.keys(this.list[name].margin).forEach((topLeft) => {
+
+    //       const id = $(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`).attr('id');
+    //       const inputAreaPos = Number(this.#getPtValueFromStylesheets(`#${id}`)[topLeft].split('pt')[0]);
+    //       this.list[name][topLeft] = `${this.list[name].margin[topLeft] - inputAreaPos}pt`;
+    //     });
+    //   }, defaultMargine);
+    // });
   }
   isFrontPage(units) {
     units.some(unit => {
@@ -195,7 +211,7 @@ class IconObjects {
 
   setPages(name, units) {
     if (!Array.isArray(units) || units.length === 0) return;
-    this.list[name].pages = units.map(unit => pageList.indexToSelector(unit - 1));
+    this.list[name].pages = units.map(index => pageList.indexToSelector(index - 1));
   }
   setMargin(name, left, top) {
     this.list[name].margin = {};
@@ -203,29 +219,46 @@ class IconObjects {
     this.list[name].margin.top = top;
   }
   setPosition(name, page) {
-    const getPtValueFromStylesheets = (selector) => {
-      let result;
-      [...document.styleSheets].some(styleSheet => {
-        return [...styleSheet.cssRules].some(rule => {
-          if (rule.selectorText === selector) {
-            result = rule.style;
-            return true;
-          }
-          return false;
-        });
-      });
-      return result;
-    };
-
     Object.keys(this.list[name].margin).forEach((key, i) => {
       const id = $(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`).attr('id');
-      const inputAreaPos = Number(getPtValueFromStylesheets(`#${id}`)[key].split('pt')[0]);
+      const inputAreaPos = Number(this.#getPtValueFromStylesheets(`#${id}`)[key].split('pt')[0]);
       this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
     });
   }
-  getNameList() {
-    return Object.keys(this.list).map(key => this.list[key].name);
+  #makeIconDiv(target) {
+    const iconDiv = $('<div>');
+    iconDiv.prop('type', 'button');
+    iconDiv.prop('tabindex', '-1');
+    iconDiv.css('cursor', target.iconType === 'button' ? 'pointer' : 'default');
+    iconDiv.css('font-weight', 'bold');
+    iconDiv.css('font-family', 'メイリオ');
+    iconDiv.css('padding', `2pt 0pt`);
+    iconDiv.css('font-size', `${fontSize}pt`);
+    iconDiv.css('color', target.iconType === 'label' ? target.color : 'white');
+    iconDiv.css('background', target.iconType === 'label' ? 'white' : target.color);
+    iconDiv.css('border', target.iconType === 'label' ? `solid 2px ${target.color}` : 'white');
+    iconDiv.css('border-radius', '5px');
+    iconDiv.css('text-align', 'center');
+    iconDiv.css('display', 'inline-block');
+    iconDiv.css('width', `${(target.string.length + 2) * fontSize}pt`);
+    iconDiv.attr('id', target.name);
+    iconDiv.css('position', 'absolute');
+    iconDiv.text(target.string);
+    return iconDiv;
   }
+  #getPtValueFromStylesheets(selector) {
+    let result;
+    [...document.styleSheets].some(styleSheet => {
+      return [...styleSheet.cssRules].some(rule => {
+        if (rule.selectorText === selector) {
+          result = rule.style;
+          return true;
+        }
+        return false;
+      });
+    });
+    return result;
+  };
 }
 
 class RadioButtons {
@@ -879,7 +912,6 @@ function onClickCopyPageButton() {
 
 function setFocusColor() {
   const fieldTabIdSelector = inputObjects.getAllObjNameList().map(name => {
-    if (iconObjects.getNameList().map(v => v === name).reduce((a, b) => a || b)) return;
     return inputObjects.getAllIds(name).map(id => {
       if ($(`#${id} `).attr('tabindex') > 0) return `#${id} `;
     }).filter(v => v).join();
