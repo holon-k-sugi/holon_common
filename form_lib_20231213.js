@@ -143,19 +143,19 @@ class IconObjects {
     const fontSize = 8;
     const iconsByPage = [...Array(pageList.getLength())].map(_ => Array());
 
-    if (iconSetting.acrossYears) {
-      this.setMargin('acrossYears', margin, margin);
-    }
-    if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage)) {
-      this.setMargin('addPage', margin, margin);
-    }
-    if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees)) {
-      this.setMargin('inputEmployees', margin + fontSize * 10, margin);
-    }
-    if (pageList.addPages.length > 0) {
-      this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
-    }
-    this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
+    // if (iconSetting.acrossYears) {
+    //   this.setMargin('acrossYears', margin, margin);
+    // }
+    // if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage)) {
+    //   this.setMargin('addPage', margin, margin);
+    // }
+    // if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees)) {
+    //   this.setMargin('inputEmployees', margin + fontSize * 10, margin);
+    // }
+    // if (pageList.addPages.length > 0) {
+    //   this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
+    // }
+    // this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
     Object.keys(this.iconList).forEach(iconName => {
       const target = list[iconName];
