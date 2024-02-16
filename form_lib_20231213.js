@@ -160,7 +160,7 @@ class IconObjects {
     Object.keys(this.iconList).forEach(iconName => {
       const target = this.iconList[iconName];
       if (target.isEnabled(iconSetting)) {
-        target.getPages(iconSetting).forEach(index => iconsByPage[index - 1].push(key));
+        target.getPages(iconSetting).forEach(index => iconsByPage[index - 1].push(iconName));
       }
     });
     Object.keys(iconsByPage).forEach(icons => {
