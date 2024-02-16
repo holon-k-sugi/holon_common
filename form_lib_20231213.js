@@ -163,7 +163,7 @@ class IconObjects {
         target.getPages(iconSetting).forEach(index => iconsByPage[index - 1].push(iconName));
       }
     });
-    Object.keys(iconsByPage).forEach(icons => {
+    iconsByPage.forEach(icons => {
       if (icons.length === 0) return;
 
       const $labelsDiv = $('<div>');
@@ -172,7 +172,7 @@ class IconObjects {
       const $buttonsDiv = $('<div>');
       $buttonsDiv.css('text-align', 'right');
       $buttonsDiv.css('width', '50%');
-      
+
       icons.forEach(icon => {
         const iconDiv = this.#makeIconDiv(this.iconList[icon]);
         const $tmp = iconDiv.clone();
@@ -184,7 +184,7 @@ class IconObjects {
         }
       });
       const $iconsDiv = $('<div>');
-      $iconsDiv.css('display','flex');
+      $iconsDiv.css('display', 'flex');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
       pageList.indexToSelector(index - 1).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
