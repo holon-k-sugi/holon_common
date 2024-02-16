@@ -140,7 +140,6 @@ class IconObjects {
   }
   showIcon(iconSetting) {
     const margin = 13;
-    const fontSize = 8;
     const iconsByPage = [...Array(pageList.getLength())].map(_ => Array());
 
     // if (iconSetting.acrossYears) {
@@ -225,6 +224,7 @@ class IconObjects {
     });
   }
   #makeIconDiv(target) {
+    fontSize = 8;
     const iconDiv = $('<div>');
     iconDiv.prop('type', 'button');
     iconDiv.prop('tabindex', '-1');
