@@ -2,10 +2,10 @@ class InputObjects {
   initialize() {
     const maxPageNum = 50;
     this.objListByPage = [...Array(maxPageNum)].map(() => []);
-    this.list = allObj.reduce((cur, id) => {
-      const target = cur;
+    this.list = allObj.reduce((acc, id) => {
+      const target = acc;
       const splitId = id.split('_');
-      splitId.shift();
+      splitId.shift(); splitId.pop();
       const page = +splitId.pop();
       const objName = splitId.join('_');
       this.objListByPage[page].push({ name: objName, id });
