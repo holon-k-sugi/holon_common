@@ -1181,8 +1181,6 @@ function getUnmappedObjList() {
 function initializeInstances() {
   inputObjects.initialize();
   radioButtons.initialize();
-  companyMaster.initialize();
-  documentEmployees.initialize();
   pageList.initialize();
   dmxMapping.initialize();
   defineAttrAll();
