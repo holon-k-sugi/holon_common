@@ -251,9 +251,9 @@ class IconObjects {
   static #makeIconDiv(target) {
     const fontSize = 8;
     const iconDiv = $('<div>');
-    iconDiv.prop('margin', '2pt');
     iconDiv.prop('type', 'button');
     iconDiv.prop('tabindex', '-1');
+    iconDiv.css('margin', '2pt');
     iconDiv.css('cursor', target.iconType === 'button' ? 'pointer' : 'default');
     iconDiv.css('font-weight', 'bold');
     iconDiv.css('font-family', 'メイリオ');
