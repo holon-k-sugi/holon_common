@@ -202,7 +202,8 @@ class IconObjects {
       $labelsDiv.css('text-align', 'left');
       $labelsDiv.css('width', '50%');
       const $buttonsDiv = $('<div>');
-      $buttonsDiv.css('text-align', 'right');
+      $buttonsDiv.css('display', 'flex');
+      $buttonsDiv.css('justify-content', 'end');
       $buttonsDiv.css('width', '50%');
 
       icons.forEach(icon => {
