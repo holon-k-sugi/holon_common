@@ -199,6 +199,7 @@ class IconObjects {
       if (icons.length === 0) return;
       console.log(`hoge${i}`);
       const $labelsDiv = $('<div>');
+      $labelsDiv.css('display', 'flex');
       $labelsDiv.css('text-align', 'left');
       $labelsDiv.css('width', '50%');
       const $buttonsDiv = $('<div>');
