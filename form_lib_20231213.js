@@ -253,7 +253,7 @@ class IconObjects {
     const iconDiv = $('<div>');
     iconDiv.prop('type', 'button');
     iconDiv.prop('tabindex', '-1');
-    iconDiv.css('margin', '2pt');
+    iconDiv.css('margin', '0pt 2pt');
     iconDiv.css('cursor', target.iconType === 'button' ? 'pointer' : 'default');
     iconDiv.css('font-weight', 'bold');
     iconDiv.css('font-family', 'メイリオ');
