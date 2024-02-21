@@ -199,12 +199,12 @@ class IconObjects {
       if (icons.length === 0) return;
       console.log(`hoge${i}`);
       const $labelsDiv = $('<div>');
-      $labelsDiv.css('padding', '16pt');
+      $labelsDiv.css('padding', '10pt');
       $labelsDiv.css('display', 'flex');
       $labelsDiv.css('text-align', 'left');
       $labelsDiv.css('width', '50%');
       const $buttonsDiv = $('<div>');
-      $buttonsDiv.css('padding', '16pt');
+      $buttonsDiv.css('padding', '10pt');
       $buttonsDiv.css('display', 'flex');
       $buttonsDiv.css('justify-content', 'end');
       $buttonsDiv.css('width', '50%');
@@ -251,6 +251,7 @@ class IconObjects {
   static #makeIconDiv(target) {
     const fontSize = 8;
     const iconDiv = $('<div>');
+    iconDiv.prop('margin', '2pt');
     iconDiv.prop('type', 'button');
     iconDiv.prop('tabindex', '-1');
     iconDiv.css('cursor', target.iconType === 'button' ? 'pointer' : 'default');
