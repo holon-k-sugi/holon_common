@@ -264,7 +264,6 @@ class IconObjects {
     iconDiv.css('display', 'inline-block');
     iconDiv.css('width', `${(target.string.length + 2) * fontSize}pt`);
     iconDiv.attr('id', target.name);
-    iconDiv.css('position', 'absolute');
     iconDiv.text(target.string);
     return iconDiv;
   }
