@@ -213,7 +213,8 @@ class IconObjects {
       });
       const $iconsDiv = $('<div>');
       $iconsDiv.css('display', 'flex');
-      $iconsDiv.css('id', '');
+      $iconsDiv.css('id', 'ICON_DIV');
+      $iconsDiv.css('width', '595pt');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
       pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
