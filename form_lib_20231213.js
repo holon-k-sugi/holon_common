@@ -209,7 +209,10 @@ class IconObjects {
         const iconDiv = IconObjects.#makeIconDiv(this.iconList[icon]);
         const $tmp = iconDiv.clone();
         if (this.iconList[icon].iconType === 'label') $labelsDiv.append($tmp);
-        if (this.iconList[icon].iconType === 'button') $buttonsDiv.append($tmp);
+        if (this.iconList[icon].iconType === 'button') {
+          $tmp.css('float', 'right');
+          $buttonsDiv.append($tmp);
+        }
       });
       const $iconsDiv = $('<div>');
       $iconsDiv.css('display', 'flex');
