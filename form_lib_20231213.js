@@ -145,49 +145,59 @@ class IconObjects {
   constructor() {
     this.iconList = {
       acrossYears: {
-        name: 'CAPTION_ACROSS_YEARS', string: '前年度から複製可能', color: 'rgba(230,100,0,1)', iconType: 'label', isEnabled: iconSetting => iconSetting.acrossYears, getPages: () => [2],
+        name: 'CAPTION_ACROSS_YEARS',
+        string: '前年度から複製可能',
+        color: 'rgba(230,100,0,1)',
+        iconType: 'label',
+        isEnabled: iconSetting => iconSetting.acrossYears,
+        getPages: () => [2],
       },
       addPage: {
-        name: 'CAPTION_COPY_PAGE', string: 'ページ追加可能', color: 'rgba(190,0,0,1)', iconType: 'label', isEnabled: iconSetting => Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage), getPages: iconSetting => iconSetting.addPage,
+        name: 'CAPTION_COPY_PAGE',
+        string: 'ページ追加可能',
+        color: 'rgba(190,0,0,1)',
+        iconType: 'label',
+        isEnabled: iconSetting => Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage),
+        getPages: iconSetting => iconSetting.addPage,
       },
       inputEmployees: {
-        name: 'CAPTION_INPUT_EMPLOYEES', string: '従業員参照可能', color: 'rgba(0,30,100,1)', iconType: 'label', isEnabled: iconSetting => Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees), getPages: iconSetting => iconSetting.inputEmployees,
+        name: 'CAPTION_INPUT_EMPLOYEES',
+        string: '従業員参照可能',
+        color: 'rgba(0,30,100,1)',
+        iconType: 'label',
+        isEnabled: iconSetting => Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees),
+        getPages: iconSetting => iconSetting.inputEmployees,
       },
       copyPage1: {
-        name: 'COPY_PAGE_BUTTON', string: '1ページ目引用', color: 'rgba(68,201,194,1)', iconType: 'button', isEnabled: () => pageList.addPages.length > 0, getPages: () => pageList.addPages,
+        name: 'COPY_PAGE_BUTTON',
+        string: '1ページ目引用',
+        color: 'rgba(68,201,194,1)',
+        iconType: 'button',
+        isEnabled: () => pageList.addPages.length > 0,
+        getPages: () => pageList.addPages,
       },
       csvNum: {
-        name: 'SHOW_CSV_NUM_BUTTON', string: 'CSV番号を表示する', color: 'rgba(68,201,194,1)', iconType: 'button', isEnabled: () => true, getPages: () => [2],
+        name: 'SHOW_CSV_NUM_BUTTON',
+        string: 'CSV番号を表示する',
+        color: 'rgba(68,201,194,1)',
+        iconType: 'button',
+        isEnabled: () => true,
+        getPages: () => [2],
       },
     };
   }
 
   showIcon(iconSetting) {
-    const margin = 13;
     const iconsByPage = [...Array(pageList.getLength())].map(_ => Array(1));
-
-    // if (iconSetting.acrossYears) {
-    //   this.setMargin('acrossYears', margin, margin);
-    // }
-    // if (Array.isArray(iconSetting.addPage) && iconSetting.addPage.length !== 0 && pageList.isFrontPage(iconSetting.addPage)) {
-    //   this.setMargin('addPage', margin, margin);
-    // }
-    // if (Array.isArray(iconSetting.inputEmployees) && iconSetting.inputEmployees.length !== 0 && pageList.isFrontPage(iconSetting.inputEmployees)) {
-    //   this.setMargin('inputEmployees', margin + fontSize * 10, margin);
-    // }
-    // if (pageList.addPages.length > 0) {
-    //   this.setMargin('copyPage1', 595 - margin - (this.list.copyPage1.string.length + 2) * fontSize, margin);
-    // }
-    // this.setMargin('csvNum', 595 - margin - (this.list.csvNum.string.length + 2) * fontSize, margin);
 
     Object.keys(this.iconList).forEach(iconName => {
       const target = this.iconList[iconName];
-      if (target.isEnabled(iconSetting)) target.getPages(iconSetting)
-        .forEach(index => iconsByPage[index - 1].push(iconName));
+      if (target.isEnabled(iconSetting)) target.getPages(iconSetting).forEach(index => iconsByPage[index - 1].push(iconName));
     });
+    console.log('hoge');
     iconsByPage.forEach((icons, i) => {
       if (icons.length === 0) return;
-
+      console.log(`hoge${i}`);
       const $labelsDiv = $('<div>');
       $labelsDiv.css('text-align', 'left');
       $labelsDiv.css('width', '50%');
@@ -198,12 +208,8 @@ class IconObjects {
       icons.forEach(icon => {
         const iconDiv = IconObjects.#makeIconDiv(this.iconList[icon]);
         const $tmp = iconDiv.clone();
-        if (this.iconList[icon] === 'label') {
-          $labelsDiv.append($tmp);
-        }
-        if (this.iconList[icon] === 'button') {
-          $buttonsDiv.append($tmp);
-        }
+        if (this.iconList[icon].iconType === 'label') $labelsDiv.append($tmp);
+        if (this.iconList[icon].iconType === 'button') $buttonsDiv.append($tmp);
       });
       const $iconsDiv = $('<div>');
       $iconsDiv.css('display', 'flex');
@@ -211,22 +217,6 @@ class IconObjects {
       $iconsDiv.append($buttonsDiv);
       pageList.indexToSelector(i + 1).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
     });
-    // this.iconsByPage.forEach((icons, index) => {
-    //   if (icons.length === 0) return;
-    //   const defaultMargine = 13;
-    //   icons.forEach((margine, name, i) => {
-    //     Object.keys(this.list[name].margin).forEach((topLeft) => {
-
-    //       const id = $(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`).attr('id');
-    //       const inputAreaPos = Number(this.#getPtValueFromStylesheets(`#${id}`)[topLeft].split('pt')[0]);
-    //       this.list[name][topLeft] = `${this.list[name].margin[topLeft] - inputAreaPos}pt`;
-    //     });
-    //   }, defaultMargine);
-    // });
-  }
-
-  isFrontPage(units) {
-    units.some(unit => pageList.indexToSelector(unit - 1));
   }
 
   setPages(name, units) {
@@ -241,10 +231,10 @@ class IconObjects {
   }
 
   setPosition(name, page) {
-    Object.keys(this.list[name].margin).forEach(key => {
-      const id = $(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`).attr('id');
-      const inputAreaPos = Number(IconObjects.#getPtValueFromStylesheets(`#${id}`)[key].split('pt')[0]);
-      this.list[name][key] = `${this.list[name].margin[key] - inputAreaPos}pt`;
+    const id = $(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`).attr('id');
+    const inputAreaPos = topLeft => Number(IconObjects.#getPtValueFromStylesheets(`#${id}`)[topLeft].split('pt')[0]);
+    Object.keys(this.list[name].margin).forEach(topLeft => {
+      this.list[name][topLeft] = `${this.list[name].margin[topLeft] - inputAreaPos(topLeft)}pt`;
     });
   }
 
