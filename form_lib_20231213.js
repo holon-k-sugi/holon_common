@@ -199,10 +199,12 @@ class IconObjects {
       if (icons.length === 0) return;
       console.log(`hoge${i}`);
       const $labelsDiv = $('<div>');
+      $labelsDiv.css('padding', '16pt');
       $labelsDiv.css('display', 'flex');
       $labelsDiv.css('text-align', 'left');
       $labelsDiv.css('width', '50%');
       const $buttonsDiv = $('<div>');
+      $buttonsDiv.css('padding', '16pt');
       $buttonsDiv.css('display', 'flex');
       $buttonsDiv.css('justify-content', 'end');
       $buttonsDiv.css('width', '50%');
