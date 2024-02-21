@@ -215,6 +215,7 @@ class IconObjects {
       $iconsDiv.css('display', 'flex');
       $iconsDiv.css('id', 'ICON_DIV');
       $iconsDiv.css('width', '595pt');
+      $iconsDiv.css('height', '40pt');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
       pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
