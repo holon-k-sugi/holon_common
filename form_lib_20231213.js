@@ -213,9 +213,10 @@ class IconObjects {
       });
       const $iconsDiv = $('<div>');
       $iconsDiv.css('display', 'flex');
+      $iconsDiv.css('id', '');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
-      pageList.indexToSelector(i + 1).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
+      pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
     });
   }
 
