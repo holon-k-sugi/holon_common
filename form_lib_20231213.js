@@ -1121,6 +1121,7 @@ function addDownLoadCSVLink() {
   $tmp.attr('download', 'jscloud.csv');
   $tmp.attr('height', '100%');
   $tmp.attr('width', '100%');
+  $tmp.attr('position', 'absolute');
   $('#DOWNLOAD_CSV_BUTTON').append($tmp);
 }
 // eslint-disable-next-line no-unused-vars
