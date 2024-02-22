@@ -1119,10 +1119,7 @@ function addDownLoadCSVLink() {
   const blob = new Blob([`${header}\n${content}`], { type: 'text/plain' });
   $tmp.attr('href', URL.createObjectURL(blob));
   $tmp.attr('download', 'jscloud.csv');
-  $tmp.attr('height', '100%');
-  $tmp.attr('width', '100%');
-  $tmp.attr('position', 'absolute');
-  $('#DOWNLOAD_CSV_BUTTON').append($tmp);
+  $('#DOWNLOAD_CSV_BUTTON').wrap($tmp);
 }
 // eslint-disable-next-line no-unused-vars
 function makeArray(num, prefix, first, deference) {
