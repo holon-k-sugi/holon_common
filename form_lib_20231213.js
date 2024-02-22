@@ -1112,7 +1112,7 @@ function createCSVLabel() {
   });
 }
 // eslint-disable-next-line no-unused-vars
-function downLoadCSV() {
+function addDownLoadCSVLink() {
   const $tmp = $('<a>');
   const header = dmxMapping.getCSVObjList().map((_, i) => i + 1).join(',');
   const content = dmxMapping.getCSVObjList().map(n => getV(n)).join(',');
