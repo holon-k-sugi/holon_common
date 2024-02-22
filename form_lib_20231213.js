@@ -1118,7 +1118,7 @@ function addDownLoadCSVLink() {
   const content = dmxMapping.getCSVObjList().map(n => getV(n)).join(',');
   const blob = new Blob([`${header}\n${content}`], { type: 'text/plain' });
   $tmp.attr('href', URL.createObjectURL(blob));
-  $tmp.attr('href', 'jscloud.csv');
+  $tmp.attr('download', 'jscloud.csv');
   $tmp.attr('height', '100%');
   $tmp.attr('width', '100%');
   $('#DOWNLOAD_CSV_BUTTON').append($tmp);
