@@ -184,6 +184,14 @@ class IconObjects {
         isEnabled: () => true,
         getPages: () => [2],
       },
+      downLoadCSV: {
+        name: 'DOWNLOAD_CSV_BUTTON',
+        string: 'CSVをダウンロード',
+        color: 'rgba(68,201,194,1)',
+        iconType: 'button',
+        isEnabled: () => true,
+        getPages: () => [2],
+      },
     };
   }
 
@@ -1102,6 +1110,18 @@ function createCSVLabel() {
       $(elm).after(csvDiv);
     });
   });
+}
+// eslint-disable-next-line no-unused-vars
+function downLoadCSV() {
+  const $tmp = $('<a>');
+  const header = dmxMapping.getCSVObjList().map((_, i) => i + 1).join(',');
+  const content = dmxMapping.getCSVObjList().map(n => getV(n)).join(',');
+  const blob = new Blob([`${header}\n${content}`], { type: 'text/plain' });
+  $tmp.attr('href', URL.createObjectURL(blob));
+  $tmp.attr('href', 'jscloud.csv');
+  $tmp.attr('height', '100%');
+  $tmp.attr('width', '100%');
+  $('#DOWNLOAD_CSV_BUTTON').append($tmp);
 }
 // eslint-disable-next-line no-unused-vars
 function makeArray(num, prefix, first, deference) {
