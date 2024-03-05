@@ -1197,7 +1197,7 @@ function loadCDN() {
   };
   Object.keys(cdnList).forEach(key => {
     const $script = $('<script>').attr('src', cdnList[key].url);
-    $('head').append($script);
+    $('.createform .visibility-hidden').append($script);
   });
 }
 // eslint-disable-next-line no-unused-vars
