@@ -1196,7 +1196,7 @@ function loadCDN() {
     },
   };
   Object.keys(cdnList).forEach(key => {
-    const $script = $('script').attr('src', cdnList[key].url);
+    const $script = $('<script>').attr('src', cdnList[key].url);
     $('head').append($script);
   });
 }
