@@ -1195,11 +1195,10 @@ function loadCDN() {
       url: 'https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.0.0/encoding.min.js',
     },
   };
-  const target = document.getElementsByClassName('createform visibility-hidden');
   Object.keys(cdnList).forEach(key => {
     const script = document.createElement('script');
     script.setAttribute('src', cdnList[key].url);
-    target[0].appendChild(script);
+    document.body.appendChild(script);
   });
 }
 // eslint-disable-next-line no-unused-vars
