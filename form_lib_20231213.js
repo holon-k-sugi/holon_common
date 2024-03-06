@@ -1199,7 +1199,7 @@ function loadCDN() {
   Object.keys(cdnList).forEach(key => {
     const script = document.createElement('script');
     script.setAttribute('src', cdnList[key].url);
-    target.appendChild(script);
+    target[0].appendChild(script);
   });
 }
 // eslint-disable-next-line no-unused-vars
