@@ -1122,11 +1122,14 @@ function addDownLoadCSVLink() {
     to: 'SJIS',
     from: 'UNICODE',
   });
+  console.log(sjisData);
   const uint8Array = new Uint8Array(sjisData);
+  console.log(uint8Array);
   const blob = new Blob([uint8Array], { type: 'text/csv;charset=shift-jis;' });
   $tmp.attr('href', URL.createObjectURL(blob));
   $tmp.attr('download', 'jscloud.csv');
   $('#DOWNLOAD_CSV_BUTTON').wrap($tmp);
+  console.log('end');
 }
 // eslint-disable-next-line no-unused-vars
 function makeArray(num, prefix, first, deference) {
