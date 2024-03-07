@@ -1005,7 +1005,7 @@ function setFocusColor() {
   // フォーカスのあたっているフィールドに色を付ける。
   $(fieldTabIdSelector).on({
     focus: evt => $(evt.target).css('background', focusColor),
-    blurF: evt => $(evt.target).css('background', fieldTabColor),
+    blur: evt => $(evt.target).css('background', fieldTabColor),
   });
 }
 // eslint-disable-next-line no-unused-vars
