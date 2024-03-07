@@ -1,3 +1,5 @@
+import Encoding from 'https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.0.0/encoding.min.js'
+
 class InputObjects {
   initialize() {
     const maxPageNum = 50;
