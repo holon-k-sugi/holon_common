@@ -1187,6 +1187,7 @@ function executeFuncitonsOnload() {
 function initializeInstances() {
   inputObjects.initialize();
   radioButtons.initialize();
+  documentEmployees.initialize();
   pageList.initialize();
   dmxMapping.initialize();
   defineAttrAll();
