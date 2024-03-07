@@ -982,7 +982,7 @@ function onLoadIcon(iconSetting) {
 // eslint-disable-next-line no-unused-vars
 function onClickCopyPageButton() {
   $(document).on('click', '#COPY_PAGE_BUTTON', evt => {
-    const parent = $(evt.currentTarget).parent();
+    const parent = $(evt.currentTarget).parent().parent().parent();
     const page = parent.attr('id').split('_')[3] - 1;
     inputObjects.getObjListByPage(page).forEach(obj => {
       if (documentEmployees.objNameSet.has(obj.name)) return;
