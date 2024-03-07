@@ -194,10 +194,8 @@ class IconObjects {
       const target = this.iconList[iconName];
       if (target.isEnabled(iconSetting)) target.getPages(iconSetting).forEach(index => iconsByPage[index - 1].push(iconName));
     });
-    console.log('hoge');
     iconsByPage.forEach((icons, i) => {
       if (icons.length === 0) return;
-      console.log(`hoge${i}`);
       const $labelsDiv = $('<div>');
       $labelsDiv.css('padding', '10pt');
       $labelsDiv.css('display', 'flex');
@@ -261,7 +259,7 @@ class IconObjects {
     iconDiv.css('font-size', `${fontSize}pt`);
     iconDiv.css('color', target.iconType === 'label' ? target.color : 'white');
     iconDiv.css('background', target.iconType === 'label' ? 'white' : target.color);
-    iconDiv.css('border', target.iconType === 'label' ? `solid 2px ${target.color}` : 'white');
+    iconDiv.css('border', `solid 2px ${target.color}`);
     iconDiv.css('border-radius', '5px');
     iconDiv.css('text-align', 'center');
     iconDiv.css('display', 'inline-block');
