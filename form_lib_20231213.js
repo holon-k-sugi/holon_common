@@ -986,6 +986,9 @@ function onLoadDocumentEmployeesList(employees) {
 // eslint-disable-next-line no-unused-vars
 function onLoadIcon(iconSetting) {
   iconObjects.showIcon(iconSetting);
+  onClickCopyPageButton();
+  createCSVLabel();
+  addDownLoadCSVLink();
 }
 // eslint-disable-next-line no-unused-vars
 function onClickCopyPageButton() {
@@ -1123,9 +1126,7 @@ function addDownLoadCSVLink() {
     from: 'UNICODE',
   });
   const uint8Array = new Uint8Array(sjisData);
-  const blob = new Blob([`${header}\n${content}`], { type: 'text/plain' });
-  // const blob = new Blob([uint8Array], { type: 'text/csv;charset=shift-jis;' });
-  // const blob = new Blob([uint8Array], { type: 'text/palin' });
+  const blob = new Blob([uint8Array], { type: 'text/csv;charset=shift-jis;' });
   $tmp.attr('href', URL.createObjectURL(blob));
   $tmp.attr('download', 'jscloud.csv');
   $('#DOWNLOAD_CSV_BUTTON').wrap($tmp);
@@ -1219,13 +1220,9 @@ function getUnmappedObjList() {
 // eslint-disable-next-line no-unused-vars
 function executeFuncitonsOnload() {
   // loadCDN();
-  showDocInfo();
   onLoadRadioButton();
   setFocusColor();
   onLoadCompanyMaster();
-  onClickCopyPageButton();
-  createCSVLabel();
-  addDownLoadCSVLink();
 }
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
@@ -1234,4 +1231,5 @@ function initializeInstances() {
   pageList.initialize();
   dmxMapping.initialize();
   defineAttrAll();
+  showDocInfo();
 }
