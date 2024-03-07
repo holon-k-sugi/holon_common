@@ -1,4 +1,4 @@
-import Encoding from 'https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.0.0/encoding.min.js'
+import Encoding from 'encoding-japanese';
 
 class InputObjects {
   initialize() {
@@ -181,14 +181,6 @@ class IconObjects {
       csvNum: {
         name: 'SHOW_CSV_NUM_BUTTON',
         string: 'CSV番号を表示する',
-        color: 'rgba(68,201,194,1)',
-        iconType: 'button',
-        isEnabled: () => true,
-        getPages: () => [2],
-      },
-      downLoadCSV: {
-        name: 'DOWNLOAD_CSV_BUTTON',
-        string: 'CSVをダウンロード',
         color: 'rgba(68,201,194,1)',
         iconType: 'button',
         isEnabled: () => true,
@@ -990,7 +982,6 @@ function onLoadIcon(iconSetting) {
   iconObjects.showIcon(iconSetting);
   onClickCopyPageButton();
   createCSVLabel();
-  addDownLoadCSVLink();
 }
 // eslint-disable-next-line no-unused-vars
 function onClickCopyPageButton() {
@@ -1117,23 +1108,6 @@ function createCSVLabel() {
   });
 }
 // eslint-disable-next-line no-unused-vars
-function addDownLoadCSVLink() {
-  const $tmp = $('<a>');
-  const header = dmxMapping.getCSVObjList().map((_, i) => i + 1).join(',');
-  const content = dmxMapping.getCSVObjList().map(n => getV(n)).join(',');
-  const csvData = `${header}\n${content}`;
-  const unicodeArray = Encoding.stringToCode(csvData); // 文字列から文字コード値の配列に変換
-  const sjisData = Encoding.convert(unicodeArray, {
-    to: 'SJIS',
-    from: 'UNICODE',
-  });
-  const uint8Array = new Uint8Array(sjisData);
-  const blob = new Blob([uint8Array], { type: 'text/csv;charset=shift-jis;' });
-  $tmp.attr('href', URL.createObjectURL(blob));
-  $tmp.attr('download', 'jscloud.csv');
-  $('#DOWNLOAD_CSV_BUTTON').wrap($tmp);
-}
-// eslint-disable-next-line no-unused-vars
 function makeArray(num, prefix, first, deference) {
   return [...Array(num)].map((_, i) => `${prefix}${first + i * deference} `);
 }
@@ -1194,18 +1168,6 @@ function defineAttrAll() {
     };
   }(jQuery));
 }
-function loadCDN() {
-  const cdnList = {
-    encoding: {
-      url: 'https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.0.0/encoding.min.js',
-    },
-  };
-  Object.keys(cdnList).forEach(key => {
-    const script = document.createElement('script');
-    script.setAttribute('src', cdnList[key].url);
-    document.body.appendChild(script);
-  });
-}
 // eslint-disable-next-line no-unused-vars
 function showDocInfo() {
   const formName = $('input[name="jobName"]').val();
@@ -1221,7 +1183,6 @@ function getUnmappedObjList() {
 }
 // eslint-disable-next-line no-unused-vars
 function executeFuncitonsOnload() {
-  // loadCDN();
   onLoadRadioButton();
   setFocusColor();
   onLoadCompanyMaster();
