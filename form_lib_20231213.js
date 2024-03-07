@@ -1,5 +1,3 @@
-import Encoding from 'encoding-japanese';
-
 class InputObjects {
   initialize() {
     const maxPageNum = 50;
