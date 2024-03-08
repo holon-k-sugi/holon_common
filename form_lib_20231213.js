@@ -227,25 +227,6 @@ class IconObjects {
     });
   }
 
-  setPages(name, units) {
-    if (!Array.isArray(units) || units.length === 0) return;
-    this.list[name].pages = units.map(index => pageList.indexToSelector(index - 1));
-  }
-
-  setMargin(name, left, top) {
-    this.list[name].margin = {};
-    this.list[name].margin.left = left;
-    this.list[name].margin.top = top;
-  }
-
-  setPosition(name, page) {
-    const id = $(`#${page.attr('id')} > [class~="iftc_cf_inputitems"]`).attr('id');
-    const inputAreaPos = topLeft => Number(IconObjects.#getPtValueFromStylesheets(`#${id}`)[topLeft].split('pt')[0]);
-    Object.keys(this.list[name].margin).forEach(topLeft => {
-      this.list[name][topLeft] = `${this.list[name].margin[topLeft] - inputAreaPos(topLeft)}pt`;
-    });
-  }
-
   static #makeIconDiv(target) {
     const fontSize = 8;
     const iconDiv = $('<div>');
@@ -422,7 +403,11 @@ class CompanyMaster {
           TEL2: 'TEL_2',
           TEL3: 'TEL_3',
         },
-        noMasterPrefix: { POSITION: 'LSS_ATTORNEY_POST', OWNER: 'LSS_ATTORNEY_FULL_NAME', NUM: 'SHRSH_NUM' },
+        noMasterPrefix: {
+          POSITION: 'LSS_ATTORNEY_POST',
+          OWNER: 'LSS_ATTORNEY_FULL_NAME',
+          NUM: 'SHRSH_NUM',
+        },
       },
       JGYNSH: {
         masterPrefix: 'BUSINESS_OWNER_',
@@ -829,10 +814,7 @@ function toWareki(dateString) {
   return [wareki.split('/'), wareki.slice(0, 2), wareki.slice(2).split('/')].flat();
 }
 // eslint-disable-next-line no-unused-vars
-function calcPeriod(yearId, monthId, dayId, subMonth, subDay, type = 2) {
-  const args = [yearId, monthId, dayId, subMonth, subDay];
-  const isValid = args.reduce((acc, cur) => acc || cur === undefined, false);
-  if (isValid) return '';
+function getDateFromFieldId(yearId, monthId, dayId, type = 2) {
   const toNumber = fieldId => {
     if (Number.isInteger(fieldId)) return fieldId;
     if (Number.isInteger(getV(fieldId))) return getV(fieldId);
@@ -844,69 +826,64 @@ function calcPeriod(yearId, monthId, dayId, subMonth, subDay, type = 2) {
     if ([0, 1988, 2018][t] === null) return id;
     return (getV(id) === '元' ? 1 : toNumber(id)) + [0, 1988, 2018][t];
   };
+  const result = {
+    year: japanese2Christian(yearId, type),
+    month: toNumber(monthId),
+    day: toNumber(dayId),
+  };
+  return result;
+}
+// eslint-disable-next-line no-unused-vars
+function calculateDeadline(year, month, day, subMonth, subDay) {
   const toDoubleDigits = x => (`0${x}`).slice(-2);
   const toDateField = dt => [dt.getFullYear(), toDoubleDigits(dt.getMonth() + 1), toDoubleDigits(dt.getDate())].join('/');
-  const year = japanese2Christian(yearId, type);
-  const month = toNumber(monthId);
-  const day = toNumber(dayId);
-  const ymdIsZero = [year, month, day].map(ymd => ymd !== 0).reduce((acc, cur) => acc && cur);
-  if (!ymdIsZero) return '';
   const refDt = new Date(year, month - 1, day + subDay);
-  let result;
   const lastDay = new Date(refDt.getFullYear(), refDt.getMonth() + subMonth + 1, 0);
+  let result;
   if (refDt.getDate() > lastDay.getDate()) result = lastDay;
   else result = new Date(refDt.getFullYear(), refDt.getMonth() + subMonth, refDt.getDate() + (subMonth <= 0 ? 0 : -1));
   return toDateField(result);
+}
+// eslint-disable-next-line no-unused-vars
+function calcPeriod(yearId, monthId, dayId, subMonth, subDay, type) {
+  const args = [yearId, monthId, dayId, subMonth, subDay];
+  const isValid = args.reduce((acc, cur) => acc || cur === undefined, false);
+  if (isValid) return '';
+  const date = getDateFromFieldId(yearId, monthId, dayId, type);
+  const ymdIsZero = [date.year, date.month, date.day].map(ymd => ymd !== 0).reduce((acc, cur) => acc && cur);
+  if (!ymdIsZero) return '';
+  return calculateDeadline(date.year, date.month, date.day, subMonth, subDay);
 }
 // eslint-disable-next-line no-unused-vars
 function calcPeriodFromDate(dateId, subMonth = 0, subDay = 0) {
   if (!dateId) return '';
   if (!getV(dateId)) return '';
+  const splitDate = getV(dateId).split('/');
+  return calculateDeadline(splitDate[0], splitDate[1], splitDate[2], subMonth, subDay);
+}
+// eslint-disable-next-line no-unused-vars
+function calculateSubstractDate(year, month, day, subMonth, subDay) {
   const toDD = x => (`0${x}`).slice(-2);
   const toDateField = dt => [dt.getFullYear(), toDD(dt.getMonth() + 1), toDD(dt.getDate())].join('/');
-  const refDt = new Date(getV(dateId)); refDt.setDate(refDt.getDate() + subDay);
-  const lastDay = new Date(refDt.getFullYear(), refDt.getMonth() + subMonth + 1, 0);
-  let result;
-  if (refDt.getDate() > lastDay.getDate()) result = lastDay;
-  else result = new Date(refDt.getFullYear(), refDt.getMonth() + subMonth, refDt.getDate() + (subMonth <= 0 ? 0 : -1));
+  const result = new Date(year, month - 1 + subMonth, day + subDay);
   return toDateField(result);
 }
 // eslint-disable-next-line no-unused-vars
-function calcSubDate(yearId, monthId, dayId, subMonth, subDay, type = 2) {
+function calcSubDate(yearId, monthId, dayId, subMonth, subDay, type) {
   const args = [yearId, monthId, dayId, subMonth, subDay];
   const isValid = args.reduce((acc, cur) => acc || cur === undefined, false);
   if (isValid) return '';
-  const toNumber = fieldId => {
-    if (Number.isInteger(fieldId)) return fieldId;
-    if (Number.isInteger(getV(fieldId))) return getV(fieldId);
-    const numString = (getV(fieldId) || '').replace(/[０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 65248)).replace(/[^0-9]/g, '');
-    return Number(numString);
-  };
-  const japanese2Christian = (id, t = 2) => {
-    if (Number.isInteger(id)) return id;
-    if ([0, 1988, 2018][t] === null) return id;
-    return (getV(id) === '元' ? 1 : toNumber(id)) + [0, 1988, 2018][t];
-  };
-  const toDoubleDigits = x => (`0${x}`).slice(-2);
-  const toDateField = dt => [dt.getFullYear(), toDoubleDigits(dt.getMonth() + 1), toDoubleDigits(dt.getDate())].join('/');
-  const year = japanese2Christian(yearId, type);
-  const month = toNumber(monthId);
-  const day = toNumber(dayId);
-  const ymdIsZero = [year, month, day].map(ymd => ymd !== 0).reduce((acc, cur) => acc && cur);
+  const date = getDateFromFieldId(yearId, monthId, dayId, type);
+  const ymdIsZero = [date.year, date.month, date.day].map(ymd => ymd !== 0).reduce((acc, cur) => acc && cur);
   if (!ymdIsZero) return '';
-  const result = new Date(year, month - 1 + subMonth, day + subDay);
-  return toDateField(result);
+  return calculateSubstractDate(date.year, date.month, date.day, subMonth, subDay);
 }
 // eslint-disable-next-line no-unused-vars
 function calcSubDateFromDate(dateId, subMonth = 0, subDay = 0) {
   if (!dateId) return '';
   if (!getV(dateId)) return '';
-  const toDD = x => (`0${x}`).slice(-2);
-  const toDateField = dt => [dt.getFullYear(), toDD(dt.getMonth() + 1), toDD(dt.getDate())].join('/');
-  const result = new Date(getV(dateId));
-  result.setMonth(result.getMonth() + subMonth);
-  result.setDate(result.getDate() + subDay);
-  return toDateField(result);
+  const splitDate = getV(dateId).split('/');
+  return calculateSubstractDate(splitDate[0], splitDate[1], splitDate[2], subMonth, subDay);
 }
 
 // Load 時実行
