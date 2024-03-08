@@ -837,7 +837,7 @@ function getDateFromFieldId(yearId, monthId, dayId, type = 2) {
 function calculateDeadline(year, month, day, subMonth, subDay) {
   const toDoubleDigits = x => (`0${x}`).slice(-2);
   const toDateField = dt => [dt.getFullYear(), toDoubleDigits(dt.getMonth() + 1), toDoubleDigits(dt.getDate())].join('/');
-  const refDt = new Date(year, month - 1, day + subDay);
+  const refDt = new Date(Number(year), Number(month) - 1, Number(day) + subDay);
   const lastDay = new Date(refDt.getFullYear(), refDt.getMonth() + subMonth + 1, 0);
   let result;
   if (refDt.getDate() > lastDay.getDate()) result = lastDay;
@@ -865,7 +865,7 @@ function calcPeriodFromDate(dateId, subMonth = 0, subDay = 0) {
 function calculateSubstractDate(year, month, day, subMonth, subDay) {
   const toDD = x => (`0${x}`).slice(-2);
   const toDateField = dt => [dt.getFullYear(), toDD(dt.getMonth() + 1), toDD(dt.getDate())].join('/');
-  const result = new Date(year, month - 1 + subMonth, day + subDay);
+  const result = new Date(Number(year), Number(month) - 1 + subMonth, Number(day) + subDay);
   return toDateField(result);
 }
 // eslint-disable-next-line no-unused-vars
