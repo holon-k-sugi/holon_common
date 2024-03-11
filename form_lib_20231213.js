@@ -218,7 +218,6 @@ class IconObjects {
         if (this.iconList[icon].iconType === 'label') $labelsDiv.append($tmp);
         if (this.iconList[icon].iconType === 'button') {
           $tmp.css('float', 'right');
-          if (veticalPosition[i]) $tmp.css('top', veticalPosition[i]);
           $buttonsDiv.append($tmp);
         }
       });
@@ -229,6 +228,7 @@ class IconObjects {
       $iconsDiv.css('height', '40pt');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
+      if (veticalPosition[i]) $iconsDiv.css('top', veticalPosition[i]);
       pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
     });
   }
