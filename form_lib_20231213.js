@@ -194,6 +194,11 @@ class IconObjects {
       const target = this.iconList[iconName];
       if (target.isEnabled(iconSetting)) target.getPages(iconSetting).forEach(index => iconsByPage[index - 1].push(iconName));
     });
+    const veticalPosition = iconSetting.varticalPositions.reduce((acc, [index, position]) => {
+      const target = acc;
+      target[index - 1] = position;
+      return target;
+    }, {});
     iconsByPage.forEach((icons, i) => {
       if (icons.length === 0) return;
       const $labelsDiv = $('<div>');
@@ -213,6 +218,7 @@ class IconObjects {
         if (this.iconList[icon].iconType === 'label') $labelsDiv.append($tmp);
         if (this.iconList[icon].iconType === 'button') {
           $tmp.css('float', 'right');
+          if (veticalPosition[i]) $tmp.css('top', veticalPosition[i]);
           $buttonsDiv.append($tmp);
         }
       });
