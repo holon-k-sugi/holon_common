@@ -226,6 +226,7 @@ class IconObjects {
       $iconsDiv.css('id', 'ICON_DIV');
       $iconsDiv.css('width', '595pt');
       $iconsDiv.css('height', '40pt');
+      $iconsDiv.css('position', 'absolute');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
       if (veticalPosition[i]) $iconsDiv.css('top', veticalPosition[i]);
