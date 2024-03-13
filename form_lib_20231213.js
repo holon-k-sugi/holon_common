@@ -229,7 +229,7 @@ class IconObjects {
       $iconsDiv.css('position', 'absolute');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
-      if (veticalPosition[i]) $iconsDiv.css('top', veticalPosition[i]);
+      if (veticalPosition[i]) $iconsDiv.offset({ top: veticalPosition[i] });
       pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
     });
   }
