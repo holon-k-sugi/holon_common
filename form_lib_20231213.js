@@ -222,17 +222,15 @@ class IconObjects {
         }
       });
       const $iconsDiv = $('<div>');
+      $iconsDiv.attr('id', 'ICONS_DIV');
       $iconsDiv.css('display', 'flex');
-      $iconsDiv.css('id', 'ICON_DIV');
       $iconsDiv.css('width', '595pt');
       $iconsDiv.css('height', '40pt');
       $iconsDiv.css('position', 'absolute');
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
-      if (veticalPosition[i]) {
-        console.log(i, ':', { top: veticalPosition[i] });
-        $iconsDiv.offset({ top: veticalPosition[i] });
-      }
+      if (veticalPosition[i] !== undefined) $iconsDiv.css('top', veticalPosition[i]);
+
       pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
     });
   }
