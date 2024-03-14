@@ -227,9 +227,13 @@ class IconObjects {
       $iconsDiv.css('width', '595pt');
       $iconsDiv.css('height', '40pt');
       const id = pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').attr('id');
+      console.log(id);
+      console.log(IconObjects.#getPtValueFromStylesheets(`#${id}`));
       const inputAreaTop = Number(IconObjects.#getPtValueFromStylesheets(`#${id}`).top.split('pt')[0]);
+      console.log(inputAreaTop);
       $iconsDiv.css('top', `${-inputAreaTop}pt`);
       const inputAreaLeft = Number(IconObjects.#getPtValueFromStylesheets(`#${id}`).left.split('pt')[0]);
+      console.log(inputAreaLeft);
       $iconsDiv.css('left', `${-inputAreaLeft}pt`);
       if (veticalPosition[i] !== undefined) {
         $iconsDiv.css('position', 'absolute');
