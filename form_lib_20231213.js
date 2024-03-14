@@ -226,10 +226,17 @@ class IconObjects {
       $iconsDiv.css('display', 'flex');
       $iconsDiv.css('width', '595pt');
       $iconsDiv.css('height', '40pt');
-      $iconsDiv.css('position', 'absolute');
+      const id = pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').attr('id');
+      const inputAreaTop = Number(IconObjects.#getPtValueFromStylesheets(`#${id}`).top.split('pt')[0]);
+      $iconsDiv.css('top', `${-inputAreaTop}pt`);
+      const inputAreaLeft = Number(IconObjects.#getPtValueFromStylesheets(`#${id}`).left.split('pt')[0]);
+      $iconsDiv.css('left', `${-inputAreaLeft}pt`);
+      if (veticalPosition[i] !== undefined) {
+        $iconsDiv.css('position', 'absolute');
+        $iconsDiv.css('top', `${veticalPosition[i] - inputAreaTop}pt`);
+      }
       $iconsDiv.append($labelsDiv);
       $iconsDiv.append($buttonsDiv);
-      if (veticalPosition[i] !== undefined) $iconsDiv.css('top', veticalPosition[i]);
 
       pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').append($iconsDiv);
     });
