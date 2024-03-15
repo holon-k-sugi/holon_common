@@ -227,7 +227,7 @@ class IconObjects {
       $iconsDiv.css('width', '595pt');
       $iconsDiv.css('height', '40pt');
       const id = pageList.indexToSelector(i).children('[class~="iftc_cf_inputitems"]').attr('id');
-      if (veticalPosition[i] !== undefined) $iconsDiv.css('position', 'absolute');
+      $iconsDiv.css('position', 'absolute');
       const inputAreaCSS = IconObjects.#getPtValueFromStylesheets(`#${id}`);
       const inputAreaTop = Number(inputAreaCSS?.top.split('pt')[0] || 0);
       $iconsDiv.css('top', `${(veticalPosition[i] !== undefined ? veticalPosition[i] : 0) - inputAreaTop}pt`);
