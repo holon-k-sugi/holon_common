@@ -723,7 +723,7 @@ const dmxMapping = new DMXMapping();
 function getV(name, index) {
   if (radioButtons.radioExists(name)) return radioButtons.list[name].getRadioButtonValue(index);
   const id = inputObjects.getIdsByIndex(name, index ?? 0)[0];
-  if (isCheckBox(id)) $(`#${id}`).prop('checked');
+  if (isCheckBox(id)) return $(`#${id}`).prop('checked');
   return $(`#${id}`).val();
 }
 // eslint-disable-next-line no-unused-vars
