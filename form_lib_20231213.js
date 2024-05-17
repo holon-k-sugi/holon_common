@@ -211,6 +211,7 @@ class IconObjects {
       $buttonsDiv.css('display', 'flex');
       $buttonsDiv.css('justify-content', 'end');
       $buttonsDiv.css('width', '50%');
+      $buttonsDiv.css('pointer-events', 'auto');
 
       icons.forEach(icon => {
         const iconDiv = IconObjects.#makeIconDiv(this.iconList[icon]);
