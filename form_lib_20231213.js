@@ -223,6 +223,7 @@ class IconObjects {
       });
       const $iconsDiv = $('<div>');
       $iconsDiv.attr('id', 'ICONS_DIV');
+      $iconsDiv.css('pointer-events', 'none');
       $iconsDiv.css('display', 'flex');
       $iconsDiv.css('width', '595pt');
       $iconsDiv.css('height', '40pt');
