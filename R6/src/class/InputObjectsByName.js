@@ -21,6 +21,15 @@ class InputObjectsByName {
     return this.pageList.filter(v => v.length !== 0);
   }
 
+  getIdsByIndex(index) {
+    return this.getFilteredList()[index];
+  }
+
+  getValueByIndex(index) {
+    const id = this.getIdsByIndex(index)[0];
+    return $(`#${id}`).val();
+  }
+
   getIndexById(id) {
     return this.getFilteredList().findIndex(arr => arr.some(v => v === id));
   }

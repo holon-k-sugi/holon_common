@@ -7,7 +7,7 @@ class DocumentEmployees {
       if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
         return;
       }
-      this.#list = JSON.parse(getV('DOCUMENT_EMPLOYEES_LIST'));
+      this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST',0));
     } catch (e) {
       console.error('DocumentEmployees.initialize: ', e);
     }

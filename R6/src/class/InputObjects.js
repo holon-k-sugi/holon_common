@@ -77,4 +77,8 @@ class InputObjects {
   static getObjListByPage(page) {
     return this.#objListByPage[page];
   }
+
+  static getValueByIndex(name, index) {
+    return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+  }
 }

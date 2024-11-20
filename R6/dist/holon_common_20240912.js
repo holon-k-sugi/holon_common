@@ -201,7 +201,7 @@ class DocumentEmployees {
       if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
         return;
       }
-      this.#list = JSON.parse(getV('DOCUMENT_EMPLOYEES_LIST'));
+      this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST',0));
     } catch (e) {
       console.error('DocumentEmployees.initialize: ', e);
     }
@@ -518,6 +518,10 @@ class InputObjects {
   static getObjListByPage(page) {
     return this.#objListByPage[page];
   }
+
+  static getValueByIndex(name, index) {
+    return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+  }
 }
 class InputObjectsByName {
   constructor(maxPageNum) {
@@ -540,6 +544,15 @@ class InputObjectsByName {
 
   getFilteredList() {
     return this.pageList.filter(v => v.length !== 0);
+  }
+
+  getIdsByIndex(index) {
+    return this.getFilteredList()[index];
+  }
+
+  getValueByIndex(index) {
+    const id = this.getIdsByIndex(index)[0];
+    return $(`#${id}`).val();
   }
 
   getIndexById(id) {
