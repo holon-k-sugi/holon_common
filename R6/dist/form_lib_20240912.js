@@ -203,7 +203,7 @@ class DocumentEmployees {
       }
       this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST',0));
     } catch (e) {
-      console.error('DocumentEmployees.initialize: ', e);
+      this.list = [];
     }
     this.objNameSet = new Set();
   }
