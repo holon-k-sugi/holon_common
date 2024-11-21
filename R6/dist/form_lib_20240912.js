@@ -137,20 +137,20 @@ class CompanyMaster {
   }
 
   static getMaster(name) {
-    if (!InputObjects.objExists(this.toMasterName(name))) {
-      console.warn(`${this.toMasterName(name)}は存在しないオブジェクト`);
+    if (!InputObjects.objExists(CompanyMaster.toMasterName(name))) {
+      console.warn(`${CompanyMaster.toMasterName(name)}は存在しないオブジェクト`);
       return '';
     }
-    return getV(this.toMasterName(name));
+    return getV(CompanyMaster.toMasterName(name));
   }
 
   static setMaster(name) {
-    const exists = [name, this.toMasterName(name)].filter(v => !InputObjects.objExists(v));
+    const exists = [name, CompanyMaster.toMasterName(name)].filter(v => !InputObjects.objExists(v));
     if (exists.length > 0) {
       exists.forEach(v => console.warn(`${v}は存在しないオブジェクト`));
       return;
     }
-    setV(name, this.getMaster(name));
+    setV(name, CompanyMaster.getMaster(name));
   }
 
   static getAllObjNameByType(type) {
@@ -158,8 +158,8 @@ class CompanyMaster {
   }
 
   static setAllMasterByType(type) {
-    this.getAllObjNameByType(type).forEach(name => {
-      this.setMaster(name);
+    CompanyMaster.getAllObjNameByType(type).forEach(name => {
+      CompanyMaster.setMaster(name);
     });
   }
 }
