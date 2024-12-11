@@ -78,7 +78,19 @@ class InputObjects {
     return this.#objListByPage[page];
   }
 
+  static getValue(name) {
+    return InputObjects.getObjByName(name).getValue();
+  }
+
   static getValueByIndex(name, index) {
     return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+  }
+  static setValueByIndex(...args) {
+    const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
+      ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
+    const val = args.slice(-1)[0];
+    target.forEach(id => {
+      $(`#${id}`).val(val);
+    });
   }
 }

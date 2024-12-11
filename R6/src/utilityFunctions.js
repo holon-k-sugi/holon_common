@@ -2,9 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 function getV(name, index) {
   if (RadioButtons.radioExists(name)) return RadioButtons.list[name].getRadioButtonValue(index);
-  const id = InputObjects.getIdsByIndex(name, index ?? 0)[0];
-  if (isCheckBox(id)) return $(`#${id}`).prop('checked');
-  return $(`#${id}`).val();
+  return InputObjects.getValueByIndex(name, index);
 }
 // eslint-disable-next-line no-unused-vars
 function setV(...args) { // (name, val) or (name, index, val)
@@ -22,7 +20,7 @@ function setV(...args) { // (name, val) or (name, index, val)
   });
 }
 // eslint-disable-next-line no-unused-vars
-function getMaster(name) { return CompanyMaster.getMaster(name); }
+function getMaster(name) { return InputObjects.getValueByIndex(name); }
 // eslint-disable-next-line no-unused-vars
 function getN(name, i) {
   const hankakuNumber = Number(toHan(getV(name, i)).replace(/,/g, ''));

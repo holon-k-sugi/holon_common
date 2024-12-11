@@ -2,159 +2,141 @@ class ChechBox {
   static #list = {};
   static initialize() {
     this.#list = InputObjects.getAllObjNameList().reduce((cur, name) => {
-      return target;
+      const id = InputObjects.getObjByName(name).getId();
+      if ($(`#${id}`).prop('type') === 'checkbox') {
+        cur[name] = InputObjects.getObjByName(name);
+      }
+      return cur;
     }, {});
+    ChechBox.validateCheckMark();
+  }
+
+  static isCheckBox(name) {
+    return this.#list[name] !== undefined;
+  }
+
+  static validateCheckMark() {
+    Object.keys(this.#list).forEach(name => {
+      const id = this.#list[name].getId();
+      if ($(`#${id}`).prop('value') === 'true' && $(`#${id}`).prop('value') === 'false') {
+        return;
+      }
+      console.warn(`${name} のチェック値が不正です。`);
+    });
   }
 }
 class CompanyMaster {
+  static #notHaveObjPrefix = {
+    EIFN: 'E_I_F_NO',
+    LIN: 'LABOR_INSURANCE_NO',
+    CN: 'CORPORATE_NUMBER',
+    EIFN1: 'E_I_F_NO_1',
+    EIFN2: 'E_I_F_NO_2',
+    EIFN3: 'E_I_F_NO_3',
+    LIN1: 'LABOR_INSURANCE_NO_1',
+    LIN2: 'LABOR_INSURANCE_NO_2',
+    LIN3: 'LABOR_INSURANCE_NO_3',
+    CAPITAL_STOCK: 'CAPITAL',
+    EMPLOYEEN: 'EMPLOYEE_NUMBER',
+    PRINCIPAL_BIZ: 'PRINCIPAL_BUSINESS',
+    SCALE: 'CORPORATE_SCALE',
+    INDUSTRYCLASSL: 'INDUSTRY_CLASSIFICATION_DIVISIO',
+    INDUSTRYCLASSM: 'INDUSTRY_CLASSIFICATION',
+    INDUSTRIES_TYPE: 'INDUSTRIES',
+    LABOR_DELEGATE: 'WORKING_REPRESENTATIVE_FULL_NAM',
+    CUTOFFDATE: 'CUTOFF_DATE',
+    JGYNSHBIRTHDAY: 'REPRESENTATIVE_BIRTHDAY',
+    FOUNDATIONYEAR: 'FOUNDATION_YEAR',
+    FINANCIALMONTH: 'FINANCIAL_MONTH',
+    ROUDOUKYOKU: 'WORKING_AGENCY_HEAD_LOCAL',
+    HELLOWORK: 'PUBLIC_EMPLOYMENT_SECURITY_OFFI',
+    JGYNSHBIRTHDAY_Y: 'JGYNSHBIRTHDAY_Y',
+    JGYNSHBIRTHDAY_M: 'JGYNSHBIRTHDAY_M',
+    JGYNSHBIRTHDAY_D: 'JGYNSHBIRTHDAY_D',
+    TENANT_ID: 'TENANT_ID',
+    CREATED_TENANT_ID: 'CREATED_TENANT_ID',
+    ROUKI_ID: 'LSIO_ID',
+    ROUKI_NAME: 'LSIO',
+  };
+
+  static #hasObjPrefix = {
+    SHRSH: {
+      SHRSH_POST: 'S_BUSINESS_OWNER_POSTAL_CODE',
+      SHRSH_AD1: 'S_BUSINESS_OWNER_ADDRESS_1',
+      SHRSH_AD2: 'S_BUSINESS_OWNER_ADDRESS_2',
+      SHRSH_OFFICE: 'S_BUSINESS_OWNER_NAME',
+      SHRSH_TEL: 'S_BUSINESS_OWNER_TEL',
+      SHRSH_POST1: 'S_BUSINESS_OWNER_POSTAL_CODE_1',
+      SHRSH_POST2: 'S_BUSINESS_OWNER_POSTAL_CODE_2',
+      SHRSH_TEL1: 'S_BUSINESS_OWNER_TEL_1',
+      SHRSH_TEL2: 'S_BUSINESS_OWNER_TEL_2',
+      SHRSH_TEL3: 'S_BUSINESS_OWNER_TEL_3',
+      SHRSH_POSITION: 'LSS_ATTORNEY_POST',
+      SHRSH_OWNER: 'LSS_ATTORNEY_FULL_NAME',
+      SHRSH_NUM: 'SHRSH_NUM',
+    },
+    JGYNSH: {
+      JGYNSH_POST: 'BUSINESS_OWNER_POSTAL_CODE',
+      JGYNSH_AD1: 'BUSINESS_OWNER_ADDRESS_1',
+      JGYNSH_AD2: 'BUSINESS_OWNER_ADDRESS_2',
+      JGYNSH_OFFICE: 'BUSINESS_OWNER_NAME',
+      JGYNSH_NAME: 'BUSINESS_OWNER_POST_FULL_NAME',
+      JGYNSH_TEL: 'BUSINESS_OWNER_TEL',
+      JGYNSH_POST1: 'BUSINESS_OWNER_POSTAL_CODE_1',
+      JGYNSH_POST2: 'BUSINESS_OWNER_POSTAL_CODE_2',
+      JGYNSH_POSITION: 'BUSINESS_OWNER_POST',
+      JGYNSH_OWNER: 'BUSINESS_OWNER_REPRESENT_FULL_N',
+      JGYNSH_TEL1: 'BUSINESS_OWNER_TEL_1',
+      JGYNSH_TEL2: 'BUSINESS_OWNER_TEL_2',
+      JGYNSH_TEL3: 'BUSINESS_OWNER_TEL_3',
+    },
+    OFF: {
+      OFF_POST: 'OFFICE_POSTAL_CODE',
+      OFF_AD1: 'OFFICE_ADDRESS_1',
+      OFF_AD2: 'OFFICE_ADDRESS_2',
+      OFF_NAME: 'OFFICE_NAME',
+      OFF_TEL: 'OFFICE_TEL',
+      OFF_POST1: 'OFFICE_POSTAL_CODE_1',
+      OFF_POST2: 'OFFICE_POSTAL_CODE_2',
+      OFF_TEL1: 'OFFICE_TEL_1',
+      OFF_TEL2: 'OFFICE_TEL_2',
+      OFF_TEL3: 'OFFICE_TEL_3',
+    },
+    TNTSH: {
+      TNTSH_NAME: 'RESPONSIBLE_FULL_NAME',
+      TNTSH_AFFILIATION: 'RESPONSIBLE_AFFILIATION',
+      TNTSH_TEL: 'RESPONSIBLE_TEL',
+      TNTSH_FAX: 'RESPONSIBLE_FAX',
+      TNTSH_MAIL: 'RESPONSIBLE_MAIL_ADDRESS',
+      TNTSH_TEL1: 'RESPONSIBLE_TEL_1',
+      TNTSH_TEL2: 'RESPONSIBLE_TEL_2',
+      TNTSH_TEL3: 'RESPONSIBLE_TEL_3',
+      TNTSH_FAX1: 'RESPONSIBLE_FAX_1',
+      TNTSH_FAX2: 'RESPONSIBLE_FAX_2',
+      TNTSH_FAX3: 'RESPONSIBLE_FAX_3',
+      TNTSH_MAIL1: 'RESPONSIBLE_MAIL_ADDRESS_1',
+      TNTSH_MAIL2: 'RESPONSIBLE_MAIL_ADDRESS_2',
+    },
+  };
   static initialize() {
-    const hasObjPrefix = {
-      SHRSH: {
-        masterPrefix: 'S_BUSINESS_OWNER_',
-        hasMasterPrefix: {
-          POST: 'POSTAL_CODE',
-          AD1: 'ADDRESS_1',
-          AD2: 'ADDRESS_2',
-          OFFICE: 'NAME',
-          TEL: 'TEL',
-          POST1: 'POSTAL_CODE_1',
-          POST2: 'POSTAL_CODE_2',
-          TEL1: 'TEL_1',
-          TEL2: 'TEL_2',
-          TEL3: 'TEL_3',
-        },
-        noMasterPrefix: {
-          POSITION: 'LSS_ATTORNEY_POST',
-          OWNER: 'LSS_ATTORNEY_FULL_NAME',
-          NUM: 'SHRSH_NUM',
-        },
-      },
-      JGYNSH: {
-        masterPrefix: 'BUSINESS_OWNER_',
-        hasMasterPrefix: {
-          POST: 'POSTAL_CODE',
-          AD1: 'ADDRESS_1',
-          AD2: 'ADDRESS_2',
-          OFFICE: 'NAME',
-          NAME: 'POST_FULL_NAME',
-          TEL: 'TEL',
-          POST1: 'POSTAL_CODE_1',
-          POST2: 'POSTAL_CODE_2',
-          POSITION: 'POST',
-          OWNER: 'REPRESENT_FULL_N',
-          TEL1: 'TEL_1',
-          TEL2: 'TEL_2',
-          TEL3: 'TEL_3',
-        },
-        noMasterPrefix: {},
-      },
-      OFF: {
-        masterPrefix: 'OFFICE_',
-        hasMasterPrefix: {
-          POST: 'POSTAL_CODE',
-          AD1: 'ADDRESS_1',
-          AD2: 'ADDRESS_2',
-          NAME: 'NAME',
-          TEL: 'TEL',
-          POST1: 'POSTAL_CODE_1',
-          POST2: 'POSTAL_CODE_2',
-          TEL1: 'TEL_1',
-          TEL2: 'TEL_2',
-          TEL3: 'TEL_3',
-        },
-        noMasterPrefix: {},
-      },
-      TNTSH: {
-        masterPrefix: 'RESPONSIBLE_',
-        hasMasterPrefix: {
-          NAME: 'FULL_NAME',
-          AFFILIATION: 'AFFILIATION',
-          TEL: 'TEL',
-          FAX: 'FAX',
-          MAIL: 'MAIL_ADDRESS',
-          TEL1: 'TEL_1',
-          TEL2: 'TEL_2',
-          TEL3: 'TEL_3',
-          FAX1: 'FAX_1',
-          FAX2: 'FAX_2',
-          FAX3: 'FAX_3',
-          MAIL1: 'MAIL_ADDRESS_1',
-          MAIL2: 'MAIL_ADDRESS_2',
-        },
-        noMasterPrefix: {},
-      },
-    };
-    Object.keys(hasObjPrefix).forEach(type => {
-      this[type] = {};
-      const tmp = hasObjPrefix[type];
-      Object.keys(tmp.hasMasterPrefix).forEach(objSuffix => {
-        this[type][objSuffix] = tmp.masterPrefix + tmp.hasMasterPrefix[objSuffix];
-      });
-      Object.keys(tmp.noMasterPrefix).forEach(objSuffix => {
-        this[type][objSuffix] = tmp.noMasterPrefix[objSuffix];
-      });
-    });
-    this.OTHER = {
-      EIFN: 'E_I_F_NO',
-      LIN: 'LABOR_INSURANCE_NO',
-      CN: 'CORPORATE_NUMBER',
-      EIFN1: 'E_I_F_NO_1',
-      EIFN2: 'E_I_F_NO_2',
-      EIFN3: 'E_I_F_NO_3',
-      LIN1: 'LABOR_INSURANCE_NO_1',
-      LIN2: 'LABOR_INSURANCE_NO_2',
-      LIN3: 'LABOR_INSURANCE_NO_3',
-      CAPITAL_STOCK: 'CAPITAL',
-      EMPLOYEEN: 'EMPLOYEE_NUMBER',
-      PRINCIPAL_BIZ: 'PRINCIPAL_BUSINESS',
-      SCALE: 'CORPORATE_SCALE',
-      INDUSTRYCLASSL: 'INDUSTRY_CLASSIFICATION_DIVISIO',
-      INDUSTRYCLASSM: 'INDUSTRY_CLASSIFICATION',
-      INDUSTRIES_TYPE: 'INDUSTRIES',
-      LABOR_DELEGATE: 'WORKING_REPRESENTATIVE_FULL_NAM',
-      CUTOFFDATE: 'CUTOFF_DATE',
-      JGYNSHBIRTHDAY: 'REPRESENTATIVE_BIRTHDAY',
-      FOUNDATIONYEAR: 'FOUNDATION_YEAR',
-      FINANCIALMONTH: 'FINANCIAL_MONTH',
-      ROUDOUKYOKU: 'WORKING_AGENCY_HEAD_LOCAL',
-      HELLOWORK: 'PUBLIC_EMPLOYMENT_SECURITY_OFFI',
-      JGYNSHBIRTHDAY_Y: 'JGYNSHBIRTHDAY_Y',
-      JGYNSHBIRTHDAY_M: 'JGYNSHBIRTHDAY_M',
-      JGYNSHBIRTHDAY_D: 'JGYNSHBIRTHDAY_D',
-      TENANT_ID: 'TENANT_ID',
-      CREATED_TENANT_ID: 'CREATED_TENANT_ID',
-      ROUKI_ID: 'LSIO_ID',
-      ROUKI_NAME: 'LSIO',
-    };
   }
 
   static toMasterName(name) {
-    const splitName = name.split('_');
-    if (!(splitName[0] in this)) return this.OTHER[name];
-    const objPrefix = splitName.shift();
-    const objSuffix = splitName.join('_');
-    return this[objPrefix][objSuffix];
+    const objPrefix = name.split('_')[0];
+    if (!(objPrefix in this.#hasObjPrefix)) return this.#notHaveObjPrefix[name];
+    return this.#hasObjPrefix[objPrefix][name];
   }
 
   static getMaster(name) {
-    if (!InputObjects.objExists(CompanyMaster.toMasterName(name))) {
-      console.warn(`${CompanyMaster.toMasterName(name)}は存在しないオブジェクト`);
-      return '';
-    }
-    return getV(CompanyMaster.toMasterName(name));
+    return InputObjects.getValueByIndex(CompanyMaster.toMasterName(name));
   }
 
   static setMaster(name) {
-    const exists = [name, CompanyMaster.toMasterName(name)].filter(v => !InputObjects.objExists(v));
-    if (exists.length > 0) {
-      exists.forEach(v => console.warn(`${v}は存在しないオブジェクト`));
-      return;
-    }
-    setV(name, CompanyMaster.getMaster(name));
+    InputObjects.setValueByIndex(name, CompanyMaster.getMaster(name));
   }
 
   static getAllObjNameByType(type) {
-    return Object.keys(this[type]).map(key => `${type === 'OTHER' ? '' : `${type}_`}${key}`);
+    return Object.keys(this.#hasObjPrefix[type]);
   }
 
   static setAllMasterByType(type) {
@@ -519,19 +501,37 @@ class InputObjects {
     return this.#objListByPage[page];
   }
 
+  static getValue(name) {
+    return InputObjects.getObjByName(name).getValue();
+  }
+
   static getValueByIndex(name, index) {
     return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+  }
+  static setValueByIndex(...args) {
+    const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
+      ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
+    const val = args.slice(-1)[0];
+    target.forEach(id => {
+      $(`#${id}`).val(val);
+    });
   }
 }
 class InputObjectsByName {
   constructor(maxPageNum) {
     this.objList = [];
     this.pageList = [...Array(maxPageNum)].map(() => []);
+    this.type = '';
   }
 
   register(id, page) {
     this.objList.push(id);
     this.pageList[page].push(id);
+    if (this.type === '') this.type = $(`#${id}`).prop('type');
+  }
+
+  getId() {
+    return this.objList[0];
   }
 
   getALLIds() {
@@ -550,9 +550,19 @@ class InputObjectsByName {
     return this.getFilteredList()[index];
   }
 
+  getType() {
+    return this.type;
+  }
+
+  getValue() {
+    return this.getValueByIndex(0);
+  }
+
   getValueByIndex(index) {
     const id = this.getIdsByIndex(index)[0];
-    return $(`#${id}`).val();
+    if (this.type === 'checkbox') return $(`#${id}`).prop('checked');
+    if (this.type === 'text') return $(`#${id}`).val();
+    return '';
   }
 
   getIndexById(id) {
@@ -710,12 +720,10 @@ class RadioButtons {
   }
 
   static onClickRadioButtonL(name, index) {
-    const splitName = name.split('_');
-    splitName.pop();
-    const groupName = splitName.join('_');
+    const groupName = name.split('_').slice(1).join('_');
     const preState = getV(...[name, index].filter(v => v !== undefined));
     this.#list[groupName].getAllButtonNameList().forEach(buttonName => {
-      const tmp = [buttonName, index, this.list[groupName].unmark].filter(v => v !== undefined);
+      const tmp = [buttonName, index, this.#list[groupName].unmark].filter(v => v !== undefined);
       setV(...tmp);
     });
     if (preState === this.#list[groupName].mark) return;
@@ -724,30 +732,25 @@ class RadioButtons {
   }
 
   static radioExists(name) {
-    return this.#list?.[name] !== undefined;
+    if (this.#list?.[name] !== undefined) {
+      console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
+      return false;
+    }
+    return true;
   }
 
   static getRadioGroup(name) {
-    if (!RadioButtons.radioExists(name)) {
-      console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
-      return {};
-    }
+    if (!RadioButtons.radioExists(name)) return {};
     return this.#list[name];
   }
 
   static setMark(name, mark, unmark) {
-    if (!RadioButtons.radioExists(name)) {
-      console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
-      return;
-    }
+    if (!RadioButtons.radioExists(name)) return;
     this.#list[name].setMark(mark, unmark);
   }
 
   static countButtons(name) {
-    if (!RadioButtons.radioExists(name)) {
-      console.warn(`countButtons: ${name} は存在しないラジオボタングループ`);
-      return {};
-    }
+    if (!RadioButtons.radioExists(name)) return {};
     return this.getRadioGroup(name).countButtons();
   }
 }
@@ -755,9 +758,7 @@ class RadioButtons {
 // eslint-disable-next-line no-unused-vars
 function getV(name, index) {
   if (RadioButtons.radioExists(name)) return RadioButtons.list[name].getRadioButtonValue(index);
-  const id = InputObjects.getIdsByIndex(name, index ?? 0)[0];
-  if (isCheckBox(id)) return $(`#${id}`).prop('checked');
-  return $(`#${id}`).val();
+  return InputObjects.getValueByIndex(name, index);
 }
 // eslint-disable-next-line no-unused-vars
 function setV(...args) { // (name, val) or (name, index, val)
@@ -775,7 +776,7 @@ function setV(...args) { // (name, val) or (name, index, val)
   });
 }
 // eslint-disable-next-line no-unused-vars
-function getMaster(name) { return CompanyMaster.getMaster(name); }
+function getMaster(name) { return InputObjects.getValueByIndex(name); }
 // eslint-disable-next-line no-unused-vars
 function getN(name, i) {
   const hankakuNumber = Number(toHan(getV(name, i)).replace(/,/g, ''));
@@ -1054,23 +1055,27 @@ function logWarningWithCaller(message) {
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
 function onLoadCompanyMaster() {
-  setV('JGYNSHBIRTHDAY_Y', getMaster('JGYNSHBIRTHDAY').slice(0, 4));
-  setV('JGYNSHBIRTHDAY_M', getMaster('JGYNSHBIRTHDAY').slice(4, 6));
-  setV('JGYNSHBIRTHDAY_D', getMaster('JGYNSHBIRTHDAY').slice(6, 8));
+  [...Array(3)].forEach((_, i) => {
+    setV(`JGYNSHBIRTHDAY_${['Y', 'M', 'D'][i]}`, getMaster('JGYNSHBIRTHDAY').slice(i * 2, i * 2 + 2));
+  });
+  if (InputObjects.objExists('IS_MANUAL') && getCheckValue('IS_MANUAL')) return;
   Object.keys(CompanyMaster).forEach(type => {
-    if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID') || (InputObjects.objExists('IS_MANUAL') && getCheckValue('IS_MANUAL')))) return;
+    if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
     CompanyMaster.setAllMasterByType(type);
   });
-  if (getMaster('TENANT_ID') !== getMaster('CREATED_TENANT_ID') && InputObjects.objExists('IS_MANUAL')) {
-    if (!getCheckValue('IS_MANUAL')) setV('SHRSH_NUM', getV('LSS_ATTORNEY_REGIST_NUMBER') === '' ? getV('S_LSS_ATTORNEY_REGIST_NUMBER') : getV('LSS_ATTORNEY_REGIST_NUMBER'));
+
+  if (getMaster('TENANT_ID') !== getMaster('CREATED_TENANT_ID')) {
+    if (!getCheckValue('IS_MANUAL'))
+      setV('SHRSH_NUM', InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') === '' ? InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER') : InputObjects.getValueByIndex('LSS_ATTORNEY_REGIST_NUMBER'));
     $(getSelector('IS_MANUAL')).on('click', () => {
       if (!getCheckValue('IS_MANUAL')) {
         CompanyMaster.setAllMasterByType('SHRSH');
-        setV('SHRSH_NUM', getV('LSS_ATTORNEY_REGIST_NUMBER') === '' ? getV('S_LSS_ATTORNEY_REGIST_NUMBER') : getV('LSS_ATTORNEY_REGIST_NUMBER'));
+        setV('SHRSH_NUM', InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') === '' ? InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER') : InputObjects.getValueByIndex('LSS_ATTORNEY_REGIST_NUMBER'));
       }
     });
   }
-  if (InputObjects.objExists('LSIO') && InputObjects.objExists('ROUKI_NAME') && getV('LSIO') !== '') setV('ROUKI_NAME', getV('LSIO').split('労働基準監督署')[0]);
+  if (InputObjects.objExists('LSIO') && InputObjects.objExists('ROUKI_NAME') && getV('LSIO') !== '')
+    setV('ROUKI_NAME', InputObjects.getValue('LSIO').split('労働基準監督署')[0]);
 }
 // eslint-disable-next-line no-unused-vars
 function onLoadRadioButton() {
@@ -1228,6 +1233,7 @@ function initializeInstances() {
   DMXMapping.initialize();
   defineAttrAll();
   showDocInfo();
+  ChechBox.initialize();
 }
 
 // eslint-disable-next-line no-unused-vars

@@ -2,11 +2,17 @@ class InputObjectsByName {
   constructor(maxPageNum) {
     this.objList = [];
     this.pageList = [...Array(maxPageNum)].map(() => []);
+    this.type = '';
   }
 
   register(id, page) {
     this.objList.push(id);
     this.pageList[page].push(id);
+    if (this.type === '') this.type = $(`#${id}`).prop('type');
+  }
+
+  getId() {
+    return this.objList[0];
   }
 
   getALLIds() {
@@ -25,9 +31,19 @@ class InputObjectsByName {
     return this.getFilteredList()[index];
   }
 
+  getType() {
+    return this.type;
+  }
+
+  getValue() {
+    return this.getValueByIndex(0);
+  }
+
   getValueByIndex(index) {
     const id = this.getIdsByIndex(index)[0];
-    return $(`#${id}`).val();
+    if (this.type === 'checkbox') return $(`#${id}`).prop('checked');
+    if (this.type === 'text') return $(`#${id}`).val();
+    return '';
   }
 
   getIndexById(id) {

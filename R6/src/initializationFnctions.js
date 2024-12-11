@@ -9,23 +9,27 @@ function logWarningWithCaller(message) {
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
 function onLoadCompanyMaster() {
-  setV('JGYNSHBIRTHDAY_Y', getMaster('JGYNSHBIRTHDAY').slice(0, 4));
-  setV('JGYNSHBIRTHDAY_M', getMaster('JGYNSHBIRTHDAY').slice(4, 6));
-  setV('JGYNSHBIRTHDAY_D', getMaster('JGYNSHBIRTHDAY').slice(6, 8));
+  [...Array(3)].forEach((_, i) => {
+    setV(`JGYNSHBIRTHDAY_${['Y', 'M', 'D'][i]}`, getMaster('JGYNSHBIRTHDAY').slice(i * 2, i * 2 + 2));
+  });
+  if (InputObjects.objExists('IS_MANUAL') && getCheckValue('IS_MANUAL')) return;
   Object.keys(CompanyMaster).forEach(type => {
-    if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID') || (InputObjects.objExists('IS_MANUAL') && getCheckValue('IS_MANUAL')))) return;
+    if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
     CompanyMaster.setAllMasterByType(type);
   });
-  if (getMaster('TENANT_ID') !== getMaster('CREATED_TENANT_ID') && InputObjects.objExists('IS_MANUAL')) {
-    if (!getCheckValue('IS_MANUAL')) setV('SHRSH_NUM', getV('LSS_ATTORNEY_REGIST_NUMBER') === '' ? getV('S_LSS_ATTORNEY_REGIST_NUMBER') : getV('LSS_ATTORNEY_REGIST_NUMBER'));
+
+  if (getMaster('TENANT_ID') !== getMaster('CREATED_TENANT_ID')) {
+    if (!getCheckValue('IS_MANUAL'))
+      setV('SHRSH_NUM', InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') === '' ? InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER') : InputObjects.getValueByIndex('LSS_ATTORNEY_REGIST_NUMBER'));
     $(getSelector('IS_MANUAL')).on('click', () => {
       if (!getCheckValue('IS_MANUAL')) {
         CompanyMaster.setAllMasterByType('SHRSH');
-        setV('SHRSH_NUM', getV('LSS_ATTORNEY_REGIST_NUMBER') === '' ? getV('S_LSS_ATTORNEY_REGIST_NUMBER') : getV('LSS_ATTORNEY_REGIST_NUMBER'));
+        setV('SHRSH_NUM', InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') === '' ? InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER') : InputObjects.getValueByIndex('LSS_ATTORNEY_REGIST_NUMBER'));
       }
     });
   }
-  if (InputObjects.objExists('LSIO') && InputObjects.objExists('ROUKI_NAME') && getV('LSIO') !== '') setV('ROUKI_NAME', getV('LSIO').split('労働基準監督署')[0]);
+  if (InputObjects.objExists('LSIO') && InputObjects.objExists('ROUKI_NAME') && getV('LSIO') !== '')
+    setV('ROUKI_NAME', InputObjects.getValue('LSIO').split('労働基準監督署')[0]);
 }
 // eslint-disable-next-line no-unused-vars
 function onLoadRadioButton() {
@@ -183,6 +187,7 @@ function initializeInstances() {
   DMXMapping.initialize();
   defineAttrAll();
   showDocInfo();
+  ChechBox.initialize();
 }
 
 // eslint-disable-next-line no-unused-vars

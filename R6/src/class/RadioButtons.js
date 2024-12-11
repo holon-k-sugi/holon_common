@@ -19,12 +19,10 @@ class RadioButtons {
   }
 
   static onClickRadioButtonL(name, index) {
-    const splitName = name.split('_');
-    splitName.pop();
-    const groupName = splitName.join('_');
+    const groupName = name.split('_').slice(1).join('_');
     const preState = getV(...[name, index].filter(v => v !== undefined));
     this.#list[groupName].getAllButtonNameList().forEach(buttonName => {
-      const tmp = [buttonName, index, this.list[groupName].unmark].filter(v => v !== undefined);
+      const tmp = [buttonName, index, this.#list[groupName].unmark].filter(v => v !== undefined);
       setV(...tmp);
     });
     if (preState === this.#list[groupName].mark) return;
@@ -33,30 +31,25 @@ class RadioButtons {
   }
 
   static radioExists(name) {
-    return this.#list?.[name] !== undefined;
+    if (this.#list?.[name] !== undefined) {
+      console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
+      return false;
+    }
+    return true;
   }
 
   static getRadioGroup(name) {
-    if (!RadioButtons.radioExists(name)) {
-      console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
-      return {};
-    }
+    if (!RadioButtons.radioExists(name)) return {};
     return this.#list[name];
   }
 
   static setMark(name, mark, unmark) {
-    if (!RadioButtons.radioExists(name)) {
-      console.warn(`setMark: ${name} は存在しないラジオボタングループ`);
-      return;
-    }
+    if (!RadioButtons.radioExists(name)) return;
     this.#list[name].setMark(mark, unmark);
   }
 
   static countButtons(name) {
-    if (!RadioButtons.radioExists(name)) {
-      console.warn(`countButtons: ${name} は存在しないラジオボタングループ`);
-      return {};
-    }
+    if (!RadioButtons.radioExists(name)) return {};
     return this.getRadioGroup(name).countButtons();
   }
 }
