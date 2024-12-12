@@ -18,11 +18,13 @@ class ChechBox {
   static validateCheckMark() {
     Object.keys(this.#list).forEach(name => {
       const id = this.#list[name].getId();
-      if ($(`#${id}`).attr('value') !== 'true') {
-        console.warn(`${name} のチェック時の書き出し値が true ではなく ${$(`#${id}`).attr('value')} です。`);
+      const checkedValue = $(`#${id}`).attr('value');
+      if (checkedValue !== 'true') {
+        console.warn(`${name} のチェック時の書き出し値が true ではなく ${checkedValue} です。`);
       }
-      if ($(`#${id}`).attr('data-unchecked-value') !== 'false') {
-        console.warn(`${name} の非チェック時の書き出し値が false ではなく ${$(`#${id}`).attr('value')} です。`);
+      const unchedValue = $(`#${id}`).attr('data-unchecked-value');
+      if (unchedValue !== 'false') {
+        console.warn(`${name} の非チェック時の書き出し値が false ではなく ${unchedValue} です。`);
       }
       return;
     });
