@@ -43,7 +43,7 @@ class RadioButtons {
     return this.#list[name];
   }
 
-  static getVakue(name, index) {
+  static getValue(name, index) {
     if (!RadioButtons.radioExists(name)) return '';
     return RadioButtons.getRadioGroup(name).getValue(index);
   }
