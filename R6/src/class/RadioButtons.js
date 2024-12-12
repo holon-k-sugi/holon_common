@@ -31,7 +31,7 @@ class RadioButtons {
   }
 
   static radioExists(name) {
-    if (this.#list?.[name] !== undefined) {
+    if (this.#list?.[name] === undefined) {
       console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
       return false;
     }
