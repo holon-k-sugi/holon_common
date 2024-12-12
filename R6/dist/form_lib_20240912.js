@@ -644,7 +644,7 @@ class PageList {
     return this.#length;
   }
 }
-class RadioButton {
+class RadioButtonGroup {
   constructor() {
     this.buttonList = {};
     this.reverseList = {};
@@ -686,7 +686,7 @@ class RadioButton {
     });
   }
 
-  getRadioButtonValue(index) {
+  getValue(index) {
     return Object.keys(this.reverseList)
       .find(num => getV(this.reverseList[num], index) === this.mark);
   }
@@ -713,7 +713,7 @@ class RadioButtons {
       const end = splitName.pop();
       const groupName = splitName.join('_');
       if (/^R[0-9]{1,2}$/.test(end)) {
-        if (!target[groupName]) target[groupName] = new RadioButton();
+        if (!target[groupName]) target[groupName] = new RadioButtonGroup();
         target[groupName].registerButton(`${groupName}_${end}`, +end.slice(1));
       }
       return target;
@@ -749,20 +749,25 @@ class RadioButtons {
     return this.#list[name];
   }
 
+  static getVakue(name, index) {
+    if (!RadioButtons.radioExists(name)) return '';
+    return RadioButtons.getRadioGroup(name).getValue(index);
+  }
+
   static setMark(name, mark, unmark) {
     if (!RadioButtons.radioExists(name)) return;
-    this.#list[name].setMark(mark, unmark);
+    RadioButtons.getRadioGroup(name).setMark(mark, unmark);
   }
 
   static countButtons(name) {
     if (!RadioButtons.radioExists(name)) return {};
-    return this.getRadioGroup(name).countButtons();
+    return RadioButtons.getRadioGroup(name).countButtons();
   }
 }
 // 汎用関数
 // eslint-disable-next-line no-unused-vars
 function getV(name, index) {
-  if (RadioButtons.radioExists(name)) return RadioButtons.list[name].getRadioButtonValue(index);
+  if (RadioButtons.radioExists(name)) return RadioButtons.getValue(name, index);
   return InputObjects.getValueByIndex(name, index);
 }
 // eslint-disable-next-line no-unused-vars

@@ -1,7 +1,7 @@
 // 汎用関数
 // eslint-disable-next-line no-unused-vars
 function getV(name, index) {
-  if (RadioButtons.radioExists(name)) return RadioButtons.list[name].getRadioButtonValue(index);
+  if (RadioButtons.radioExists(name)) return RadioButtons.getValue(name, index);
   return InputObjects.getValueByIndex(name, index);
 }
 // eslint-disable-next-line no-unused-vars

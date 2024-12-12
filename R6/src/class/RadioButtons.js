@@ -7,7 +7,7 @@ class RadioButtons {
       const end = splitName.pop();
       const groupName = splitName.join('_');
       if (/^R[0-9]{1,2}$/.test(end)) {
-        if (!target[groupName]) target[groupName] = new RadioButton();
+        if (!target[groupName]) target[groupName] = new RadioButtonGroup();
         target[groupName].registerButton(`${groupName}_${end}`, +end.slice(1));
       }
       return target;
@@ -43,13 +43,18 @@ class RadioButtons {
     return this.#list[name];
   }
 
+  static getVakue(name, index) {
+    if (!RadioButtons.radioExists(name)) return '';
+    return RadioButtons.getRadioGroup(name).getValue(index);
+  }
+
   static setMark(name, mark, unmark) {
     if (!RadioButtons.radioExists(name)) return;
-    this.#list[name].setMark(mark, unmark);
+    RadioButtons.getRadioGroup(name).setMark(mark, unmark);
   }
 
   static countButtons(name) {
     if (!RadioButtons.radioExists(name)) return {};
-    return this.getRadioGroup(name).countButtons();
+    return RadioButtons.getRadioGroup(name).countButtons();
   }
 }
