@@ -22,7 +22,7 @@ class ChechBox {
         console.warn(`${name} のチェック時の書き出し値が true ではなく ${$(`#${id}`).attr('value')}です。`);
         return;
       }
-      if ($(`#${id}`).attr('value') !== 'false') {
+      if ($(`#${id}`).attr('data-unchecked-value') !== 'false') {
         console.warn(`${name} の非チェック時の書き出し値が false ではなく ${$(`#${id}`).attr('value')}です。`);
         return;
       }
