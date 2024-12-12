@@ -31,15 +31,16 @@ class RadioButtons {
   }
 
   static radioExists(name) {
-    if (this.#list?.[name] === undefined) {
-      console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
-      return false;
-    }
+    if (this.#list?.[name] === undefined) return false;
+
     return true;
   }
 
   static getRadioGroup(name) {
-    if (!RadioButtons.radioExists(name)) return {};
+    if (!RadioButtons.radioExists(name)) {
+      console.warn(`getRadioGroup: ${name} は存在しないラジオボタングループ`);
+      return {};
+    }
     return this.#list[name];
   }
 
