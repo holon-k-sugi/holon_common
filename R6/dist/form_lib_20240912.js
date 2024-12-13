@@ -1077,7 +1077,7 @@ function onLoadCompanyMaster() {
   [...Array(3)].forEach((_, i) => {
     setV(`JGYNSHBIRTHDAY_${['Y', 'M', 'D'][i]}`, getMaster('JGYNSHBIRTHDAY').slice(i * 2, i * 2 + 2));
   });
-  if (InputObjects.objExists('IS_MANUAL') && getCheckValue('IS_MANUAL')) return;
+  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) return;
   Object.keys(CompanyMaster).forEach(type => {
     if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
     CompanyMaster.setAllMasterByType(type);
