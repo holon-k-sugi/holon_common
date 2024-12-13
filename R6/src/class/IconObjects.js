@@ -29,8 +29,8 @@ class IconObjects {
       string: '1ページ目引用',
       color: 'rgba(68,201,194,1)',
       iconType: 'button',
-      isEnabled: () => PageList.addPages.length > 0,
-      getPages: () => PageList.addPages,
+      isEnabled: () => PageList.getLengthOfAddPage() > 0,
+      getPages: () => PageList.getAddPages(),
     },
     csvNum: {
       name: 'SHOW_CSV_NUM_BUTTON',

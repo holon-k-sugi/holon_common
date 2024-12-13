@@ -323,8 +323,8 @@ class IconObjects {
       string: '1ページ目引用',
       color: 'rgba(68,201,194,1)',
       iconType: 'button',
-      isEnabled: () => PageList.addPages.length > 0,
-      getPages: () => PageList.addPages,
+      isEnabled: () => PageList.getLengthOfAddPage() > 0,
+      getPages: () => PageList.getAddPages(),
     },
     csvNum: {
       name: 'SHOW_CSV_NUM_BUTTON',
@@ -642,6 +642,14 @@ class PageList {
 
   static getLength() {
     return this.#length;
+  }
+
+  static getAddPages(){
+    return this.#addPages;
+  }
+
+  static getLengthOfAddPage() {
+    return this.#addPages.length;
   }
 }
 class RadioButtonGroup {
@@ -1069,7 +1077,7 @@ function onLoadCompanyMaster() {
   [...Array(3)].forEach((_, i) => {
     setV(`JGYNSHBIRTHDAY_${['Y', 'M', 'D'][i]}`, getMaster('JGYNSHBIRTHDAY').slice(i * 2, i * 2 + 2));
   });
-  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) return;
+  if (InputObjects.objExists('IS_MANUAL') && getCheckValue('IS_MANUAL')) return;
   Object.keys(CompanyMaster).forEach(type => {
     if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
     CompanyMaster.setAllMasterByType(type);

@@ -57,4 +57,12 @@ class PageList {
   static getLength() {
     return this.#length;
   }
+
+  static getAddPages(){
+    return this.#addPages;
+  }
+
+  static getLengthOfAddPage() {
+    return this.#addPages.length;
+  }
 }
