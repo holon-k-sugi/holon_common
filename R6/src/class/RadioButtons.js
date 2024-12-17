@@ -4,11 +4,11 @@ class RadioButtons {
     this.#list = InputObjects.getAllObjNameList().reduce((cur, name) => {
       const target = cur;
       const splitName = name.split('_');
-      const end = splitName.pop();
-      const groupName = splitName.join('_');
+      const end = splitName[0];
+      const groupName = splitName.slice(1).join('_');
       if (/^R[0-9]{1,2}$/.test(end)) {
         if (!target[groupName]) target[groupName] = new RadioButtonGroup();
-        target[groupName].registerButton(`${groupName}_${end}`, +end.slice(1));
+        target[groupName].registerButton(name, +end.split('R')[1]);
       }
       return target;
     }, {});
@@ -21,18 +21,17 @@ class RadioButtons {
   static onClickRadioButtonL(name, index) {
     const groupName = name.split('_').slice(1).join('_');
     const preState = getV(...[name, index].filter(v => v !== undefined));
-    this.#list[groupName].getAllButtonNameList().forEach(buttonName => {
-      const tmp = [buttonName, index, this.#list[groupName].unmark].filter(v => v !== undefined);
+    RadioButtons.getRadioGroup(groupName).getAllButtonNameList().forEach(buttonName => {
+      const tmp = [buttonName, index, RadioButtons.getRadioGroup(groupName).unmark].filter(v => v !== undefined);
       setV(...tmp);
     });
-    if (preState === this.#list[groupName].mark) return;
-    const tmp = [name, index, this.#list[groupName].mark].filter(v => v !== undefined);
+    if (preState === RadioButtons.getRadioGroup(groupName).mark) return;
+    const tmp = [name, index, RadioButtons.getRadioGroup(groupName).mark].filter(v => v !== undefined);
     setV(...tmp);
   }
 
   static radioExists(name) {
     if (this.#list?.[name] === undefined) return false;
-
     return true;
   }
 
