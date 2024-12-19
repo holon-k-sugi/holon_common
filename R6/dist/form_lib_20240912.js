@@ -726,7 +726,7 @@ class RadioButtons {
     this.#list = InputObjects.getAllObjNameList().reduce((cur, name) => {
       const target = cur;
       const splitName = name.split('_');
-      const end = slice(-1)[0];
+      const end = splitName.slice(-1)[0];
       const groupName = splitName.slice(1).join('_');
       if (/^R[0-9]+$/.test(end)) {
         if (!target[groupName]) target[groupName] = new RadioButtonGroup();
