@@ -727,7 +727,7 @@ class RadioButtons {
       const target = cur;
       const splitName = name.split('_');
       const end = splitName.slice(-1)[0];
-      const groupName = splitName.slice(1).join('_');
+      const groupName = splitName.slice(0, -1).join('_');
       if (/^R[0-9]+$/.test(end)) {
         if (!target[groupName]) target[groupName] = new RadioButtonGroup();
         target[groupName].registerButton(name, +end.split('R')[1]);
