@@ -656,16 +656,6 @@ class RadioButtonGroup {
   constructor(name, num) {
     this.buttonList = {};
     this.reverseList = {};
-    const type = InputObjects.getObjByName(name).getType();
-    if (type === 'checkbox') {
-      this.mark = true;
-      this.unmark = false;
-    }
-    if (type === 'text') {
-      this.mark = '◯';
-      this.unmark = '​';
-    }
-
   }
 
   getAllButtonNameList() {
@@ -683,6 +673,17 @@ class RadioButtonGroup {
   registerButton(name, num) {
     this.buttonList[name] = num;
     this.reverseList[num] = name;
+    if (this.mark === undefined) {
+      const type = InputObjects.getObjByName(name).getType();
+      if (type === 'checkbox') {
+        this.mark = true;
+        this.unmark = false;
+      }
+      if (type === 'text') {
+        this.mark = '◯';
+        this.unmark = '​';
+      }
+    }
   }
 
   setMark(mark, unmark) {
