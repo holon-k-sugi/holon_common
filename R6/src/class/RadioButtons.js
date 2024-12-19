@@ -19,7 +19,7 @@ class RadioButtons {
   }
 
   static onClickRadioButtonL(name, index) {
-    const groupName = name.split('_').slice(1).join('_');
+    const groupName = name.split('_').slice(0, -1).join('_');
     const preState = getV(...[name, index].filter(v => v !== undefined));
     RadioButtons.getRadioGroup(groupName).getAllButtonNameList().forEach(buttonName => {
       const tmp = [buttonName, index, RadioButtons.getRadioGroup(groupName).unmark].filter(v => v !== undefined);
