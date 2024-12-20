@@ -1112,6 +1112,7 @@ function onLoadRadioButton() {
       [...Array(num)].forEach((_, i) => {
         console.log(getSelector(name, i));
         $(getSelector(name, i)).off('click.initializeButton').on('click.initializeButton', () => {
+          console.log(hoge);
           RadioButtons.onClickRadioButtonL(name, i);
           $(getSelector(name, i)).each((_i, elm) => {
             if (!/[a-z]/.test($(elm).attr('name'))) RadioButtons.getRadioGroup(groupName).synchronizeButton(i);
