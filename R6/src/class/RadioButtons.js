@@ -19,10 +19,10 @@ class RadioButtons {
   }
 
   static onClickRadioButtonL(name, index) {
-    console.log(name, index);
     const groupName = name.split('_').slice(0, -1).join('_');
-    const preState = getV(...[name, index].filter(v => v !== undefined));
-    console.log(groupName, preState);
+    const type = InputObjects.getObjByName(name).getType();
+    const value = InputObjects.getValueByIndex(name, index);
+    const preState = type === 'checkbox' ? !value : value;
     RadioButtons.getRadioGroup(groupName).getAllButtonNameList().forEach(buttonName => {
       const tmp = [buttonName, index, RadioButtons.getRadioGroup(groupName).unmark].filter(v => v !== undefined);
       setV(...tmp);
