@@ -58,8 +58,7 @@ class RadioButtonGroup {
     const isWrong = this.getAllButtonNameList()
       .map(name => getV(name) === this.mark).filter(v => v).length > 1;
     if (isWrong) this.getAllButtonNameList().forEach(name => {
-      const init = $(getSelector(name)).attr('data-init-value');
-      if (init === undefined) setV(name, this.unmark);
+      setV(name, this.unmark);
     });
   }
 
