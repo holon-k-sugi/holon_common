@@ -744,6 +744,7 @@ class RadioButtons {
     console.log(name, index);
     const groupName = name.split('_').slice(0, -1).join('_');
     const preState = getV(...[name, index].filter(v => v !== undefined));
+    console.log(groupName, preState);
     RadioButtons.getRadioGroup(groupName).getAllButtonNameList().forEach(buttonName => {
       const tmp = [buttonName, index, RadioButtons.getRadioGroup(groupName).unmark].filter(v => v !== undefined);
       setV(...tmp);
