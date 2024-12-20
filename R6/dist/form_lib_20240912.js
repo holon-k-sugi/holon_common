@@ -1112,7 +1112,6 @@ function onLoadRadioButton() {
       const num = getP(name);
       [...Array(num)].forEach((_, i) => {
         $(getSelector(name, i)).off('click.initializeButton').on('click.initializeButton', () => {
-          console.log('hoge');
           RadioButtons.onClickRadioButtonL(name, i);
           $(getSelector(name, i)).each((_i, elm) => {
             if (!/[a-z]/.test($(elm).attr('name'))) RadioButtons.getRadioGroup(groupName).synchronizeButton(i);
@@ -1260,14 +1259,15 @@ function initializeInstances() {
   DocumentEmployees.initialize();
   PageList.initialize();
   DMXMapping.initialize();
-  defineAttrAll();
-  showDocInfo();
   ChechBox.initialize();
+  defineAttrAll();
 }
 
 // eslint-disable-next-line no-unused-vars
 function executeFuncitonsOnload() {
+  showDocInfo();
   onLoadRadioButton();
   setFocusColor();
   onLoadCompanyMaster();
+  if (window.location.hostname === 'stg.joseikin-cloud.jp') getUnmappedObjList();
 }
