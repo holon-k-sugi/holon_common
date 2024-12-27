@@ -1256,7 +1256,7 @@ function showDocInfo() {
 
 function showErrorConfig() {
   const errConfig = [
-    { class: 'iftc_cf_checknum', formatType: '数字' },
+    { class: 'iftc_cf_checknum', formatType: '数値' },
     { class: 'iftc_cf_checkpercent', formatType: 'パーセント' },
     { class: 'iftc_cf_formatdate', formatType: '日付' },
   ];
