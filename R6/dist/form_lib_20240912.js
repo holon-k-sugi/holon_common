@@ -1007,17 +1007,19 @@ function visualizeObj(captionList = [], inputList = [], labelList = []) {
 function makeArray(num, prefix, first, deference) {
   return [...Array(num)].map((_, i) => `${prefix}${first + i * deference} `);
 }
+
 // eslint-disable-next-line no-unused-vars
 function textBoxToSelectBox(names = [], options = []) {
   names.forEach(n => {
-    const selector = getSelector(n);
-    const tmp = getV(n);
-    $(selector).replaceWith($('<select></select>', $(selector).attrAll()));
-    options.forEach(([name, value]) => {
-      if (value) $(selector).append($('<option>').html(name)).val(value);
-      else $(selector).append($('<option>').html(name));
+    [...Array(getP(n))].forEach((_, p) => {
+      const selector = getSelector(n, p);
+      const tmp = $(selector).val();
+      $(selector).replaceWith($('<select></select>', $(selector).attrAll()));
+      options.forEach(([name, value]) => {
+        $(selector).append($('<option>').html(name).val(value ?? name));
+      });
+      $(selector).val(tmp);
     });
-    $(selector).val(tmp);
   });
 }
 
@@ -1252,6 +1254,20 @@ function showDocInfo() {
   console.log(`ライブラリVer: ${ver === undefined ? 'なし' : ver} `);
 }
 
+function showErrorConfig() {
+  const errConfig = [
+    { class: 'iftc_cf_checknum', formatType: '数字' },
+    { class: 'iftc_cf_checkpercent', formatType: 'パーセント' },
+    { class: 'iftc_cf_formatdate', formatType: '日付' },
+  ];
+  errConfig.forEach(obj => {
+    if ($(`.${obj.class}`).length > 0) {
+      const name = $(`.${obj.class}`).attr('id').split('_').slice(1, -2).join('_');
+      console.warn(`${name} に${obj.formatType}のフォーマットが設定されています。`);
+    }
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -1269,5 +1285,9 @@ function executeFuncitonsOnload() {
   onLoadRadioButton();
   setFocusColor();
   onLoadCompanyMaster();
-  if (window.location.hostname === 'stg.joseikin-cloud.jp') getUnmappedObjList();
+  if (window.location.hostname === 'stg.joseikin-cloud.jp') {
+    console.log('ステージング環境');
+    getUnmappedObjList();
+    showErrorConfig();
+  }
 }

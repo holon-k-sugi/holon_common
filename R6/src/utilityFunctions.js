@@ -223,17 +223,19 @@ function visualizeObj(captionList = [], inputList = [], labelList = []) {
 function makeArray(num, prefix, first, deference) {
   return [...Array(num)].map((_, i) => `${prefix}${first + i * deference} `);
 }
+
 // eslint-disable-next-line no-unused-vars
 function textBoxToSelectBox(names = [], options = []) {
   names.forEach(n => {
-    const selector = getSelector(n);
-    const tmp = getV(n);
-    $(selector).replaceWith($('<select></select>', $(selector).attrAll()));
-    options.forEach(([name, value]) => {
-      if (value) $(selector).append($('<option>').html(name)).val(value);
-      else $(selector).append($('<option>').html(name));
+    [...Array(getP(n))].forEach((_, p) => {
+      const selector = getSelector(n, p);
+      const tmp = $(selector).val();
+      $(selector).replaceWith($('<select></select>', $(selector).attrAll()));
+      options.forEach(([name, value]) => {
+        $(selector).append($('<option>').html(name).val(value ?? name));
+      });
+      $(selector).val(tmp);
     });
-    $(selector).val(tmp);
   });
 }
 

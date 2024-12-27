@@ -178,6 +178,20 @@ function showDocInfo() {
   console.log(`ライブラリVer: ${ver === undefined ? 'なし' : ver} `);
 }
 
+function showErrorConfig() {
+  const errConfig = [
+    { class: 'iftc_cf_checknum', formatType: '数字' },
+    { class: 'iftc_cf_checkpercent', formatType: 'パーセント' },
+    { class: 'iftc_cf_formatdate', formatType: '日付' },
+  ];
+  errConfig.forEach(obj => {
+    if ($(`.${obj.class}`).length > 0) {
+      const name = $(`.${obj.class}`).attr('id').split('_').slice(1, -2).join('_');
+      console.warn(`${name} に${obj.formatType}のフォーマットが設定されています。`);
+    }
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -195,5 +209,9 @@ function executeFuncitonsOnload() {
   onLoadRadioButton();
   setFocusColor();
   onLoadCompanyMaster();
-  if (window.location.hostname === 'stg.joseikin-cloud.jp') getUnmappedObjList();
+  if (window.location.hostname === 'stg.joseikin-cloud.jp') {
+    console.log('ステージング環境');
+    getUnmappedObjList();
+    showErrorConfig();
+  }
 }
