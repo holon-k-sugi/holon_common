@@ -210,8 +210,9 @@ function executeFuncitonsOnload() {
   setFocusColor();
   onLoadCompanyMaster();
   if (window.location.hostname === 'stg.joseikin-cloud.jp') {
-    console.log('ステージング環境');
+    console.log('---STG用デバッグ情報開始---');
     getUnmappedObjList();
     showErrorConfig();
+    console.log('---STG用デバッグ情報終了---');
   }
 }
