@@ -85,6 +85,7 @@ class InputObjects {
   static getValueByIndex(name, index) {
     return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
   }
+
   static setValueByIndex(...args) {
     const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
@@ -92,5 +93,9 @@ class InputObjects {
     target.forEach(id => {
       $(`#${id}`).val(val);
     });
+  }
+
+  static getDuplicateObject(){
+    return Object.keys(this.#list).filter(name => this.#list[name].isDuplicate());
   }
 }

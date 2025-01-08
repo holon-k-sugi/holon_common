@@ -66,7 +66,12 @@ function getSelector(name, index = undefined) {
 }
 // eslint-disable-next-line no-unused-vars
 function makeSelector(names) {
-  return names.map(name => getSelector(name)).filter(v => v).join();
+  return names.map(name => {
+    if (RadioButtons.radioExists(name)) {
+      return RadioButtons.getAllButtonNameList(name).map(n => getSelector(n));
+    }
+    return getSelector(name);
+  }).flat().filter(v => v).join();
 }
 // eslint-disable-next-line no-unused-vars
 function getLabelSelector(name, index = undefined) {

@@ -192,6 +192,14 @@ function showErrorConfig() {
   });
 }
 
+function showDuplicateObject() {
+  const frontPageList = PageList.getFrontPage();
+  InputObjects.getDuplicateObject().forEach(name => {
+    const isDuplicate = InputObjects.getObjByName(name).getPageList().every(page => frontPageList.includes(page));
+    if (isDuplicate) console.warn(`${name} は重複しています。`);
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -213,6 +221,7 @@ function executeFuncitonsOnload() {
     console.log('---STG用デバッグ情報開始---');
     getUnmappedObjList();
     showErrorConfig();
+    showDuplicateObject();
     console.log('---STG用デバッグ情報終了---');
   }
 }

@@ -513,6 +513,7 @@ class InputObjects {
   static getValueByIndex(name, index) {
     return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
   }
+
   static setValueByIndex(...args) {
     const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
@@ -521,17 +522,21 @@ class InputObjects {
       $(`#${id}`).val(val);
     });
   }
+
+  static getDuplicateObject(){
+    return Object.keys(this.#list).filter(name => this.#list[name].isDuplicate());
+  }
 }
 class InputObjectsByName {
   constructor(maxPageNum) {
     this.objList = [];
-    this.pageList = [...Array(maxPageNum)].map(() => []);
+    this.objListByPage = [...Array(maxPageNum)].map(() => []);
     this.type = '';
   }
 
   register(id, page) {
     this.objList.push(id);
-    this.pageList[page].push(id);
+    this.objListByPage[page].push(id);
     if (this.type === '') this.type = $(`#${id}`).prop('type');
   }
 
@@ -543,12 +548,18 @@ class InputObjectsByName {
     return this.objList;
   }
 
+  getPageList() {
+    return this.objListByPage.map((n, i) => {
+      if (n.length > 0) return i;
+    });
+  }
+
   getIdsByPage(page) {
-    return this.pageList[page];
+    return this.objListByPage[page];
   }
 
   getFilteredList() {
-    return this.pageList.filter(v => v.length !== 0);
+    return this.objListByPage.filter(v => v.length !== 0);
   }
 
   getIdsByIndex(index) {
@@ -576,6 +587,10 @@ class InputObjectsByName {
 
   getLengthOfPage() {
     return this.getFilteredList().length;
+  }
+
+  isDuplicate() {
+    return this.objList.length > 1;
   }
 }
 class LazyEvaluationFunctions {
@@ -653,7 +668,7 @@ class PageList {
   }
 }
 class RadioButtonGroup {
-  constructor(name, num) {
+  constructor() {
     this.buttonList = {};
     this.reverseList = {};
   }
@@ -738,6 +753,11 @@ class RadioButtons {
 
   static getAllGroupNameList() {
     return Object.keys(this.#list);
+  }
+
+  static getAllButtonNameList(name) {
+    if (!RadioButtons.radioExists(name)) return [];
+    return RadioButtons.getRadioGroup(name).getAllButtonNameList();
   }
 
   static onClickRadioButtonL(name, index) {
@@ -850,7 +870,12 @@ function getSelector(name, index = undefined) {
 }
 // eslint-disable-next-line no-unused-vars
 function makeSelector(names) {
-  return names.map(name => getSelector(name)).filter(v => v).join();
+  return names.map(name => {
+    if (RadioButtons.radioExists(name)) {
+      return RadioButtons.getAllButtonNameList(name).map(n => getSelector(n));
+    }
+    return getSelector(name);
+  }).flat().filter(v => v).join();
 }
 // eslint-disable-next-line no-unused-vars
 function getLabelSelector(name, index = undefined) {
@@ -1268,6 +1293,14 @@ function showErrorConfig() {
   });
 }
 
+function showDuplicateObject() {
+  const frontPageList = PageList.getFrontPage();
+  InputObjects.getDuplicateObject().forEach(name => {
+    const isDuplicate = InputObjects.getObjByName(name).getPageList().every(page => frontPageList.includes(page));
+    if (isDuplicate) console.warn(`${name} は重複しています。`);
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -1289,6 +1322,7 @@ function executeFuncitonsOnload() {
     console.log('---STG用デバッグ情報開始---');
     getUnmappedObjList();
     showErrorConfig();
+    showDuplicateObject();
     console.log('---STG用デバッグ情報終了---');
   }
 }

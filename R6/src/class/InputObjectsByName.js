@@ -1,13 +1,13 @@
 class InputObjectsByName {
   constructor(maxPageNum) {
     this.objList = [];
-    this.pageList = [...Array(maxPageNum)].map(() => []);
+    this.objListByPage = [...Array(maxPageNum)].map(() => []);
     this.type = '';
   }
 
   register(id, page) {
     this.objList.push(id);
-    this.pageList[page].push(id);
+    this.objListByPage[page].push(id);
     if (this.type === '') this.type = $(`#${id}`).prop('type');
   }
 
@@ -19,12 +19,18 @@ class InputObjectsByName {
     return this.objList;
   }
 
+  getPageList() {
+    return this.objListByPage.map((n, i) => {
+      if (n.length > 0) return i;
+    });
+  }
+
   getIdsByPage(page) {
-    return this.pageList[page];
+    return this.objListByPage[page];
   }
 
   getFilteredList() {
-    return this.pageList.filter(v => v.length !== 0);
+    return this.objListByPage.filter(v => v.length !== 0);
   }
 
   getIdsByIndex(index) {
@@ -52,5 +58,9 @@ class InputObjectsByName {
 
   getLengthOfPage() {
     return this.getFilteredList().length;
+  }
+
+  isDuplicate() {
+    return this.objList.length > 1;
   }
 }

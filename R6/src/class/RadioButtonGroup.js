@@ -1,5 +1,5 @@
 class RadioButtonGroup {
-  constructor(name, num) {
+  constructor() {
     this.buttonList = {};
     this.reverseList = {};
   }

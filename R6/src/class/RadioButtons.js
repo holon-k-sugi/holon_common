@@ -18,6 +18,11 @@ class RadioButtons {
     return Object.keys(this.#list);
   }
 
+  static getAllButtonNameList(name) {
+    if (!RadioButtons.radioExists(name)) return [];
+    return RadioButtons.getRadioGroup(name).getAllButtonNameList();
+  }
+
   static onClickRadioButtonL(name, index) {
     const groupName = name.split('_').slice(0, -1).join('_');
     const type = InputObjects.getObjByName(name).getType();
