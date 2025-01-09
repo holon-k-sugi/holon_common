@@ -550,8 +550,8 @@ class InputObjectsByName {
 
   getPageList() {
     return this.objListByPage.map((n, i) => {
-      if (n.length > 0) return i;
-    });
+      if (n.length > 0) return i + 1;
+    }).filter(v => v !== undefined);
   }
 
   getIdsByPage(page) {
