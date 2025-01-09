@@ -193,7 +193,7 @@ function showErrorConfig() {
 }
 
 function showDuplicateObject() {
-  const frontPageList = PageList.getIndexOfAddPages();
+  const frontPageList = PageList.getIndexOfFrontPages();
   InputObjects.getDuplicateObject().forEach(name => {
     const isDuplicate = InputObjects.getObjByName(name).getPageList().every(page => frontPageList.includes(page));
     if (isDuplicate) console.warn(`${name} は重複しています。`);
