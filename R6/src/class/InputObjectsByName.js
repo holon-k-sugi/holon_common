@@ -59,8 +59,4 @@ class InputObjectsByName {
   getLengthOfPage() {
     return this.getFilteredList().length;
   }
-
-  isDuplicate() {
-    return this.objList.length > 1;
-  }
 }

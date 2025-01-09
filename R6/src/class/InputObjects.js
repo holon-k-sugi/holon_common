@@ -94,8 +94,4 @@ class InputObjects {
       $(`#${id}`).val(val);
     });
   }
-
-  static getDuplicateObject(){
-    return Object.keys(this.#list).filter(name => this.#list[name].isDuplicate());
-  }
 }

@@ -522,10 +522,6 @@ class InputObjects {
       $(`#${id}`).val(val);
     });
   }
-
-  static getDuplicateObject(){
-    return Object.keys(this.#list).filter(name => this.#list[name].isDuplicate());
-  }
 }
 class InputObjectsByName {
   constructor(maxPageNum) {
@@ -587,10 +583,6 @@ class InputObjectsByName {
 
   getLengthOfPage() {
     return this.getFilteredList().length;
-  }
-
-  isDuplicate() {
-    return this.objList.length > 1;
   }
 }
 class LazyEvaluationFunctions {
@@ -1300,8 +1292,8 @@ function showErrorConfig() {
 
 function showDuplicateObject() {
   const initialPages = PageList.getIndexOfInitialPages();
-  InputObjects.getDuplicateObject().forEach(name => {
-    const initialPageObjCount = InputObjects.getObjByName(name).getPageList().filter(page => initialPages.includes(page)).length;
+  InputObjects.getAllObjNameList().forEach(name => {
+    const initialPageObjCount = initialPages.map(page => InputObjects.getObjByName(name).getIdsByPage(page).length).reduce((a, b) => a + b);
     if (initialPageObjCount > 2) console.warn(`${name} は重複しています。`);
   });
 }
