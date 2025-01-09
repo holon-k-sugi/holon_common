@@ -196,7 +196,7 @@ function showDuplicateObject() {
   const initialPages = PageList.getIndexOfInitialPages();
   InputObjects.getAllObjNameList().forEach(name => {
     const initialPageObjCount = initialPages.map(page => InputObjects.getObjByName(name).getIdsByPage(page).length).reduce((a, b) => a + b);
-    if (initialPageObjCount > 2) console.warn(`${name} は重複しています。`);
+    if (initialPageObjCount > 1) console.warn(`${name} は重複しています。`);
   });
 }
 
