@@ -1294,9 +1294,10 @@ function showErrorConfig() {
 }
 
 function showDuplicateObject() {
-  const frontPageList = PageList.getIndexOfFrontPages();
+  const frontPageSet = new Set(PageList.getIndexOfFrontPages());
+  const addPageSet = new Set(PageList.getIndexOfAddPages());
   InputObjects.getDuplicateObject().forEach(name => {
-    const isDuplicate = InputObjects.getObjByName(name).getPageList().every(page => frontPageList.includes(page));
+    const isDuplicate = InputObjects.getObjByName(name).getPageList().filter(page => !addPageSet.has(page)).every(page => frontPageSet.has(page));
     if (isDuplicate) console.warn(`${name} は重複しています。`);
   });
 }
