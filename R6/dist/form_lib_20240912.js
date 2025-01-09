@@ -647,6 +647,11 @@ class PageList {
     return ret;
   }
 
+  static getIndexOfInitialPages(){
+    const addPageSet = new Set(PageList.getIndexOfAddPages());
+    return PageList.getIndexOfFrontPages().filter(page => !addPageSet.has(page));
+  }
+
   static isFrontPage(units) {
     return units.map(unit => {
       const isFront = this.#frontPages.some(v => unit === v);
@@ -1294,11 +1299,10 @@ function showErrorConfig() {
 }
 
 function showDuplicateObject() {
-  const frontPageSet = new Set(PageList.getIndexOfFrontPages());
-  const addPageSet = new Set(PageList.getIndexOfAddPages());
+  const initialPages = PageList.getIndexOfInitialPages();
   InputObjects.getDuplicateObject().forEach(name => {
-    const isDuplicate = InputObjects.getObjByName(name).getPageList().filter(page => !addPageSet.has(page)).every(page => frontPageSet.has(page));
-    if (isDuplicate) console.warn(`${name} は重複しています。`);
+    const initialPageObjCount = InputObjects.getObjByName(name).getPageList().filter(page => initialPages.includes(page)).length;
+    if (initialPageObjCount > 2) console.warn(`${name} は重複しています。`);
   });
 }
 

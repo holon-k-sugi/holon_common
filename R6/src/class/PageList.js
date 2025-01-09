@@ -46,6 +46,11 @@ class PageList {
     return ret;
   }
 
+  static getIndexOfInitialPages(){
+    const addPageSet = new Set(PageList.getIndexOfAddPages());
+    return PageList.getIndexOfFrontPages().filter(page => !addPageSet.has(page));
+  }
+
   static isFrontPage(units) {
     return units.map(unit => {
       const isFront = this.#frontPages.some(v => unit === v);
