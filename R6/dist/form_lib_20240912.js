@@ -581,15 +581,15 @@ class InputObjectsByName {
     return this.type;
   }
 
-  getValue() {
-    return this.getValueByIndex(0);
-  }
-
   getValueByIndex(index) {
     const id = this.getIdsByIndex(index)[0];
     if (this.type === 'checkbox') return $(`#${id}`).prop('checked');
     if (this.type === 'text') return $(`#${id}`).val();
     return '';
+  }
+
+  getValue() {
+    return this.getValueByIndex(0);
   }
 
   getIndexById(id) {
