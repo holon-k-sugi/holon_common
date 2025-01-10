@@ -88,9 +88,9 @@ class CompanyMaster {
   };
 
   static #hasProcessedValue = {
-    JGYNSHBIRTHDAY_Y: CompanyMaster.getMaster('JGYNSHBIRTHDAY').slice(0, 4),
-    JGYNSHBIRTHDAY_M: CompanyMaster.getMaster('JGYNSHBIRTHDAY').slice(4, 6),
-    JGYNSHBIRTHDAY_D: CompanyMaster.getMaster('JGYNSHBIRTHDAY').slice(6, 8),
+    JGYNSHBIRTHDAY_Y: InputObjects.getValue('JGYNSHBIRTHDAY').slice(0, 4),
+    JGYNSHBIRTHDAY_M: InputObjects.getValue('JGYNSHBIRTHDAY').slice(4, 6),
+    JGYNSHBIRTHDAY_D: InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: InputObjects.getValue('LSIO').split('労働基準監督署')[0],
   }
