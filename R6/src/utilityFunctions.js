@@ -297,6 +297,6 @@ function getUnmappedObjList() {
 // eslint-disable-next-line no-unused-vars
 function logWarningWithCaller(message) {
   const error = new Error();
-  const stack = error.stack.split('\n').slice(1).join('\n');
+  const stack = error.stack.split('\n').slice(1).map(v=>v.split('(')[0]).join('\n');
   console.warn(`${message}\n${stack}`);
 }
