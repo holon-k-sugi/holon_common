@@ -1,10 +1,4 @@
-// ライブラリ内関数
-function logWarningWithCaller(message) {
-  const error = new Error();
-  const stack = error.stack.split('\n');
-  const callerInfo = stack[2].trim();
-  console.warn(`${message}\nCalled by: ${callerInfo}`);
-}
+
 
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
@@ -12,7 +6,7 @@ function onLoadCompanyMaster() {
   [...Array(3)].forEach((_, i) => {
     setV(`JGYNSHBIRTHDAY_${['Y', 'M', 'D'][i]}`, getMaster('JGYNSHBIRTHDAY').slice(i * 2, i * 2 + 2));
   });
-  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) return;
+  if (InputObjects.objExists('IS_MANUAL') && !getCheckValue('IS_MANUAL')) return;
   Object.keys(CompanyMaster).forEach(type => {
     if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
     CompanyMaster.setAllMasterByType(type);
