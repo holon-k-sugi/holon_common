@@ -1,5 +1,5 @@
 JS_FILES = $(FIRST_FILES) $(CLASS_FILES) $(OTHER_FILES)
-FIRST_FILES = src/class/InputObjects.js
+FIRST_FILES = src/class/InputObjectsByName.js src/class/InputObjects.js
 CLASS_FILES = $(filter-out $(FIRST_FILES), $(wildcard src/class/*.js))
 OTHER_FILES = src/utilityFunctions.js src/initializationFnctions.js
 OUTPUT_FILE = dist/form_lib_20240912.js
