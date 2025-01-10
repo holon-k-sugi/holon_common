@@ -1,30 +1,16 @@
-
-
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
 function onLoadCompanyMaster() {
-  [...Array(3)].forEach((_, i) => {
-    setV(`JGYNSHBIRTHDAY_${['Y', 'M', 'D'][i]}`, getMaster('JGYNSHBIRTHDAY').slice(i * 2, i * 2 + 2));
-  });
-  if (InputObjects.objExists('IS_MANUAL') && !getCheckValue('IS_MANUAL')) return;
-  Object.keys(CompanyMaster).forEach(type => {
-    if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
-    CompanyMaster.setAllMasterByType(type);
-  });
-
-  if (getMaster('TENANT_ID') !== getMaster('CREATED_TENANT_ID')) {
-    if (!getCheckValue('IS_MANUAL'))
-      setV('SHRSH_NUM', InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') === '' ? InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER') : InputObjects.getValueByIndex('LSS_ATTORNEY_REGIST_NUMBER'));
+  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) {
+    CompanyMaster.setAllMaster();
+  }
+  if (InputObjects.objExists('IS_MANUAL')) {
     $(getSelector('IS_MANUAL')).on('click', () => {
-      if (!getCheckValue('IS_MANUAL')) {
-        CompanyMaster.setAllMasterByType('SHRSH');
-        setV('SHRSH_NUM', InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') === '' ? InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER') : InputObjects.getValueByIndex('LSS_ATTORNEY_REGIST_NUMBER'));
-      }
+      if (!getCheckValue('IS_MANUAL')) CompanyMaster.setAllMaster();
     });
   }
-  if (InputObjects.objExists('LSIO') && InputObjects.objExists('ROUKI_NAME') && getV('LSIO') !== '')
-    setV('ROUKI_NAME', InputObjects.getValue('LSIO').split('労働基準監督署')[0]);
 }
+
 // eslint-disable-next-line no-unused-vars
 function onLoadRadioButton() {
   RadioButtons.getAllGroupNameList().forEach(groupName => {
@@ -42,6 +28,7 @@ function onLoadRadioButton() {
     RadioButtons.getRadioGroup(groupName).setCorrectMark();
   });
 }
+
 // eslint-disable-next-line no-unused-vars
 function onLoadDocumentEmployeesList(employees) {
   if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
@@ -68,12 +55,14 @@ function onLoadDocumentEmployeesList(employees) {
   });
   setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
 }
+
 // eslint-disable-next-line no-unused-vars
 function onLoadIcon(iconSetting) {
   IconObjects.showIcon(iconSetting);
   onClickCopyPageButton();
   createCSVLabel();
 }
+
 // eslint-disable-next-line no-unused-vars
 function onClickCopyPageButton() {
   $(document).on('click', '#COPY_PAGE_BUTTON', evt => {
@@ -96,6 +85,7 @@ function toggleCSVLabel() {
     $('.csv-num').css('visibility', !isVisible ? 'hidden' : '');
   };
 }
+
 // eslint-disable-next-line no-unused-vars
 function createCSVLabel() {
   const callToggleCSVLabel = toggleCSVLabel();

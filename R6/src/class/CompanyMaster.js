@@ -1,37 +1,4 @@
 class CompanyMaster {
-  static #notHaveObjPrefix = {
-    EIFN: 'E_I_F_NO',
-    LIN: 'LABOR_INSURANCE_NO',
-    CN: 'CORPORATE_NUMBER',
-    EIFN1: 'E_I_F_NO_1',
-    EIFN2: 'E_I_F_NO_2',
-    EIFN3: 'E_I_F_NO_3',
-    LIN1: 'LABOR_INSURANCE_NO_1',
-    LIN2: 'LABOR_INSURANCE_NO_2',
-    LIN3: 'LABOR_INSURANCE_NO_3',
-    CAPITAL_STOCK: 'CAPITAL',
-    EMPLOYEEN: 'EMPLOYEE_NUMBER',
-    PRINCIPAL_BIZ: 'PRINCIPAL_BUSINESS',
-    SCALE: 'CORPORATE_SCALE',
-    INDUSTRYCLASSL: 'INDUSTRY_CLASSIFICATION_DIVISIO',
-    INDUSTRYCLASSM: 'INDUSTRY_CLASSIFICATION',
-    INDUSTRIES_TYPE: 'INDUSTRIES',
-    LABOR_DELEGATE: 'WORKING_REPRESENTATIVE_FULL_NAM',
-    CUTOFFDATE: 'CUTOFF_DATE',
-    JGYNSHBIRTHDAY: 'REPRESENTATIVE_BIRTHDAY',
-    FOUNDATIONYEAR: 'FOUNDATION_YEAR',
-    FINANCIALMONTH: 'FINANCIAL_MONTH',
-    ROUDOUKYOKU: 'WORKING_AGENCY_HEAD_LOCAL',
-    HELLOWORK: 'PUBLIC_EMPLOYMENT_SECURITY_OFFI',
-    JGYNSHBIRTHDAY_Y: 'JGYNSHBIRTHDAY_Y',
-    JGYNSHBIRTHDAY_M: 'JGYNSHBIRTHDAY_M',
-    JGYNSHBIRTHDAY_D: 'JGYNSHBIRTHDAY_D',
-    TENANT_ID: 'TENANT_ID',
-    CREATED_TENANT_ID: 'CREATED_TENANT_ID',
-    ROUKI_ID: 'LSIO_ID',
-    ROUKI_NAME: 'LSIO',
-  };
-
   static #hasObjPrefix = {
     SHRSH: {
       SHRSH_POST: 'S_BUSINESS_OWNER_POSTAL_CODE',
@@ -46,7 +13,6 @@ class CompanyMaster {
       SHRSH_TEL3: 'S_BUSINESS_OWNER_TEL_3',
       SHRSH_POSITION: 'LSS_ATTORNEY_POST',
       SHRSH_OWNER: 'LSS_ATTORNEY_FULL_NAME',
-      SHRSH_NUM: 'SHRSH_NUM',
     },
     JGYNSH: {
       JGYNSH_POST: 'BUSINESS_OWNER_POSTAL_CODE',
@@ -91,7 +57,42 @@ class CompanyMaster {
       TNTSH_MAIL2: 'RESPONSIBLE_MAIL_ADDRESS_2',
     },
   };
-  static initialize() {
+
+  static #notHaveObjPrefix = {
+    EIFN: 'E_I_F_NO',
+    LIN: 'LABOR_INSURANCE_NO',
+    CN: 'CORPORATE_NUMBER',
+    EIFN1: 'E_I_F_NO_1',
+    EIFN2: 'E_I_F_NO_2',
+    EIFN3: 'E_I_F_NO_3',
+    LIN1: 'LABOR_INSURANCE_NO_1',
+    LIN2: 'LABOR_INSURANCE_NO_2',
+    LIN3: 'LABOR_INSURANCE_NO_3',
+    CAPITAL_STOCK: 'CAPITAL',
+    EMPLOYEEN: 'EMPLOYEE_NUMBER',
+    PRINCIPAL_BIZ: 'PRINCIPAL_BUSINESS',
+    SCALE: 'CORPORATE_SCALE',
+    INDUSTRYCLASSL: 'INDUSTRY_CLASSIFICATION_DIVISIO',
+    INDUSTRYCLASSM: 'INDUSTRY_CLASSIFICATION',
+    INDUSTRIES_TYPE: 'INDUSTRIES',
+    LABOR_DELEGATE: 'WORKING_REPRESENTATIVE_FULL_NAM',
+    CUTOFFDATE: 'CUTOFF_DATE',
+    JGYNSHBIRTHDAY: 'REPRESENTATIVE_BIRTHDAY',
+    FOUNDATIONYEAR: 'FOUNDATION_YEAR',
+    FINANCIALMONTH: 'FINANCIAL_MONTH',
+    ROUDOUKYOKU: 'WORKING_AGENCY_HEAD_LOCAL',
+    HELLOWORK: 'PUBLIC_EMPLOYMENT_SECURITY_OFFI',
+    TENANT_ID: 'TENANT_ID',
+    CREATED_TENANT_ID: 'CREATED_TENANT_ID',
+    ROUKI_ID: 'LSIO_ID',
+  };
+
+  static #hasProcessedValue = {
+    JGYNSHBIRTHDAY_Y: CompanyMaster.getMaster('JGYNSHBIRTHDAY').slice(0, 4),
+    JGYNSHBIRTHDAY_M: CompanyMaster.getMaster('JGYNSHBIRTHDAY').slice(4, 6),
+    JGYNSHBIRTHDAY_D: CompanyMaster.getMaster('JGYNSHBIRTHDAY').slice(6, 8),
+    SHRSH_NUM: InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
+    ROUKI_NAME: InputObjects.getValue('LSIO').split('労働基準監督署')[0],
   }
 
   static toMasterName(name) {
@@ -101,6 +102,7 @@ class CompanyMaster {
   }
 
   static getMaster(name) {
+    if (name in this.#hasProcessedValue) return this.#hasProcessedValue[name];
     return InputObjects.getValueByIndex(CompanyMaster.toMasterName(name));
   }
 
@@ -114,6 +116,19 @@ class CompanyMaster {
 
   static setAllMasterByType(type) {
     CompanyMaster.getAllObjNameByType(type).forEach(name => {
+      CompanyMaster.setMaster(name);
+    });
+  }
+
+  static setAllMaster() {
+    Object.keys(this.#hasObjPrefix).forEach(type => {
+      if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
+      CompanyMaster.setAllMasterByType(type);
+    });
+    Object.keys(this.#notHaveObjPrefix).forEach(name => {
+      CompanyMaster.setMaster(name);
+    });
+    Object.keys(this.#hasProcessedValue).forEach(name => {
       CompanyMaster.setMaster(name);
     });
   }
