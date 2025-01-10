@@ -129,12 +129,12 @@ class CompanyMaster {
 
   static toMasterName(name) {
     const objPrefix = name.split('_')[0];
-    if (!(objPrefix in this.#hasObjPrefix)) return this.#notHaveObjPrefix[name];
+    if (!(this.#hasObjPrefix.hasOwnProperty(objPrefix))) return this.#notHaveObjPrefix[name];
     return this.#hasObjPrefix[objPrefix][name];
   }
 
   static getMaster(name) {
-    if (name in this.#hasProcessedValue) return this.#hasProcessedValue[name];
+    if (this.#hasProcessedValue.hasOwnProperty(name)) return this.#hasProcessedValue[name];
     return InputObjects.getValueByIndex(CompanyMaster.toMasterName(name));
   }
 
