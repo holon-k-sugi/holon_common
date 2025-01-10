@@ -1297,6 +1297,7 @@ function showErrorConfig() {
 function showDuplicateObject() {
   const initialPages = PageList.getIndexOfInitialPages();
   InputObjects.getAllObjNameList().forEach(name => {
+    if (InputObjects.getObjByName(name).getIdsByPage(0).length > 0) return;
     const initialPageObjCount = initialPages.map(page => InputObjects.getObjByName(name).getIdsByPage(page).length).reduce((a, b) => a + b);
     if (initialPageObjCount > 1) console.warn(`${name} は重複しています。`);
   });
