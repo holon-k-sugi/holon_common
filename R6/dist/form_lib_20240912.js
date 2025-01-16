@@ -155,9 +155,8 @@ class CompanyMaster {
     CompanyMaster.getAllObjNameByType(type).forEach(name => {
       CompanyMaster.setMaster(name);
     });
-    LazyEvaluationFunctions.callCompanyMasterFunctions?.();
   }
-
+  
   static setAllMaster() {
     Object.keys(this.#hasObjPrefix).forEach(type => {
       if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
@@ -169,6 +168,7 @@ class CompanyMaster {
     Object.keys(this.#hasProcessedValue).forEach(name => {
       CompanyMaster.setMaster(name);
     });
+    LazyEvaluationFunctions.callCompanyMasterFunctions?.();
   }
 }
 class DMXMapping {
