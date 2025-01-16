@@ -119,9 +119,7 @@ class CompanyMaster {
     CompanyMaster.getAllObjNameByType(type).forEach(name => {
       CompanyMaster.setMaster(name);
     });
-    if (typeof callCompanyMasterFunctions === "function") {
-      (() => callCompanyMasterFunctions())();
-    }
+    LazyEvaluationFunctions.callCompanyMasterFunctions?.();
   }
 
   static setAllMaster() {
