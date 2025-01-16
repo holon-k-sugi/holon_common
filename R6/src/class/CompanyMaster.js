@@ -119,8 +119,8 @@ class CompanyMaster {
     CompanyMaster.getAllObjNameByType(type).forEach(name => {
       CompanyMaster.setMaster(name);
     });
-    if (typeof onLoadCompanyMaster === "function") {
-      (() => onLoadCompanyMaster())();
+    if (typeof setCompanyMasterFunctions === "function") {
+      (() => callCompanyMasterFunctions())();
     }
   }
 
