@@ -2,9 +2,13 @@ class ChechBox {
   static #list = {};
   static initialize() {
     this.#list = InputObjects.getAllObjNameList().reduce((cur, name) => {
-      const id = InputObjects.getObjByName(name).getId();
-      if ($(`#${id}`).prop('type') === 'checkbox') {
-        cur[name] = InputObjects.getObjByName(name);
+      try {
+        const id = InputObjects.getObjByName(name).getId();
+        if ($(`#${id}`).prop('type') === 'checkbox') {
+          cur[name] = InputObjects.getObjByName(name);
+        }
+      } catch (e) {
+        console.warn(e);
       }
       return cur;
     }, {});
@@ -195,7 +199,7 @@ class DMXMapping {
     });
   }
 }
-class DocumentEmployees {
+class Employees {
   static #splitKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
   static #list = [];
 
@@ -252,7 +256,7 @@ class DocumentEmployees {
     return '';
   }
 }
-class DocumentEmployeesContents {
+class EmployeesContents {
   constructor(employees) {
     try {
       if (!InputObjects.objExists('PREVIOUS_DOC_EMP_LIST')) {
@@ -475,36 +479,47 @@ class InputObjects {
   }
 
   static getObjByName(name) {
-    if (this.#list[name] === undefined) {
-      logWarningWithCaller(`${name} は存在しないオブジェクト`);
-      return new InputObjectsByName(this.#MAX_PAGE_NUM);
-    }
+    if (this.#list[name] === undefined) throw new Error(`InputObjects.getObjByName: ${name} は存在しないオブジェクト`);
     return this.#list[name];
   }
 
   static getAllIds(name) {
-    return InputObjects.getObjByName(name).getALLIds();
+    try {
+      return InputObjects.getObjByName(name).getALLIds();
+    } catch (e) {
+      console.warn(e);
+      return [];
+    }
   }
 
   static getLengthOfPageListByName(name) {
-    return InputObjects.getObjByName(name).getLengthOfPage();
+    try {
+      return InputObjects.getObjByName(name).getLengthOfPage();
+    } catch (e) {
+      console.warn(e);
+      return 0;
+    }
   }
 
   static getIdsbyPage(name, page) {
-    if (InputObjects.getObjByName(name).getIdsByPage(page) === undefined) {
-      console.warn(`${page} ページ目に ${name} は存在しない`);
+    try {
+      const idList = InputObjects.getObjByName(name).getIdsByPage(page);
+      if (idList === undefined) throw new Error(`${page} ページ目に ${name} は存在しない`);
+      return idList;
+    } catch (e) {
       return [];
     }
-    return InputObjects.getObjByName(name).getIdsByPage(page);
   }
 
   static getIdsByIndex(name, index) {
-    const list = InputObjects.getObjByName(name).getFilteredList();
-    if (list[index] === undefined) {
-      console.warn(`${name} が存在するページ数は ${index + 1} より少ない`);
+    try {
+      const list = InputObjects.getObjByName(name).getFilteredList();
+      if (list[index] === undefined) throw new Error(`${name} が存在するページ数は ${index + 1} より少ない`);
+      return list[index];
+    } catch (e) {
+      console.warn(e);
       return [];
     }
-    return list[index];
   }
 
   static objExists(name) {
@@ -523,11 +538,21 @@ class InputObjects {
   }
 
   static getValue(name) {
-    return InputObjects.getObjByName(name).getValue();
+    try {
+      return InputObjects.getObjByName(name).getValue();
+    } catch (e) {
+      console.warn(e);
+      return '';
+    }
   }
 
   static getValueByIndex(name, index) {
-    return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+    try {
+      return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+    } catch (e) {
+      console.warn(e);
+      return '';
+    }
   }
 
   static setValueByIndex(...args) {
@@ -702,14 +727,18 @@ class RadioButtonGroup {
     this.buttonList[name] = num;
     this.reverseList[num] = name;
     if (this.mark === undefined) {
-      const type = InputObjects.getObjByName(name).getType();
-      if (type === 'checkbox') {
-        this.mark = true;
-        this.unmark = false;
-      }
-      if (type === 'text') {
-        this.mark = '◯';
-        this.unmark = '​';
+      try {
+        const type = InputObjects.getObjByName(name).getType();
+        if (type === 'checkbox') {
+          this.mark = true;
+          this.unmark = false;
+        }
+        if (type === 'text') {
+          this.mark = '◯';
+          this.unmark = '​';
+        }
+      } catch (e) {
+        console.warn(e);
       }
     }
   }
@@ -1158,7 +1187,7 @@ function onLoadDocumentEmployeesList(employees) {
     console.warn('PREVIOUS_DOC_EMP_LISTは存在しないオブジェクト');
     return;
   }
-  const docEmpContents = new DocumentEmployeesContents(employees);
+  const docEmpContents = new EmployeesContents(employees);
   // 配列を利用して書類の内容を上書き
   Object.keys(employees.list).forEach(key => {
     [...Array(employees.max)].forEach((_, i) => {
@@ -1188,7 +1217,7 @@ function onClickCopyPageButton() {
     const parent = $(evt.currentTarget).parent().parent().parent();
     const page = parent.attr('id').split('_')[3] - 1;
     InputObjects.getObjListByPage(page).forEach(obj => {
-      if (DocumentEmployees.objNameSet.has(obj.name)) return;
+      if (Employees.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
     LazyEvaluationFunctions.onLoad();
@@ -1308,7 +1337,7 @@ function showDuplicateObject() {
 function initializeInstances() {
   InputObjects.initialize();
   RadioButtons.initialize();
-  DocumentEmployees.initialize();
+  Employees.initialize();
   PageList.initialize();
   DMXMapping.initialize();
   ChechBox.initialize();

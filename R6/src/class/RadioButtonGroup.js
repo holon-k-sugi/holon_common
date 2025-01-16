@@ -20,14 +20,18 @@ class RadioButtonGroup {
     this.buttonList[name] = num;
     this.reverseList[num] = name;
     if (this.mark === undefined) {
-      const type = InputObjects.getObjByName(name).getType();
-      if (type === 'checkbox') {
-        this.mark = true;
-        this.unmark = false;
-      }
-      if (type === 'text') {
-        this.mark = '◯';
-        this.unmark = '​';
+      try {
+        const type = InputObjects.getObjByName(name).getType();
+        if (type === 'checkbox') {
+          this.mark = true;
+          this.unmark = false;
+        }
+        if (type === 'text') {
+          this.mark = '◯';
+          this.unmark = '​';
+        }
+      } catch (e) {
+        console.warn(e);
       }
     }
   }

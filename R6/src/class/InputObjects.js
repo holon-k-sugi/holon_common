@@ -31,36 +31,47 @@ class InputObjects {
   }
 
   static getObjByName(name) {
-    if (this.#list[name] === undefined) {
-      logWarningWithCaller(`${name} は存在しないオブジェクト`);
-      return new InputObjectsByName(this.#MAX_PAGE_NUM);
-    }
+    if (this.#list[name] === undefined) throw new Error(`InputObjects.getObjByName: ${name} は存在しないオブジェクト`);
     return this.#list[name];
   }
 
   static getAllIds(name) {
-    return InputObjects.getObjByName(name).getALLIds();
+    try {
+      return InputObjects.getObjByName(name).getALLIds();
+    } catch (e) {
+      console.warn(e);
+      return [];
+    }
   }
 
   static getLengthOfPageListByName(name) {
-    return InputObjects.getObjByName(name).getLengthOfPage();
+    try {
+      return InputObjects.getObjByName(name).getLengthOfPage();
+    } catch (e) {
+      console.warn(e);
+      return 0;
+    }
   }
 
   static getIdsbyPage(name, page) {
-    if (InputObjects.getObjByName(name).getIdsByPage(page) === undefined) {
-      console.warn(`${page} ページ目に ${name} は存在しない`);
+    try {
+      const idList = InputObjects.getObjByName(name).getIdsByPage(page);
+      if (idList === undefined) throw new Error(`${page} ページ目に ${name} は存在しない`);
+      return idList;
+    } catch (e) {
       return [];
     }
-    return InputObjects.getObjByName(name).getIdsByPage(page);
   }
 
   static getIdsByIndex(name, index) {
-    const list = InputObjects.getObjByName(name).getFilteredList();
-    if (list[index] === undefined) {
-      console.warn(`${name} が存在するページ数は ${index + 1} より少ない`);
+    try {
+      const list = InputObjects.getObjByName(name).getFilteredList();
+      if (list[index] === undefined) throw new Error(`${name} が存在するページ数は ${index + 1} より少ない`);
+      return list[index];
+    } catch (e) {
+      console.warn(e);
       return [];
     }
-    return list[index];
   }
 
   static objExists(name) {
@@ -79,11 +90,21 @@ class InputObjects {
   }
 
   static getValue(name) {
-    return InputObjects.getObjByName(name).getValue();
+    try {
+      return InputObjects.getObjByName(name).getValue();
+    } catch (e) {
+      console.warn(e);
+      return '';
+    }
   }
 
   static getValueByIndex(name, index) {
-    return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+    try {
+      return InputObjects.getObjByName(name).getValueByIndex(index ?? 0);
+    } catch (e) {
+      console.warn(e);
+      return '';
+    }
   }
 
   static setValueByIndex(...args) {

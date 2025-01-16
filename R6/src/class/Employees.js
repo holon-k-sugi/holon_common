@@ -1,4 +1,4 @@
-class DocumentEmployees {
+class Employees {
   static #splitKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
   static #list = [];
 

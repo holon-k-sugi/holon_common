@@ -2,9 +2,13 @@ class ChechBox {
   static #list = {};
   static initialize() {
     this.#list = InputObjects.getAllObjNameList().reduce((cur, name) => {
-      const id = InputObjects.getObjByName(name).getId();
-      if ($(`#${id}`).prop('type') === 'checkbox') {
-        cur[name] = InputObjects.getObjByName(name);
+      try {
+        const id = InputObjects.getObjByName(name).getId();
+        if ($(`#${id}`).prop('type') === 'checkbox') {
+          cur[name] = InputObjects.getObjByName(name);
+        }
+      } catch (e) {
+        console.warn(e);
       }
       return cur;
     }, {});

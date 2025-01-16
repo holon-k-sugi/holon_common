@@ -1,4 +1,4 @@
-class DocumentEmployeesContents {
+class EmployeesContents {
   constructor(employees) {
     try {
       if (!InputObjects.objExists('PREVIOUS_DOC_EMP_LIST')) {

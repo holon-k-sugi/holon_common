@@ -39,7 +39,7 @@ function onLoadDocumentEmployeesList(employees) {
     console.warn('PREVIOUS_DOC_EMP_LISTは存在しないオブジェクト');
     return;
   }
-  const docEmpContents = new DocumentEmployeesContents(employees);
+  const docEmpContents = new EmployeesContents(employees);
   // 配列を利用して書類の内容を上書き
   Object.keys(employees.list).forEach(key => {
     [...Array(employees.max)].forEach((_, i) => {
@@ -69,7 +69,7 @@ function onClickCopyPageButton() {
     const parent = $(evt.currentTarget).parent().parent().parent();
     const page = parent.attr('id').split('_')[3] - 1;
     InputObjects.getObjListByPage(page).forEach(obj => {
-      if (DocumentEmployees.objNameSet.has(obj.name)) return;
+      if (Employees.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
     LazyEvaluationFunctions.onLoad();
@@ -189,7 +189,7 @@ function showDuplicateObject() {
 function initializeInstances() {
   InputObjects.initialize();
   RadioButtons.initialize();
-  DocumentEmployees.initialize();
+  Employees.initialize();
   PageList.initialize();
   DMXMapping.initialize();
   ChechBox.initialize();
