@@ -27,18 +27,18 @@ class EmployeesContents {
     });
     // DOCUMENT_EMPLOYEES_LIST に存在しない ID のデータを削除
     const subDocEmpcontents = previousDocEmpContents
-      .filter(v => v.id === undefined || documentEmployees.containsId(v.id));
+      .filter(v => v.id === undefined || Employees.containsId(v.id));
     const sublength = previousDocEmpContents.length - subDocEmpcontents.length;
     const docEmpContents = subDocEmpcontents.concat([...Array(sublength)].map(() => ({})));
     // DOCUMENT_EMPLOYEES_LIST の内容で上書き
     docEmpContents.forEach((_, i) => {
       Object.keys(employees.list).forEach(key => {
-        if (documentEmployees.contains(i, key)) {
-          docEmpContents[i][key] = documentEmployees.getEmployeesValue(i, key);
+        if (Employees.contains(i, key)) {
+          docEmpContents[i][key] = Employees.getEmployeesValue(i, key);
           let objs = employees.list[key](i);
           if (!objs) return;
           if (!Array.isArray(objs)) objs = [objs];
-          objs.forEach(obj => documentEmployees.objNameSet.add(obj.name));
+          objs.forEach(obj => Employees.objNameSet.add(obj.name));
         }
       });
     });
