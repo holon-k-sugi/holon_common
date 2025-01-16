@@ -628,9 +628,9 @@ class InputObjectsByName {
   }
 }
 class LazyEvaluationFunctions {
-  static setFunction(name, func) {
-    if (func === undefined) this[name] = () => { console.warn(`LazyEvaluationFunctions.${name} は未定義`); };
-    this[name] = func;
+  static setFunction(func) {
+    if (func === undefined) this[func.name] = () => { console.warn(`LazyEvaluationFunctions.${func.name} は未定義`); };
+    this[func.name] = func;
   }
 }
 class PageList {
@@ -1221,7 +1221,7 @@ function onClickCopyPageButton() {
       if (Employees.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
-    LazyEvaluationFunctions.onLoad();
+    LazyEvaluationFunctions.onLoad?.();
   });
 }
 

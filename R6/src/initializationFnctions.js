@@ -72,7 +72,7 @@ function onClickCopyPageButton() {
       if (Employees.objNameSet.has(obj.name)) return;
       setV(obj.name, getIndexById(obj.id), getV(obj.name, 0));
     });
-    LazyEvaluationFunctions.onLoad();
+    LazyEvaluationFunctions.onLoad?.();
   });
 }
 
