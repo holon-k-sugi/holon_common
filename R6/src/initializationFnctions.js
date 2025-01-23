@@ -31,29 +31,7 @@ function onLoadRadioButton() {
 
 // eslint-disable-next-line no-unused-vars
 function onLoadDocumentEmployeesList(employees) {
-  if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
-    console.warn('DOCUMENT_EMPLOYEES_LISTは存在しないオブジェクト');
-    return;
-  }
-  if (!InputObjects.objExists('PREVIOUS_DOC_EMP_LIST')) {
-    console.warn('PREVIOUS_DOC_EMP_LISTは存在しないオブジェクト');
-    return;
-  }
-  const docEmpContents = new EmployeesContents(employees);
-  // 配列を利用して書類の内容を上書き
-  Object.keys(employees.list).forEach(key => {
-    [...Array(employees.max)].forEach((_, i) => {
-      const value = docEmpContents.getEmployeesValue(i, key);
-      let objList = employees.list[key](i);
-      if (!objList) return;
-      if (!Array.isArray(objList)) objList = [objList];
-      objList.forEach(obj => {
-        if (!obj?.name) return;
-        if (obj.page < getP(obj.name) || obj.page === undefined) setV(obj.name, obj.page, value);
-      });
-    });
-  });
-  setV('PREVIOUS_DOC_EMP_LIST', getV('DOCUMENT_EMPLOYEES_LIST'));
+  EmployeesContents.initialize(employees);
 }
 
 // eslint-disable-next-line no-unused-vars
