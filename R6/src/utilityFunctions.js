@@ -6,18 +6,7 @@ function getV(name, index) {
 }
 // eslint-disable-next-line no-unused-vars
 function setV(...args) { // (name, val) or (name, index, val)
-  const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
-    ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
-  const val = args.slice(-1)[0];
-  target.forEach(id => {
-    if (isCheckBox(id)) {
-      const display = val ? 'inline' : 'none';
-      $(`#label${id} svg`).attr('style', `display: ${display};`);
-      $(`#${id}`).prop('checked', val);
-      return;
-    }
-    $(`#${id}`).val(val);
-  });
+  InputObjects.setValueByIndex(...args);
 }
 // eslint-disable-next-line no-unused-vars
 function getMaster(name) { return InputObjects.getValueByIndex(name); }
