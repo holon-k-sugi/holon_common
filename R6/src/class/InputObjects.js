@@ -108,6 +108,7 @@ class InputObjects {
   }
 
   static setValueByIndex(...args) {
+    if (args[0] === 'ITEXT3011') console.warn(args);
     const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
     const val = args.slice(-1)[0];
