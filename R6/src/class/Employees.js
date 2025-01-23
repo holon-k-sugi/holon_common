@@ -1,6 +1,7 @@
 class Employees {
   static #splitKeyValue = ['birthday', 'hire_date', 'employment_insurance_number'];
   static #list = [];
+  static objNameSet = new Set();
 
   static initialize() {
     try {
@@ -9,9 +10,8 @@ class Employees {
       }
       this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST',0));
     } catch (e) {
-      this.list = [];
+      this.#list = [];
     }
-    this.objNameSet = new Set();
   }
 
   static getList() {
@@ -40,7 +40,7 @@ class Employees {
     const splitKey = key.split('_'); splitKey.pop();
     const keyPrefix = splitKey.join('_');
     const haveSplit = this.#splitKeyValue.some(v => v === keyPrefix);
-    if (haveSplit) return this.splitEmployeesValue(index, key);
+    if (haveSplit) return Employees.splitEmployeesValue(index, key);
     return this.#list[index]?.[key] === undefined ? '' : this.#list[index][key];
   }
 
@@ -48,7 +48,7 @@ class Employees {
     const splitKey = key.split('_');
     const keyNum = +splitKey.pop();
     const keyName = splitKey.join('_');
-    const notSplitValue = this.getEmployeesValue(index, keyName);
+    const notSplitValue = Employees.getEmployeesValue(index, keyName);
     if (notSplitValue === '') return '';
     if (keyName === 'birthday' || keyName === 'hire_date') return toWareki(notSplitValue)[keyNum];
     if (keyName === 'employment_insurance_number') return notSplitValue.split('-')[keyNum];
