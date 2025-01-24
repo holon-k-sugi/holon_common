@@ -42,7 +42,7 @@ function toHan(input) {
 }
 // eslint-disable-next-line no-unused-vars
 function isCheckBox(id) {
-  return $(`#${id}`).prop('tagName') === 'INPUT' && $(`#${id}`).attr('type') === 'checkbox';
+  return $(`#${id}`).prop('type') === 'checkbox';
 }
 // eslint-disable-next-line no-unused-vars
 function getIds(name, index = undefined) {
@@ -286,6 +286,6 @@ function getUnmappedObjList() {
 // eslint-disable-next-line no-unused-vars
 function logWarningWithCaller(message) {
   const error = new Error();
-  const stack = error.stack.split('\n').slice(1).map(v=>v.split('(')[0]).join('\n');
+  const stack = error.stack.split('\n').slice(1).map(v => v.split('(')[0]).join('\n');
   console.warn(`${message}\n${stack}`);
 }

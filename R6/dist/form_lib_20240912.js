@@ -281,14 +281,10 @@ class EmployeesContents {
       if (this.#previous.length > i) return { id: this.#previous[i].id };
       return {};
     });
-    console.log(InputObjects.getValueByIndex('ITEXT3011', undefined));
-    console.log($('#_ITEXT3011_6_17').val());
     // 前回保存時の従業員リストと現在の書類の内容と合成
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         const obj = [employees.list[key](i)].flat()[0];
-        console.log(!!obj?.name, obj.page === undefined, obj.page < InputObjects.getLengthOfPageListByName(obj.name));
-        console.log(i, key, obj, InputObjects.getValueByIndex(obj.name, obj.page));
         if (!!obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
           previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
       });
@@ -309,7 +305,6 @@ class EmployeesContents {
         }
       });
     });
-    console.log($('#_ITEXT3011_6_17').val());
     // 書類の内容を上書き
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max)].forEach((_, i) => {
@@ -321,7 +316,6 @@ class EmployeesContents {
         });
       });
     });
-    console.log($('#_ITEXT3011_6_17').val());
     // 現在の従業員リストを前回保存時の従業員リストに保存
     InputObjects.setValueByIndex('PREVIOUS_DOC_EMP_LIST', InputObjects.getValue('DOCUMENT_EMPLOYEES_LIST'));
   }
@@ -584,7 +578,7 @@ class InputObjects {
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
     const val = args.slice(-1)[0];
     target.forEach(id => {
-      if (isCheckBox(id)) {
+      if ($(`#${id}`).prop('type') === 'checkbox') {
         const display = val ? 'inline' : 'none';
         $(`#label${id} svg`).attr('style', `display: ${display};`);
         $(`#${id}`).prop('checked', val);
@@ -599,12 +593,19 @@ class InputObjectsByName {
     this.objList = [];
     this.objListByPage = [...Array(maxPageNum)].map(() => []);
     this.type = '';
+    this.getValueFunction = undefined;
   }
 
-  register(id, page) {
+  register(id, page, type, getValueFunction) {
     this.objList.push(id);
     this.objListByPage[page].push(id);
-    if (this.type === '') this.type = $(`#${id}`).prop('type');
+    if (this.type === '') this.type = type || $(`#${id}`).prop('type');
+    if (!this.getValueFunction) this.getValueFunction = getValueFunction || this.defaultGetValueFunction();
+  }
+
+  defaultGetValueFunction() {
+    if (this.type === 'checkbox') return () => $(`#${id}`).prop('checked');
+    return () => $(`#${id}`).val();
   }
 
   getId() {
@@ -639,9 +640,7 @@ class InputObjectsByName {
 
   getValueByIndex(index) {
     const id = this.getIdsByIndex(index)[0];
-    if (this.type === 'checkbox') return $(`#${id}`).prop('checked');
-    if (this.type === 'text') return $(`#${id}`).val();
-    return '';
+    return this.getValueFunction();
   }
 
   getValue() {
@@ -918,7 +917,7 @@ function toHan(input) {
 }
 // eslint-disable-next-line no-unused-vars
 function isCheckBox(id) {
-  return $(`#${id}`).prop('tagName') === 'INPUT' && $(`#${id}`).attr('type') === 'checkbox';
+  return $(`#${id}`).prop('type') === 'checkbox';
 }
 // eslint-disable-next-line no-unused-vars
 function getIds(name, index = undefined) {
@@ -1162,7 +1161,7 @@ function getUnmappedObjList() {
 // eslint-disable-next-line no-unused-vars
 function logWarningWithCaller(message) {
   const error = new Error();
-  const stack = error.stack.split('\n').slice(1).map(v=>v.split('(')[0]).join('\n');
+  const stack = error.stack.split('\n').slice(1).map(v => v.split('(')[0]).join('\n');
   console.warn(`${message}\n${stack}`);
 }
 // Load 時実行

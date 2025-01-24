@@ -22,14 +22,10 @@ class EmployeesContents {
       if (this.#previous.length > i) return { id: this.#previous[i].id };
       return {};
     });
-    console.log(InputObjects.getValueByIndex('ITEXT3011', undefined));
-    console.log($('#_ITEXT3011_6_17').val());
     // 前回保存時の従業員リストと現在の書類の内容と合成
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         const obj = [employees.list[key](i)].flat()[0];
-        console.log(!!obj?.name, obj.page === undefined, obj.page < InputObjects.getLengthOfPageListByName(obj.name));
-        console.log(i, key, obj, InputObjects.getValueByIndex(obj.name, obj.page));
         if (!!obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
           previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
       });
@@ -50,7 +46,6 @@ class EmployeesContents {
         }
       });
     });
-    console.log($('#_ITEXT3011_6_17').val());
     // 書類の内容を上書き
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max)].forEach((_, i) => {
@@ -62,7 +57,6 @@ class EmployeesContents {
         });
       });
     });
-    console.log($('#_ITEXT3011_6_17').val());
     // 現在の従業員リストを前回保存時の従業員リストに保存
     InputObjects.setValueByIndex('PREVIOUS_DOC_EMP_LIST', InputObjects.getValue('DOCUMENT_EMPLOYEES_LIST'));
   }

@@ -3,12 +3,19 @@ class InputObjectsByName {
     this.objList = [];
     this.objListByPage = [...Array(maxPageNum)].map(() => []);
     this.type = '';
+    this.getValueFunction = undefined;
   }
 
-  register(id, page) {
+  register(id, page, type, getValueFunction) {
     this.objList.push(id);
     this.objListByPage[page].push(id);
-    if (this.type === '') this.type = $(`#${id}`).prop('type');
+    if (this.type === '') this.type = type || $(`#${id}`).prop('type');
+    if (!this.getValueFunction) this.getValueFunction = getValueFunction || this.defaultGetValueFunction();
+  }
+
+  defaultGetValueFunction() {
+    if (this.type === 'checkbox') return () => $(`#${id}`).prop('checked');
+    return () => $(`#${id}`).val();
   }
 
   getId() {
@@ -43,9 +50,7 @@ class InputObjectsByName {
 
   getValueByIndex(index) {
     const id = this.getIdsByIndex(index)[0];
-    if (this.type === 'checkbox') return $(`#${id}`).prop('checked');
-    if (this.type === 'text') return $(`#${id}`).val();
-    return '';
+    return this.getValueFunction();
   }
 
   getValue() {
