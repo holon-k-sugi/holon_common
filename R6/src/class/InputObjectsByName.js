@@ -14,8 +14,8 @@ class InputObjectsByName {
   }
 
   defaultGetValueFunction() {
-    if (this.type === 'checkbox') return () => $(`#${id}`).prop('checked');
-    return () => $(`#${id}`).val();
+    if (this.type === 'checkbox') return id => $(`#${id}`).prop('checked');
+    return id => $(`#${id}`).val();
   }
 
   getId() {
@@ -50,7 +50,7 @@ class InputObjectsByName {
 
   getValueByIndex(index) {
     const id = this.getIdsByIndex(index)[0];
-    return this.getValueFunction();
+    return this.getValueFunction(id);
   }
 
   getValue() {
