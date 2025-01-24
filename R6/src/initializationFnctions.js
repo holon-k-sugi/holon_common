@@ -166,23 +166,11 @@ function showDuplicateObject() {
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
-  console.log('a'+InputObjects.getValue('ITEXT3011'));
-  console.log($('#_ITEXT3011_6_17').val());
   RadioButtons.initialize();
-  console.log('b'+InputObjects.getValue('ITEXT3011'));
-  console.log($('#_ITEXT3011_6_17').val());
   Employees.initialize();
-  console.log('c'+InputObjects.getValue('ITEXT3011'));
-  console.log($('#_ITEXT3011_6_17').val());
   PageList.initialize();
-  console.log('d'+InputObjects.getValue('ITEXT3011'));
-  console.log($('#_ITEXT3011_6_17').val());
   DMXMapping.initialize();
-  console.log('e'+InputObjects.getValue('ITEXT3011'));
-  console.log($('#_ITEXT3011_6_17').val());
   ChechBox.initialize();
-  console.log('e'+InputObjects.getValue('ITEXT3011'));
-  console.log($('#_ITEXT3011_6_17').val());
   defineAttrAll();
 }
 

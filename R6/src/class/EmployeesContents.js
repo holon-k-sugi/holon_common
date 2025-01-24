@@ -2,6 +2,7 @@ class EmployeesContents {
   static #list = [];
   static #previous = [];
   static initialize(employees) {
+    console.log($('#_ITEXT3011_6_17').val());
     // 現在の従業員リスト
     if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
       console.warn('DOCUMENT_EMPLOYEES_LISTは存在しないオブジェクト');
@@ -17,11 +18,13 @@ class EmployeesContents {
     } catch (e) {
       this.#previous = [];
     }
+    console.log($('#_ITEXT3011_6_17').val());
     // 固有ロジックで設定する「max: 最大取り込み人数」の大きさの配列を用意し、前回保存時の従業員リストから ID を取得して格納
     const previousDocEmpContents = [...Array(employees.max ?? 0)].map((_, i) => {
       if (this.#previous.length > i) return { id: this.#previous[i].id };
       return {};
     });
+    console.log($('#_ITEXT3011_6_17').val());
     // 前回保存時の従業員リストと現在の書類の内容と合成
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
@@ -32,6 +35,7 @@ class EmployeesContents {
           previousDocEmpContents[i][key] = InputObjects.getValue(obj.name, obj.page);
       });
     });
+    console.log($('#_ITEXT3011_6_17').val());
     // 現在の従業員リストに存在しない ID の従業員情報を削除
     const subDocEmpcontents = previousDocEmpContents
       .filter(v => v.id === undefined || Employees.containsId(v.id));
@@ -48,6 +52,7 @@ class EmployeesContents {
         }
       });
     });
+    console.log($('#_ITEXT3011_6_17').val());
     // 書類の内容を上書き
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max)].forEach((_, i) => {
@@ -59,6 +64,7 @@ class EmployeesContents {
         });
       });
     });
+    console.log($('#_ITEXT3011_6_17').val());
     // 現在の従業員リストを前回保存時の従業員リストに保存
     InputObjects.setValueByIndex('PREVIOUS_DOC_EMP_LIST', InputObjects.getValue('DOCUMENT_EMPLOYEES_LIST'));
   }
