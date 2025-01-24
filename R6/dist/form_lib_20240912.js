@@ -307,6 +307,7 @@ class EmployeesContents {
         }
       });
     });
+    console.log(this.#list);
     // 書類の内容を上書き
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max)].forEach((_, i) => {
