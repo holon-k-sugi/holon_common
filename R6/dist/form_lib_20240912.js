@@ -285,8 +285,6 @@ class EmployeesContents {
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         const obj = [employees.list[key](i)].flat()[0];
-        console.log(!!obj?.name, obj.page === undefined, obj.page < InputObjects.getLengthOfPageListByName(obj.name));
-        console.log(i, key, obj, InputObjects.getValueByIndex(obj.name, obj.page));
         if (!!obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
           previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
       });
@@ -307,14 +305,15 @@ class EmployeesContents {
         }
       });
     });
-    console.log(this.#list);
     // 書類の内容を上書き
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max)].forEach((_, i) => {
         const value = this.#getEmployeesValue(i, key);
         const objList = [employees.list[key](i)].flat();
         objList.forEach(obj => {
-          if (!!obj?.name && (obj.page === undefined || obj.page < +InputObjects.getValue(obj.name)))
+          console.log(!!obj?.name, obj.page === undefined, obj.page < +InputObjects.getLengthOfPageListByName(obj.name));
+          console.log(obj.name, obj.page, value);
+          if (!!obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name)))
             InputObjects.setValueByIndex(obj.name, obj.page, value);
         });
       });
@@ -576,7 +575,6 @@ class InputObjects {
   }
 
   static setValueByIndex(...args) {
-    if (args[0] === 'ITEXT3011') console.warn(args);
     const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
     const val = args.slice(-1)[0];
