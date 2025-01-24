@@ -285,7 +285,7 @@ class EmployeesContents {
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         const obj = [employees.list[key](i)].flat()[0];
-        if (!!obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
+        if (obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
           previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
       });
     });
@@ -311,9 +311,7 @@ class EmployeesContents {
         const value = this.#getEmployeesValue(i, key);
         const objList = [employees.list[key](i)].flat();
         objList.forEach(obj => {
-          console.log(!!obj?.name, obj.page === undefined, obj.page < +InputObjects.getLengthOfPageListByName(obj.name));
-          console.log(obj.name, obj.page, value);
-          if (!!obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name)))
+          if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name)))
             InputObjects.setValueByIndex(obj.name, obj.page, value);
         });
       });
@@ -325,10 +323,6 @@ class EmployeesContents {
   static #getEmployeesValue(index, key) {
     if (this.#list[index]?.[key] === undefined) return '';
     return this.#list[index][key];
-  }
-
-  static #countElm() {
-    return this.#list.length;
   }
 }
 class IconObjects {
