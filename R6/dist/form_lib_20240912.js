@@ -281,7 +281,7 @@ class EmployeesContents {
       if (this.#previous.length > i) return { id: this.#previous[i].id };
       return {};
     });
-    InputObjects.getValueByIndex('ITEXT3011', undefined);
+    console.log(InputObjects.getValueByIndex('ITEXT3011', undefined));
     console.log($('#_ITEXT3011_6_17').val());
     // 前回保存時の従業員リストと現在の書類の内容と合成
     Object.keys(employees.list).forEach(key => {
