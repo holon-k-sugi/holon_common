@@ -285,6 +285,8 @@ class EmployeesContents {
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         const obj = [employees.list[key](i)].flat()[0];
+        console.log(!!obj?.name, obj.page === undefined, obj.page < InputObjects.getLengthOfPageListByName(obj.name));
+        console.log(i, key, obj, InputObjects.getValueByIndex(obj.name, obj.page));
         if (!!obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
           previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
       });
