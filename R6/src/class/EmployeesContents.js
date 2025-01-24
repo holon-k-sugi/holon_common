@@ -40,8 +40,9 @@ class EmployeesContents {
     this.#list.forEach((_, i) => {
       Object.keys(employees.list).forEach(key => {
         if (Employees.contains(i, key)) {
-          this.#list[i][key] = Employees.getEmployeesValue(i, key);
           const objs = [employees.list[key](i)].flat();
+          const value = Employees.getEmployeesValue(i, key);
+          this.#list[i][key] = objs[0].func ? objs[0].func(value, i) : value;
           objs.forEach(obj => Employees.objNameSet.add(obj.name));
         }
       });
