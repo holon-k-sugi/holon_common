@@ -1325,6 +1325,36 @@ function showDuplicateObject() {
   });
 }
 
+function linkifyTspanText() {
+  $("svg").each(function () {
+    const $svgContainer = $(this);
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    $svgContainer.find("tspan").each(function () {
+      const $tspan = $(this);
+      const text = $tspan.text();
+
+      // URLが含まれているかチェック
+      if (urlRegex.test(text)) {
+        // URL部分を抽出
+        const urls = text.match(urlRegex);
+        // 複数のURLが含まれている場合の処理
+        let modifiedText = text;
+        urls.forEach((url) => {
+          modifiedText = modifiedText.replace(
+            url,
+            `<a xlink:href="${url}" target="_blank">${url}</a>`
+          );
+        });
+        // 新しいtspanを作成して差し替え
+        const svgNS = "http://www.w3.org/2000/svg";
+        const parent = $tspan.parent();
+        const $newTspan = $(document.createElementNS(svgNS, "tspan")).html(modifiedText);
+        $tspan.replaceWith($newTspan);
+      }
+    });
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -1342,6 +1372,7 @@ function executeFuncitonsOnload() {
   onLoadRadioButton();
   setFocusColor();
   onLoadCompanyMaster();
+  linkifyTspanText();
   if (window.location.hostname === 'stg.joseikin-cloud.jp') {
     console.log('---STG用デバッグ情報開始---');
     getUnmappedObjList();
