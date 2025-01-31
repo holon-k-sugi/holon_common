@@ -164,30 +164,22 @@ function showDuplicateObject() {
 }
 
 function linkifyTspanText() {
-  $("svg").each(function () {
-    const $svgContainer = $(this);
+  $("svg").each((_, svgContainer) => {
+    const $svgContainer = $(svgContainer);
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    $svgContainer.find("tspan").each(function () {
-      const $tspan = $(this);
-      const text = $tspan.text();
-
+    $svgContainer.find("tspan").each((_, tspan) => {
+      const $tspan = $(tspan);
+      const text = $tspan.text().replace(/\r?\n/g, '');
       // URLが含まれているかチェック
       if (urlRegex.test(text)) {
         // URL部分を抽出
         const urls = text.match(urlRegex);
         // 複数のURLが含まれている場合の処理
-        let modifiedText = text;
-        urls.forEach((url) => {
-          modifiedText = modifiedText.replace(
-            url,
-            `<a xlink:href="${url}" target="_blank">${url}</a>`
-          );
-        });
-        // 新しいtspanを作成して差し替え
-        const svgNS = "http://www.w3.org/2000/svg";
-        const parent = $tspan.parent();
-        const $newTspan = $(document.createElementNS(svgNS, "tspan")).html(modifiedText);
-        $tspan.replaceWith($newTspan);
+        if (urls.length > 1) {
+          console.warn('テキストオブジェクトに複数のURLが含まれています。');
+          return;
+        }
+        $('a', { href: urls[0], target: '_blank' }).text(urls[0]).appendTo($tspan);
       }
     });
   });
