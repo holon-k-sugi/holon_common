@@ -1326,10 +1326,10 @@ function showDuplicateObject() {
 }
 
 function linkifyTspanText() {
-  $("svg").each((_, svgContainer) => {
+  $('svg').each((_, svgContainer) => {
     const $svgContainer = $(svgContainer);
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    $svgContainer.find("tspan").each((_, tspan) => {
+    $svgContainer.find('tspan').each((_, tspan) => {
       const $tspan = $(tspan);
       const text = $tspan.text().replace(/\r?\n/g, '');
       // URLが含まれているかチェック
@@ -1341,7 +1341,7 @@ function linkifyTspanText() {
           console.warn('テキストオブジェクトに複数のURLが含まれています。');
           return;
         }
-        $('a', { href: urls[0], target: '_blank' }).text(urls[0]).appendTo($tspan);
+        $tspan.wrap(`<a href="${urls[0]}" target="_blank"></a>`);
       }
     });
   });
