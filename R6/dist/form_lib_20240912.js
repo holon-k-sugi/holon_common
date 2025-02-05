@@ -1342,7 +1342,7 @@ function linkifyTspanText() {
           return;
         }
         const $text = $tspan.parent();
-        const $link = $(`<a xlink:href="${urls[0]}" target="_blank""></a>`).apend($text);
+        const $link = $(`<a xlink:href="${urls[0]}" target="_blank""></a>`).append($text);
         $text.replaceWith($link);
       }
     });
