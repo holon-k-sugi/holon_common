@@ -179,7 +179,9 @@ function linkifyTspanText() {
           console.warn('テキストオブジェクトに複数のURLが含まれています。');
           return;
         }
-        $tspan.parent().wrapInner($('<a>', { "xlink:href": urls[0], target: "_blank", class: "linkified" }));
+        $tspan.on('click', () => {
+          window.open(urls[0], '_blank');  // 新しいタブで開く
+        });
       }
     });
   });
