@@ -1342,7 +1342,15 @@ function linkifyTspanText() {
           return;
         }
         $tspan.on('click', () => {
-          window.open(urls[0], '_blank');  // 新しいタブで開く
+          window.open(urls[0], '_blank');
+        });
+        $tspan.on({
+          mouseenter: (e) => {
+            $(e.currentTarget).css('cursor', 'pointer');
+          },
+          mouseleave: (e) => {
+            $(e.currentTarget).css('cursor', 'default');
+          }
         });
       }
     });
