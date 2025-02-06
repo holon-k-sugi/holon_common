@@ -1341,9 +1341,7 @@ function linkifyTspanText() {
           console.warn('テキストオブジェクトに複数のURLが含まれています。');
           return;
         }
-        const $text = $tspan.parent();
-        const $link = $(`<a xlink:href="${urls[0]}" target="_blank""></a>`).append($text);
-        $text.replaceWith($link);
+        $tspan.parent().wrapInner($('<a>', { "xlink:href": urls[0], target: "_blank" }));
       }
     });
   });
