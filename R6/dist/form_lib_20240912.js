@@ -1398,7 +1398,7 @@ function fillAllFields(value) {
   objNameList.filter(v => !denylist.includes(v)).forEach(name => {
     const maxLength = InputObjects.getMaxLengthOfInput(name);
     if (maxLength > 0) {
-      InputObjects.setValueByIndex(name, [...Array(maxLength)].map((_, i) => (i + 1) % 10).join(''));
+      InputObjects.setValueByIndex(name, [...Array(+maxLength)].map((_, i) => (i + 1) % 10).join(''));
       return;
     }
     const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
