@@ -1371,19 +1371,24 @@ function fillAllFields(value) {
   const objNameList = InputObjects.getAllObjNameList();
 
   const denylist = [
-    'SKIP_RUN_SCRIPT_ON_LOAD',
+    'TARGET_USER_NAME',
     'DOCUMENT_STATUSES-STATUS',
+    'AMOUNT_RECEIVED',
+    'RESERVE_ITEM01',
+    'RESERVE_ITEM02',
+    'TARGET_COMPANY_NAME',
     'SUPPLY_DOCUMENT_START_DATE',
     'DOCUMENT_DEADLINE_DATE',
     'DOCUMENT_REMARKS-TYPE',
     'DOCUMENT_ITEMS-UPDATED_AT',
+    'SKIP_RUN_SCRIPT_ON_LOAD',
   ];
   const valueDict = {
     'radioButton': '◯',
     'checkbox': true,
     'text': value,
   };
-  InputObjects.getAllObjNameList().forEach(name => {
+  objNameList.filter(v => !denylist.includes(v)).forEach(name => {
     const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
     InputObjects.setValueByIndex(name, valueDict[type]);
   });
