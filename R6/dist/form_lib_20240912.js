@@ -1385,7 +1385,7 @@ function fillAllFields(value) {
   };
   InputObjects.getAllObjNameList().forEach(name => {
     const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
-    InputObjects.getObjByName(name).setValueByIndex(valueDict[type]);
+    InputObjects.setValueByIndex(name, valueDict[type]);
   });
 }
 
