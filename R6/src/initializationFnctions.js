@@ -215,11 +215,10 @@ function fillAllFields(value) {
   const valueDict = {
     'radioButton': '◯',
     'checkbox': true,
-    'text': value,
   };
   objNameList.filter(v => !denylist.includes(v)).forEach(name => {
     const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
-    InputObjects.setValueByIndex(name, valueDict[type]);
+    InputObjects.setValueByIndex(name, valueDict[type] ?? value);
   });
 }
 
