@@ -583,6 +583,10 @@ class InputObjects {
       $(`#${id}`).val(val);
     });
   }
+
+  static getType(name){
+    return InputObjects.getObjByName(name).getType();
+  }
 }
 class InputObjectsByName {
   constructor(maxPageNum) {
@@ -810,12 +814,17 @@ class RadioButtons {
       const splitName = name.split('_');
       const end = splitName.slice(-1)[0];
       const groupName = splitName.slice(0, -1).join('_');
-      if (/^R[0-9]+$/.test(end)) {
+      if (RadioButtons.isRadioButton(name)) {
         if (!target[groupName]) target[groupName] = new RadioButtonGroup();
         target[groupName].registerButton(name, +end.split('R')[1]);
       }
       return target;
     }, {});
+  }
+
+  static isRadioButton(name) {
+    const suffix = name.split('_').slice(-1)[0];
+    return /^R[0-9]+$/.test(suffix);
   }
 
   static getAllGroupNameList() {
@@ -1355,6 +1364,43 @@ function linkifyTspanText() {
       }
     });
   });
+}
+
+function fillAllFields(value) {
+  enableScriptOnload(false);
+  const objNameList = InputObjects.getAllObjNameList();
+
+  const denylist = [
+    'SKIP_RUN_SCRIPT_ON_LOAD',
+    'DOCUMENT_STATUSES-STATUS',
+    'SUPPLY_DOCUMENT_START_DATE',
+    'DOCUMENT_DEADLINE_DATE',
+    'DOCUMENT_REMARKS-TYPE',
+    'DOCUMENT_ITEMS-UPDATED_AT',
+  ];
+  const valueDict = {
+    'radioButton': '◯',
+    'checkbox': true,
+    'text': value,
+  };
+  InputObjects.getAllObjNameList().forEach(name => {
+    const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
+    InputObjects.getObjByName(name).setValueByIndex(valueDict[type]);
+  });
+}
+
+function enableScriptOnload(runScriptOnload = true) {
+  InputObjects.setValueByIndex('SKIP_RUN_SCRIPT_ON_LOAD', runScriptOnload ? '' : 'ᅟ');
+  console.log(`ロジックが実行され${runScriptOnload ? 'る' : 'ない'}ように設定しました。`);
+}
+
+function shouldRunScriptOnLoad() {
+  // 	HANGUL CHOSEONG FILLER を判定に利用
+  const skipScriptOnload = InputObjects.getValue('SKIP_RUN_SCRIPT_ON_LOAD') === 'ᅟ';
+  if (!skipScriptOnload) return true;
+  console.log('ロジックが実行されません、実行する場合は下記のコマンドを実行して保存し、リロードしてください。');
+  console.log('enableScriptOnload()');
+  return false;
 }
 
 // eslint-disable-next-line no-unused-vars

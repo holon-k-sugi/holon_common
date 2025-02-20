@@ -121,4 +121,8 @@ class InputObjects {
       $(`#${id}`).val(val);
     });
   }
+
+  static getType(name){
+    return InputObjects.getObjByName(name).getType();
+  }
 }
