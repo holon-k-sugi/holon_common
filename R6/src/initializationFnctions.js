@@ -217,6 +217,11 @@ function fillAllFields(value) {
     'checkbox': true,
   };
   objNameList.filter(v => !denylist.includes(v)).forEach(name => {
+    const maxLength = InputObjects.getMaxLengthOfInput(name);
+    if (maxLength > 0) {
+      InputObjects.setValueByIndex(name, [...Array(maxLength)].map((_, i) => (i + 1) % 10).join(''));
+      return;
+    }
     const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
     InputObjects.setValueByIndex(name, valueDict[type] ?? value);
   });

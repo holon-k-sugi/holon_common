@@ -125,4 +125,8 @@ class InputObjects {
   static getType(name){
     return InputObjects.getObjByName(name).getType();
   }
+
+  static getMaxLengthOfInput(name) {
+    return InputObjects.getObjByName(name).getMaxLengthOfInput();
+  }
 }

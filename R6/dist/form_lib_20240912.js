@@ -587,6 +587,10 @@ class InputObjects {
   static getType(name){
     return InputObjects.getObjByName(name).getType();
   }
+
+  static getMaxLengthOfInput(name) {
+    return InputObjects.getObjByName(name).getMaxLengthOfInput();
+  }
 }
 class InputObjectsByName {
   constructor(maxPageNum) {
@@ -653,6 +657,10 @@ class InputObjectsByName {
 
   getLengthOfPage() {
     return this.getFilteredList().length;
+  }
+
+  getMaxLengthOfInput() {
+    return $(`#${this.getId()}`).attr('maxlength');
   }
 }
 class LazyEvaluationFunctions {
@@ -1388,6 +1396,11 @@ function fillAllFields(value) {
     'checkbox': true,
   };
   objNameList.filter(v => !denylist.includes(v)).forEach(name => {
+    const maxLength = InputObjects.getMaxLengthOfInput(name);
+    if (maxLength > 0) {
+      InputObjects.setValueByIndex(name, [...Array(maxLength)].map((_, i) => (i + 1) % 10).join(''));
+      return;
+    }
     const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
     InputObjects.setValueByIndex(name, valueDict[type] ?? value);
   });

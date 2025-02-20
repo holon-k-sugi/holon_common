@@ -64,4 +64,8 @@ class InputObjectsByName {
   getLengthOfPage() {
     return this.getFilteredList().length;
   }
+
+  getMaxLengthOfInput() {
+    return $(`#${this.getId()}`).attr('maxlength');
+  }
 }
