@@ -1177,6 +1177,52 @@ function logWarningWithCaller(message) {
   const stack = error.stack.split('\n').slice(1).map(v => v.split('(')[0]).join('\n');
   console.warn(`${message}\n${stack}`);
 }
+
+function fillAllFields(value) {
+  enableScriptOnload(false);
+  const objNameList = InputObjects.getAllObjNameList();
+
+  const denylist = [
+    'TARGET_USER_NAME',
+    'DOCUMENT_STATUSES-STATUS',
+    'AMOUNT_RECEIVED',
+    'RESERVE_ITEM01',
+    'RESERVE_ITEM02',
+    'TARGET_COMPANY_NAME',
+    'SUPPLY_DOCUMENT_START_DATE',
+    'DOCUMENT_DEADLINE_DATE',
+    'DOCUMENT_REMARKS-TYPE',
+    'DOCUMENT_ITEMS-UPDATED_AT',
+    'SKIP_RUN_SCRIPT_ON_LOAD',
+  ];
+  const valueDict = {
+    'radioButton': '◯',
+    'checkbox': true,
+  };
+  objNameList.filter(v => !denylist.includes(v)).forEach(name => {
+    const maxLength = InputObjects.getMaxLengthOfInput(name);
+    if (maxLength > 0) {
+      InputObjects.setValueByIndex(name, [...Array(+maxLength)].map((_, i) => (i + 1) % 10).join(''));
+      return;
+    }
+    const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
+    InputObjects.setValueByIndex(name, valueDict[type] ?? value);
+  });
+}
+
+function enableScriptOnload(runScriptOnload = true) {
+  InputObjects.setValueByIndex('SKIP_RUN_SCRIPT_ON_LOAD', runScriptOnload ? '' : 'ᅟ');
+  console.log(`ロジックが実行され${runScriptOnload ? 'る' : 'ない'}ように設定しました。`);
+}
+
+function shouldRunScriptOnLoad() {
+  // 	HANGUL CHOSEONG FILLER を判定に利用
+  const skipScriptOnload = InputObjects.getValue('SKIP_RUN_SCRIPT_ON_LOAD') === 'ᅟ';
+  if (!skipScriptOnload) return true;
+  console.log('ロジックが実行されません、実行する場合は下記のコマンドを実行して保存し、リロードしてください。');
+  console.log('enableScriptOnload()');
+  return false;
+}
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
 function onLoadCompanyMaster() {
@@ -1372,52 +1418,6 @@ function linkifyTspanText() {
       }
     });
   });
-}
-
-function fillAllFields(value) {
-  enableScriptOnload(false);
-  const objNameList = InputObjects.getAllObjNameList();
-
-  const denylist = [
-    'TARGET_USER_NAME',
-    'DOCUMENT_STATUSES-STATUS',
-    'AMOUNT_RECEIVED',
-    'RESERVE_ITEM01',
-    'RESERVE_ITEM02',
-    'TARGET_COMPANY_NAME',
-    'SUPPLY_DOCUMENT_START_DATE',
-    'DOCUMENT_DEADLINE_DATE',
-    'DOCUMENT_REMARKS-TYPE',
-    'DOCUMENT_ITEMS-UPDATED_AT',
-    'SKIP_RUN_SCRIPT_ON_LOAD',
-  ];
-  const valueDict = {
-    'radioButton': '◯',
-    'checkbox': true,
-  };
-  objNameList.filter(v => !denylist.includes(v)).forEach(name => {
-    const maxLength = InputObjects.getMaxLengthOfInput(name);
-    if (maxLength > 0) {
-      InputObjects.setValueByIndex(name, [...Array(+maxLength)].map((_, i) => (i + 1) % 10).join(''));
-      return;
-    }
-    const type = RadioButtons.isRadioButton(name) ? 'radioButton' : InputObjects.getType(name);
-    InputObjects.setValueByIndex(name, valueDict[type] ?? value);
-  });
-}
-
-function enableScriptOnload(runScriptOnload = true) {
-  InputObjects.setValueByIndex('SKIP_RUN_SCRIPT_ON_LOAD', runScriptOnload ? '' : 'ᅟ');
-  console.log(`ロジックが実行され${runScriptOnload ? 'る' : 'ない'}ように設定しました。`);
-}
-
-function shouldRunScriptOnLoad() {
-  // 	HANGUL CHOSEONG FILLER を判定に利用
-  const skipScriptOnload = InputObjects.getValue('SKIP_RUN_SCRIPT_ON_LOAD') === 'ᅟ';
-  if (!skipScriptOnload) return true;
-  console.log('ロジックが実行されません、実行する場合は下記のコマンドを実行して保存し、リロードしてください。');
-  console.log('enableScriptOnload()');
-  return false;
 }
 
 // eslint-disable-next-line no-unused-vars
