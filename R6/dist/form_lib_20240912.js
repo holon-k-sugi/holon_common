@@ -924,6 +924,10 @@ function getP(name) {
   return InputObjects.getLengthOfPageListByName(name);
 }
 // eslint-disable-next-line no-unused-vars
+function setMark(name, mark, unmark) {
+  RadioButtons.setMark(name, mark, unmark);
+}
+// eslint-disable-next-line no-unused-vars
 function toHan(input) {
   if (typeof input !== 'string') return '';
   return input.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/[－]/g, '-');
@@ -1420,6 +1424,32 @@ function linkifyTspanText() {
   });
 }
 
+function getWrongFormIdentifiers() {
+  // ページインデックスを付与していない場合
+  // id = '_ITEXT4000_7_0' name = 'ITEXT4000'
+  // ページインデックスを付与している場合
+  // id = '_ITEXT5004_8_12' name = 'ITEXT5004_J24J03A00K10p10_0'
+
+  const addPageIndex = $('div[id^="iftc_cf_inputarea_"]').children().filter((_, el) => {
+    return /_0$/.test(el.name);
+  });
+  const formIdentifiers = {};
+  addPageIndex.each((_, elm) => {
+    const id = $(elm).attr('id').split('_').slice(1, -2).join('_');
+    const formIdentifier = $(elm).attr('name').replace(id, '').split('_').slice(1, -1).join('_');
+    const parentClass = $(elm).closest('div[class^="iftc_cf_form_"]').attr('class');
+    const formFileName = parentClass.replace('iftc_cf_form_', '').replace(' iftc_cf_pageframe', '')
+    const correctIdentifier = formFileName.split('_').join('');
+
+    if (formIdentifiers[formFileName] === undefined && formIdentifier !== correctIdentifier)
+      formIdentifiers[formFileName] = correctIdentifier;
+  });
+  Object.keys(formIdentifiers).forEach(formIdentifier => {
+    console.warn(`${formIdentifier} の識別子が間違っています。正しい識別子は下記です。`);
+    console.warn(`${formIdentifiers[formIdentifier]}`);
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -1438,6 +1468,7 @@ function executeFuncitonsOnload() {
   setFocusColor();
   onLoadCompanyMaster();
   linkifyTspanText();
+  getWrongFormIdentifiers();
   if (window.location.hostname === 'stg.joseikin-cloud.jp') {
     console.log('---STG用デバッグ情報開始---');
     getUnmappedObjList();

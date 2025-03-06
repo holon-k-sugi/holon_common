@@ -36,6 +36,10 @@ function getP(name) {
   return InputObjects.getLengthOfPageListByName(name);
 }
 // eslint-disable-next-line no-unused-vars
+function setMark(name, mark, unmark) {
+  RadioButtons.setMark(name, mark, unmark);
+}
+// eslint-disable-next-line no-unused-vars
 function toHan(input) {
   if (typeof input !== 'string') return '';
   return input.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0)).replace(/[－]/g, '-');

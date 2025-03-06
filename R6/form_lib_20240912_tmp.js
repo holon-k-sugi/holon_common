@@ -1,11 +1,14 @@
-if (window.allObj != undefined) {
-  initializeInstances();
+initializeInstances();
+if (shouldRunScriptOnLoad()) main();
+
+function main() {
   if (getV('DOCUMENT_STATUSES-STATUS') === '3') return;
+  LazyEvaluationFunctions.setFunction(onLoad);
+  LazyEvaluationFunctions.setFunction(callCompanyMasterFunctions);
   executeFuncitonsOnload();
   initialize();
   onLoad();
   onChange();
-  lazyEvaluationFunctions.setFunction('onLoad', onLoad);
 }
 
 function initialize() {
@@ -33,5 +36,9 @@ function makeListForDocumentEmployeesList() {
 
 function onLoad() {
 }
+
+function callCompanyMasterFunctions() {
+}
+
 function onChange() {
 }
