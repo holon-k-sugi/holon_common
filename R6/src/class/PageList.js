@@ -46,9 +46,9 @@ class PageList {
     return ret;
   }
 
-  static getIndexOfInitialPages(){
+  static getIndexOfInitialPages() {
     const addPageSet = new Set(PageList.getIndexOfAddPages());
-    return PageList.getIndexOfFrontPages().filter(page => !addPageSet.has(page));
+    return PageList.getIndexOfFrontPages().filter(page => !addPageSet.has(page - 1));
   }
 
   static isFrontPage(units) {
@@ -63,7 +63,7 @@ class PageList {
     return this.#length;
   }
 
-  static getAddPages(){
+  static getAddPages() {
     return this.#addPages;
   }
 
