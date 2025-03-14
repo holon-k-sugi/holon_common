@@ -719,7 +719,7 @@ class PageList {
 
   static getIndexOfInitialPages() {
     const addPageSet = new Set(PageList.getIndexOfAddPages());
-    return PageList.getIndexOfFrontPages().filter(page => !addPageSet.has(page - 1));
+    return PageList.getIndexOfFrontPages().filter(page => !addPageSet.has(page)).map(v => v - 1);
   }
 
   static isFrontPage(units) {
