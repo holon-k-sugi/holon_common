@@ -60,9 +60,7 @@ function getSelector(name, index = undefined) {
 // eslint-disable-next-line no-unused-vars
 function makeSelector(names) {
   return names.map(name => {
-    if (RadioButtons.radioExists(name)) {
-      return RadioButtons.getAllButtonNameList(name).map(n => getSelector(n));
-    }
+    if (RadioButtons.radioExists(name)) return RadioButtons.getAllButtonNameList(name).map(n => getSelector(n));
     return getSelector(name);
   }).flat().filter(v => v).join();
 }
@@ -195,13 +193,12 @@ function setFocusColor() {
 // eslint-disable-next-line no-unused-vars
 function visualizeObj(captionList = [], inputList = [], labelList = []) {
   const log = n => console.warn(`visualizeObj: ${n} は存在しないラベル`);
-  const makeSelectorList = (list, callback) => {
-    return list.map(n => {
-      if (InputObjects.objExists(n)) return callback(n);
-      log(n);
-      return '';
-    }).filter(v => v).join().split(',');
-  }
+  const makeSelectorList = (list, callback) => list.map(n => {
+    if (InputObjects.objExists(n)) return callback(n);
+    log(n);
+    return '';
+  }).filter(v => v).join().split(',');
+
   const captionObj = makeSelectorList(captionList, getSelector);
   $(captionObj.join()).prop('disabled', true);
   $(captionObj.join()).css('font-weight', 'bold');
@@ -294,6 +291,7 @@ function logWarningWithCaller(message) {
   console.warn(`${message}\n${stack}`);
 }
 
+// eslint-disable-next-line no-unused-vars
 function fillAllFields(value) {
   enableScriptOnload(false);
   const objNameList = InputObjects.getAllObjNameList();
@@ -312,8 +310,8 @@ function fillAllFields(value) {
     'SKIP_RUN_SCRIPT_ON_LOAD',
   ];
   const valueDict = {
-    'radioButton': '◯',
-    'checkbox': true,
+    radioButton: '◯',
+    checkbox: true,
   };
   objNameList.filter(v => !denylist.includes(v)).forEach(name => {
     const maxLength = InputObjects.getMaxLengthOfInput(name);
@@ -331,8 +329,9 @@ function enableScriptOnload(runScriptOnload = true) {
   console.log(`ロジックが実行され${runScriptOnload ? 'る' : 'ない'}ように設定しました。`);
 }
 
+// eslint-disable-next-line no-unused-vars
 function shouldRunScriptOnLoad() {
-  // 	HANGUL CHOSEONG FILLER を判定に利用
+  // HANGUL CHOSEONG FILLER を判定に利用
   const skipScriptOnload = InputObjects.getValue('SKIP_RUN_SCRIPT_ON_LOAD') === 'ᅟ';
   if (!skipScriptOnload) return true;
   console.log('ロジックが実行されません、実行する場合は下記のコマンドを実行して保存し、リロードしてください。');

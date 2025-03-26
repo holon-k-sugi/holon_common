@@ -94,7 +94,7 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
-  }
+  };
 
   static toMasterName(name) {
     const objPrefix = name.split('_')[0];
@@ -120,7 +120,7 @@ class CompanyMaster {
       CompanyMaster.setMaster(name);
     });
   }
-  
+
   static setAllMaster() {
     Object.keys(this.#hasObjPrefix).forEach(type => {
       if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;

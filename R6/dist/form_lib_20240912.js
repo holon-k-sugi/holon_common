@@ -1,12 +1,11 @@
 class ChechBox {
   static #list = {};
+
   static initialize() {
     this.#list = InputObjects.getAllObjNameList().reduce((cur, name) => {
       try {
         const id = InputObjects.getObjByName(name).getId();
-        if ($(`#${id}`).prop('type') === 'checkbox') {
-          cur[name] = InputObjects.getObjByName(name);
-        }
+        if ($(`#${id}`).prop('type') === 'checkbox') cur[name] = InputObjects.getObjByName(name);
       } catch (e) {
         console.warn(e);
       }
@@ -23,14 +22,10 @@ class ChechBox {
     Object.keys(this.#list).forEach(name => {
       const id = this.#list[name].getId();
       const checkedValue = $(`#${id}`).attr('value');
-      if (checkedValue !== 'true') {
-        console.warn(`${name} のチェック時の書き出し値が true ではなく ${checkedValue} です。`);
-      }
+      if (checkedValue !== 'true') console.warn(`${name} のチェック時の書き出し値が true ではなく ${checkedValue} です。`);
+
       const unchedValue = $(`#${id}`).attr('data-unchecked-value');
-      if (unchedValue !== 'false') {
-        console.warn(`${name} の非チェック時の書き出し値が false ではなく ${unchedValue} です。`);
-      }
-      return;
+      if (unchedValue !== 'false') console.warn(`${name} の非チェック時の書き出し値が false ではなく ${unchedValue} です。`);
     });
   }
 }
@@ -130,7 +125,7 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
-  }
+  };
 
   static toMasterName(name) {
     const objPrefix = name.split('_')[0];
@@ -156,7 +151,7 @@ class CompanyMaster {
       CompanyMaster.setMaster(name);
     });
   }
-  
+
   static setAllMaster() {
     Object.keys(this.#hasObjPrefix).forEach(type => {
       if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
@@ -207,10 +202,8 @@ class Employees {
 
   static initialize() {
     try {
-      if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
-        return;
-      }
-      this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST',0));
+      if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) return;
+      this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST', 0));
     } catch (e) {
       this.#list = [];
     }
@@ -260,6 +253,7 @@ class Employees {
 class EmployeesContents {
   static #list = [];
   static #previous = [];
+
   static initialize(employees) {
     // 現在の従業員リスト
     if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
@@ -285,8 +279,7 @@ class EmployeesContents {
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         const obj = [employees.list[key](i)].flat()[0];
-        if (obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
-          previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
+        if (obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name))) previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
       });
     });
     // 現在の従業員リストに存在しない ID の従業員情報を削除
@@ -312,8 +305,7 @@ class EmployeesContents {
         const value = this.#getEmployeesValue(i, key);
         const objList = [employees.list[key](i)].flat();
         objList.forEach(obj => {
-          if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name)))
-            InputObjects.setValueByIndex(obj.name, obj.page, value);
+          if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name))) InputObjects.setValueByIndex(obj.name, obj.page, value);
         });
       });
     });
@@ -584,7 +576,7 @@ class InputObjects {
     });
   }
 
-  static getType(name){
+  static getType(name) {
     return InputObjects.getObjByName(name).getType();
   }
 
@@ -623,6 +615,7 @@ class InputObjectsByName {
   getPageList() {
     return this.objListByPage.map((n, i) => {
       if (n.length > 0) return i + 1;
+      return undefined;
     }).filter(v => v !== undefined);
   }
 
@@ -763,20 +756,18 @@ class RadioButtonGroup {
   registerButton(name, num) {
     this.buttonList[name] = num;
     this.reverseList[num] = name;
-    if (this.mark === undefined) {
-      try {
-        const type = InputObjects.getObjByName(name).getType();
-        if (type === 'checkbox') {
-          this.mark = true;
-          this.unmark = false;
-        }
-        if (type === 'text') {
-          this.mark = '◯';
-          this.unmark = '​';
-        }
-      } catch (e) {
-        console.warn(e);
+    if (this.mark === undefined) try {
+      const type = InputObjects.getObjByName(name).getType();
+      if (type === 'checkbox') {
+        this.mark = true;
+        this.unmark = false;
       }
+      if (type === 'text') {
+        this.mark = '◯';
+        this.unmark = '​';
+      }
+    } catch (e) {
+      console.warn(e);
     }
   }
 
@@ -792,21 +783,21 @@ class RadioButtonGroup {
   synchronizeButton(index) {
     this.getAllButtonNameList().forEach(name => {
       [...Array(InputObjects.getLengthOfPageListByName(name))].forEach((_, i) => {
-        setV(name, i, getV(name, index));
+        InputObjects.setValueByIndex(name, i, InputObjects.getValueByIndex(name, index));
       });
     });
   }
 
   getValue(index) {
     return Object.keys(this.reverseList)
-      .find(num => getV(this.reverseList[num], index) === this.mark);
+      .find(num => InputObjects.getValueByIndex(this.reverseList[num], index) === this.mark);
   }
 
   setCorrectMark() {
     const isWrong = this.getAllButtonNameList()
-      .map(name => getV(name) === this.mark).filter(v => v).length > 1;
+      .map(name => InputObjects.getValueByIndex(name) === this.mark).filter(v => v).length > 1;
     if (isWrong) this.getAllButtonNameList().forEach(name => {
-      setV(name, this.unmark);
+      InputObjects.setValueByIndex(name, this.unmark);
     });
   }
 
@@ -816,6 +807,7 @@ class RadioButtonGroup {
 }
 class RadioButtons {
   static #list = {};
+
   static initialize() {
     this.#list = InputObjects.getAllObjNameList().reduce((cur, name) => {
       const target = cur;
@@ -948,9 +940,7 @@ function getSelector(name, index = undefined) {
 // eslint-disable-next-line no-unused-vars
 function makeSelector(names) {
   return names.map(name => {
-    if (RadioButtons.radioExists(name)) {
-      return RadioButtons.getAllButtonNameList(name).map(n => getSelector(n));
-    }
+    if (RadioButtons.radioExists(name)) return RadioButtons.getAllButtonNameList(name).map(n => getSelector(n));
     return getSelector(name);
   }).flat().filter(v => v).join();
 }
@@ -1083,13 +1073,12 @@ function setFocusColor() {
 // eslint-disable-next-line no-unused-vars
 function visualizeObj(captionList = [], inputList = [], labelList = []) {
   const log = n => console.warn(`visualizeObj: ${n} は存在しないラベル`);
-  const makeSelectorList = (list, callback) => {
-    return list.map(n => {
-      if (InputObjects.objExists(n)) return callback(n);
-      log(n);
-      return '';
-    }).filter(v => v).join().split(',');
-  }
+  const makeSelectorList = (list, callback) => list.map(n => {
+    if (InputObjects.objExists(n)) return callback(n);
+    log(n);
+    return '';
+  }).filter(v => v).join().split(',');
+
   const captionObj = makeSelectorList(captionList, getSelector);
   $(captionObj.join()).prop('disabled', true);
   $(captionObj.join()).css('font-weight', 'bold');
@@ -1182,6 +1171,7 @@ function logWarningWithCaller(message) {
   console.warn(`${message}\n${stack}`);
 }
 
+// eslint-disable-next-line no-unused-vars
 function fillAllFields(value) {
   enableScriptOnload(false);
   const objNameList = InputObjects.getAllObjNameList();
@@ -1200,8 +1190,8 @@ function fillAllFields(value) {
     'SKIP_RUN_SCRIPT_ON_LOAD',
   ];
   const valueDict = {
-    'radioButton': '◯',
-    'checkbox': true,
+    radioButton: '◯',
+    checkbox: true,
   };
   objNameList.filter(v => !denylist.includes(v)).forEach(name => {
     const maxLength = InputObjects.getMaxLengthOfInput(name);
@@ -1219,8 +1209,9 @@ function enableScriptOnload(runScriptOnload = true) {
   console.log(`ロジックが実行され${runScriptOnload ? 'る' : 'ない'}ように設定しました。`);
 }
 
+// eslint-disable-next-line no-unused-vars
 function shouldRunScriptOnLoad() {
-  // 	HANGUL CHOSEONG FILLER を判定に利用
+  // HANGUL CHOSEONG FILLER を判定に利用
   const skipScriptOnload = InputObjects.getValue('SKIP_RUN_SCRIPT_ON_LOAD') === 'ᅟ';
   if (!skipScriptOnload) return true;
   console.log('ロジックが実行されません、実行する場合は下記のコマンドを実行して保存し、リロードしてください。');
@@ -1230,14 +1221,10 @@ function shouldRunScriptOnLoad() {
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
 function onLoadCompanyMaster() {
-  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) {
-    CompanyMaster.setAllMaster();
-  }
-  if (InputObjects.objExists('IS_MANUAL')) {
-    $(getSelector('IS_MANUAL')).on('click', () => {
-      if (!getCheckValue('IS_MANUAL')) CompanyMaster.setAllMaster();
-    });
-  }
+  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) CompanyMaster.setAllMaster();
+  if (InputObjects.objExists('IS_MANUAL')) $(getSelector('IS_MANUAL')).on('click', () => {
+    if (!getCheckValue('IS_MANUAL')) CompanyMaster.setAllMaster();
+  });
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -1377,7 +1364,8 @@ function showErrorConfig() {
   ];
   errConfig.forEach(obj => {
     if ($(`.${obj.class}`).length > 0) {
-      const name = $(`.${obj.class}`).attr('id').split('_').slice(1, -2).join('_');
+      const name = $(`.${obj.class}`).attr('id').split('_').slice(1, -2)
+        .join('_');
       console.warn(`${name} に${obj.formatType}のフォーマットが設定されています。`);
     }
   });
@@ -1396,7 +1384,7 @@ function linkifyTspanText() {
   $('svg').each((_, svgContainer) => {
     const $svgContainer = $(svgContainer);
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    $svgContainer.find('tspan').each((_, tspan) => {
+    $svgContainer.find('tspan').each((__, tspan) => {
       const $tspan = $(tspan);
       const text = $tspan.text().replace(/\r?\n/g, '');
       // URLが含まれているかチェック
@@ -1412,12 +1400,12 @@ function linkifyTspanText() {
           window.open(urls[0], '_blank');
         });
         $tspan.on({
-          mouseenter: (e) => {
+          mouseenter: e => {
             $(e.currentTarget).css('cursor', 'pointer');
           },
-          mouseleave: (e) => {
+          mouseleave: e => {
             $(e.currentTarget).css('cursor', 'default');
-          }
+          },
         });
       }
     });
@@ -1430,19 +1418,19 @@ function getWrongFormIdentifiers() {
   // ページインデックスを付与している場合
   // id = '_ITEXT5004_8_12' name = 'ITEXT5004_J24J03A00K10p10_0'
 
-  const addPageIndex = $('div[id^="iftc_cf_inputarea_"]').children().filter((_, el) => {
-    return /_0$/.test(el.name);
-  });
+  const addPageIndex = $('div[id^="iftc_cf_inputarea_"]').children().filter((_, el) => /_0$/.test(el.name));
   const formIdentifiers = {};
   addPageIndex.each((_, elm) => {
-    const id = $(elm).attr('id').split('_').slice(1, -2).join('_');
-    const formIdentifier = $(elm).attr('name').replace(id, '').split('_').slice(1, -1).join('_');
+    const id = $(elm).attr('id').split('_').slice(1, -2)
+      .join('_');
+    const formIdentifier = $(elm).attr('name').replace(id, '').split('_')
+      .slice(1, -1)
+      .join('_');
     const parentClass = $(elm).closest('div[class^="iftc_cf_form_"]').attr('class');
-    const formFileName = parentClass.replace('iftc_cf_form_', '').replace(' iftc_cf_pageframe', '')
+    const formFileName = parentClass.replace('iftc_cf_form_', '').replace(' iftc_cf_pageframe', '');
     const correctIdentifier = formFileName.split('_').join('');
 
-    if (formIdentifiers[formFileName] === undefined && formIdentifier !== correctIdentifier)
-      formIdentifiers[formFileName] = correctIdentifier;
+    if (formIdentifiers[formFileName] === undefined && formIdentifier !== correctIdentifier) formIdentifiers[formFileName] = correctIdentifier;
   });
   Object.keys(formIdentifiers).forEach(formIdentifier => {
     console.warn(`${formIdentifier} の識別子が間違っています。正しい識別子は下記です。`);

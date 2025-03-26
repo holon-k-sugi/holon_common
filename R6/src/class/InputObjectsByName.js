@@ -29,6 +29,7 @@ class InputObjectsByName {
   getPageList() {
     return this.objListByPage.map((n, i) => {
       if (n.length > 0) return i + 1;
+      return undefined;
     }).filter(v => v !== undefined);
   }
 

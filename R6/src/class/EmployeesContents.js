@@ -1,6 +1,7 @@
 class EmployeesContents {
   static #list = [];
   static #previous = [];
+
   static initialize(employees) {
     // 現在の従業員リスト
     if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
@@ -26,8 +27,7 @@ class EmployeesContents {
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max ?? 0)].forEach((_, i) => {
         const obj = [employees.list[key](i)].flat()[0];
-        if (obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name)))
-          previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
+        if (obj?.name && (obj.page === undefined || obj.page < InputObjects.getLengthOfPageListByName(obj.name))) previousDocEmpContents[i][key] = InputObjects.getValueByIndex(obj.name, obj.page);
       });
     });
     // 現在の従業員リストに存在しない ID の従業員情報を削除
@@ -53,8 +53,7 @@ class EmployeesContents {
         const value = this.#getEmployeesValue(i, key);
         const objList = [employees.list[key](i)].flat();
         objList.forEach(obj => {
-          if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name)))
-            InputObjects.setValueByIndex(obj.name, obj.page, value);
+          if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name))) InputObjects.setValueByIndex(obj.name, obj.page, value);
         });
       });
     });

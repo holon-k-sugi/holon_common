@@ -1,14 +1,10 @@
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
 function onLoadCompanyMaster() {
-  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) {
-    CompanyMaster.setAllMaster();
-  }
-  if (InputObjects.objExists('IS_MANUAL')) {
-    $(getSelector('IS_MANUAL')).on('click', () => {
-      if (!getCheckValue('IS_MANUAL')) CompanyMaster.setAllMaster();
-    });
-  }
+  if (!InputObjects.objExists('IS_MANUAL') || !getCheckValue('IS_MANUAL')) CompanyMaster.setAllMaster();
+  if (InputObjects.objExists('IS_MANUAL')) $(getSelector('IS_MANUAL')).on('click', () => {
+    if (!getCheckValue('IS_MANUAL')) CompanyMaster.setAllMaster();
+  });
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -148,7 +144,8 @@ function showErrorConfig() {
   ];
   errConfig.forEach(obj => {
     if ($(`.${obj.class}`).length > 0) {
-      const name = $(`.${obj.class}`).attr('id').split('_').slice(1, -2).join('_');
+      const name = $(`.${obj.class}`).attr('id').split('_').slice(1, -2)
+        .join('_');
       console.warn(`${name} に${obj.formatType}のフォーマットが設定されています。`);
     }
   });
@@ -167,7 +164,7 @@ function linkifyTspanText() {
   $('svg').each((_, svgContainer) => {
     const $svgContainer = $(svgContainer);
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    $svgContainer.find('tspan').each((_, tspan) => {
+    $svgContainer.find('tspan').each((__, tspan) => {
       const $tspan = $(tspan);
       const text = $tspan.text().replace(/\r?\n/g, '');
       // URLが含まれているかチェック
@@ -183,12 +180,12 @@ function linkifyTspanText() {
           window.open(urls[0], '_blank');
         });
         $tspan.on({
-          mouseenter: (e) => {
+          mouseenter: e => {
             $(e.currentTarget).css('cursor', 'pointer');
           },
-          mouseleave: (e) => {
+          mouseleave: e => {
             $(e.currentTarget).css('cursor', 'default');
-          }
+          },
         });
       }
     });
@@ -201,19 +198,19 @@ function getWrongFormIdentifiers() {
   // ページインデックスを付与している場合
   // id = '_ITEXT5004_8_12' name = 'ITEXT5004_J24J03A00K10p10_0'
 
-  const addPageIndex = $('div[id^="iftc_cf_inputarea_"]').children().filter((_, el) => {
-    return /_0$/.test(el.name);
-  });
+  const addPageIndex = $('div[id^="iftc_cf_inputarea_"]').children().filter((_, el) => /_0$/.test(el.name));
   const formIdentifiers = {};
   addPageIndex.each((_, elm) => {
-    const id = $(elm).attr('id').split('_').slice(1, -2).join('_');
-    const formIdentifier = $(elm).attr('name').replace(id, '').split('_').slice(1, -1).join('_');
+    const id = $(elm).attr('id').split('_').slice(1, -2)
+      .join('_');
+    const formIdentifier = $(elm).attr('name').replace(id, '').split('_')
+      .slice(1, -1)
+      .join('_');
     const parentClass = $(elm).closest('div[class^="iftc_cf_form_"]').attr('class');
-    const formFileName = parentClass.replace('iftc_cf_form_', '').replace(' iftc_cf_pageframe', '')
+    const formFileName = parentClass.replace('iftc_cf_form_', '').replace(' iftc_cf_pageframe', '');
     const correctIdentifier = formFileName.split('_').join('');
 
-    if (formIdentifiers[formFileName] === undefined && formIdentifier !== correctIdentifier)
-      formIdentifiers[formFileName] = correctIdentifier;
+    if (formIdentifiers[formFileName] === undefined && formIdentifier !== correctIdentifier) formIdentifiers[formFileName] = correctIdentifier;
   });
   Object.keys(formIdentifiers).forEach(formIdentifier => {
     console.warn(`${formIdentifier} の識別子が間違っています。正しい識別子は下記です。`);

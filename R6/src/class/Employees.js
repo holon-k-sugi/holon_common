@@ -5,10 +5,8 @@ class Employees {
 
   static initialize() {
     try {
-      if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) {
-        return;
-      }
-      this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST',0));
+      if (!InputObjects.objExists('DOCUMENT_EMPLOYEES_LIST')) return;
+      this.#list = JSON.parse(InputObjects.getValueByIndex('DOCUMENT_EMPLOYEES_LIST', 0));
     } catch (e) {
       this.#list = [];
     }

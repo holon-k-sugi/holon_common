@@ -122,7 +122,7 @@ class InputObjects {
     });
   }
 
-  static getType(name){
+  static getType(name) {
     return InputObjects.getObjByName(name).getType();
   }
 
