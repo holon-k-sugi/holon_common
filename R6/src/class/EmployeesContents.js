@@ -61,9 +61,8 @@ class EmployeesContents {
     InputObjects.setValueByIndex('PREVIOUS_DOC_EMP_LIST', InputObjects.getValue('DOCUMENT_EMPLOYEES_LIST'));
   }
 
-  static #getEmployeesValue(index, key, name) {
+  static #getEmployeesValue(index, key) {
     if (this.#list[index]?.[key] === undefined) return '';
-    if (this.#list[index][key]?.[name] === undefined) return this.#list[index][key];
-    return this.#list[index][key][name];
+    return this.#list[index][key];
   }
 }
