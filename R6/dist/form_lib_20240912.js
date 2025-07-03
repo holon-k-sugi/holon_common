@@ -1218,6 +1218,11 @@ function shouldRunScriptOnLoad() {
   console.log('enableScriptOnload()');
   return false;
 }
+
+// eslint-disable-next-line no-unused-vars
+function getEmployeesValue(index, key) {
+  return Employees.getEmployeesValue(index, key);
+}
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
 function onLoadCompanyMaster() {
