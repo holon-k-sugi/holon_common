@@ -292,10 +292,12 @@ class EmployeesContents {
     this.#list.forEach((_, i) => {
       Object.keys(employees.list).forEach(key => {
         if (Employees.contains(i, key)) {
-          const objs = [employees.list[key](i)].flat();
+          const objList = [employees.list[key](i)].flat();
           const value = Employees.getEmployeesValue(i, key);
-          this.#list[i][key] = objs[0].func ? objs[0].func(value, i) : value;
-          objs.forEach(obj => Employees.objNameSet.add(obj.name));
+          objList.forEach(obj => {
+            this.#list[i][key][obj.name] = obj.func ? obj.func(value, i) : value;
+            Employees.objNameSet.add(obj.name);
+          });
         }
       });
     });
@@ -313,9 +315,10 @@ class EmployeesContents {
     InputObjects.setValueByIndex('PREVIOUS_DOC_EMP_LIST', InputObjects.getValue('DOCUMENT_EMPLOYEES_LIST'));
   }
 
-  static #getEmployeesValue(index, key) {
+  static #getEmployeesValue(index, key, name) {
     if (this.#list[index]?.[key] === undefined) return '';
-    return this.#list[index][key];
+    if (this.#list[index][key]?.[name] === undefined) return this.#list[index][key];
+    return this.#list[index][key][name];
   }
 }
 class IconObjects {
