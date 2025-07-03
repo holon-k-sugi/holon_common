@@ -246,6 +246,8 @@ class Employees {
     const notSplitValue = Employees.getEmployeesValue(index, keyName);
     if (notSplitValue === '') return '';
     if (keyName === 'birthday' || keyName === 'hire_date') return toWareki(notSplitValue)[keyNum];
+    if (keyName === 'birthday_w' || keyName === 'hire_date_w') return toWareki(notSplitValue)[keyNum];
+    if (keyName === 'birthday_s' || keyName === 'hire_date_s') return [+notSplitValue.slice(0, 4), +notSplitValue.slice(4, 6), +notSplitValue.slice(6, 8)][keyNum];
     if (keyName === 'employment_insurance_number') return notSplitValue.split('-')[keyNum];
     return '';
   }
