@@ -293,21 +293,18 @@ class EmployeesContents {
       Object.keys(employees.list).forEach(key => {
         if (Employees.contains(i, key)) {
           const objList = [employees.list[key](i)].flat();
-          const rawValue = Employees.getEmployeesValue(i, key);
-          const value = objList[0].func ? objList[0].func(rawValue) : rawValue;
-          this.#list[i][key] = value;
-          objList.forEach(obj =>
-            Employees.objNameSet.add(obj.name)
-          );
+          this.#list[i][key] = Employees.getEmployeesValue(i, key);
+          objList.forEach(obj => Employees.objNameSet.add(obj.name));
         }
       });
     });
     // 書類の内容を上書き
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max)].forEach((_, i) => {
-        const value = this.#getEmployeesValue(i, key);
+        const rawValue = this.#getEmployeesValue(i, key);
         const objList = [employees.list[key](i)].flat();
         objList.forEach(obj => {
+          const value = (obj.func && this.#list[i].id) ? obj.func(rawValue) : rawValue;
           if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name))) InputObjects.setValueByIndex(obj.name, obj.page, value);
         });
       });
