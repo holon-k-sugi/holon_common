@@ -53,6 +53,7 @@ class EmployeesContents {
         const objList = [employees.list[key](i)].flat();
         objList.forEach(obj => {
           const value = (obj.func && this.#list[i].id) ? obj.func(rawValue) : rawValue;
+          console.log(obj.func, this.#list[i].id);
           if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name))) InputObjects.setValueByIndex(obj.name, obj.page, value);
         });
       });
