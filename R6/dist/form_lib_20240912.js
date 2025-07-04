@@ -298,7 +298,6 @@ class EmployeesContents {
         }
       });
     });
-    console.log(this.#list);
     // 書類の内容を上書き
     Object.keys(employees.list).forEach(key => {
       [...Array(employees.max)].forEach((_, i) => {
@@ -306,7 +305,6 @@ class EmployeesContents {
         const objList = [employees.list[key](i)].flat();
         objList.forEach(obj => {
           const value = (obj.func && this.#list[i].id) ? obj.func(rawValue) : rawValue;
-          console.log(obj.func, this.#list[i].id);
           if (obj?.name && (obj.page === undefined || obj.page < +InputObjects.getLengthOfPageListByName(obj.name))) InputObjects.setValueByIndex(obj.name, obj.page, value);
         });
       });
