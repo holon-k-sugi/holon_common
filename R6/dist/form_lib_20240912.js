@@ -294,9 +294,11 @@ class EmployeesContents {
         if (Employees.contains(i, key)) {
           const objList = [employees.list[key](i)].flat();
           const rawValue = Employees.getEmployeesValue(i, key);
-          const value = obj.func ? obj.func(rawValue) : rawValue;
+          const value = objList[0].func ? objList[0].func(rawValue) : rawValue;
           this.#list[i][key] = value;
-          objList.forEach(obj => Employees.objNameSet.add(obj.name));
+          objList.forEach(obj =>
+            Employees.objNameSet.add(obj.name)
+          );
         }
       });
     });
