@@ -1,7 +1,7 @@
 JS_FILES = $(CLASS_FILES) $(OTHER_FILES)
 CLASS_FILES = $(wildcard src/class/*.js)
 OTHER_FILES = src/utilityFunctions.js src/initializationFnctions.js
-OUTPUT_FILE = dist/form_lib_202251111.js
+OUTPUT_FILE = dist/form_lib_20251111.js
 
 all: $(OUTPUT_FILE)
 
