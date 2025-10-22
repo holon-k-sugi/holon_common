@@ -124,10 +124,10 @@ class CompanyMaster {
     CREATED_TENANT_ID: 'CREATED_TENANT_ID',
     ROUKI_ID: 'LSIO_ID',
     IS_YUCHO: 'IS_USING_JP_BANK',
-    BANK_NAME: 'FINANCIAL_INSTITUTION_NAME',
-    BANK_CODE: 'FINANCIAL_INSTITUTION_CODE',
-    BANK_BRANCH_NAME: 'FINANCIAL_INSTITUTION_BRANCH_NAME',
-    BANK_BRANCH_CODE: 'FINANCIAL_INSTITUTION_BRANCH_CODE',
+    BANK_NAME: 'F_I_NAME',
+    BANK_CODE: 'F_I_CODE',
+    BANK_BRANCH_NAME: 'F_I_BRANCH_NAME',
+    BANK_BRANCH_CODE: 'F_I_BRANCH_CODE',
     BANK_NUM: 'ACCOUNT_NUMBER',
     BANK_TYPE: 'ACCOUNT_TYPE',
     BANK_HOLDER_KANJI: 'ACCOUNT_HOLDER_NAME_KANJI',
@@ -1489,7 +1489,7 @@ function onLoadExecutives() {
   const suffixes = {
     NAME: { key: 'full_name', value: x => x },
     NAME_KANA: { key: 'full_name_kana', value: x => x },
-    POST: { key: 'post', value: x => x },
+    POSITION: { key: 'post', value: x => x },
     BIRTHDAY_Y: { key: 'birthday', value: x => x.slice(0, 4) },
     BIRTHDAY_M: { key: 'birthday', value: x => x.slice(4, 6) },
     BIRTHDAY_D: { key: 'birthday', value: x => x.slice(6, 8) },
@@ -1503,7 +1503,7 @@ function onLoadExecutives() {
       if (!InputObjects.objExists(objName) || InputObjects.getLengthOfPageListByName(objName) < page) return;
       Object.keys(suffixes).forEach(suffix => {
         const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, index));
-        InputObjects.setValue(objName, page, value);
+        InputObjects.setValueByIndex(objName, page, value);
       });
     });
   });

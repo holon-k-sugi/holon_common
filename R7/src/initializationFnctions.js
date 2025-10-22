@@ -229,7 +229,7 @@ function onLoadExecutives() {
   const suffixes = {
     NAME: { key: 'full_name', value: x => x },
     NAME_KANA: { key: 'full_name_kana', value: x => x },
-    POST: { key: 'post', value: x => x },
+    POSITION: { key: 'post', value: x => x },
     BIRTHDAY_Y: { key: 'birthday', value: x => x.slice(0, 4) },
     BIRTHDAY_M: { key: 'birthday', value: x => x.slice(4, 6) },
     BIRTHDAY_D: { key: 'birthday', value: x => x.slice(6, 8) },
@@ -243,7 +243,7 @@ function onLoadExecutives() {
       if (!InputObjects.objExists(objName) || InputObjects.getLengthOfPageListByName(objName) < page) return;
       Object.keys(suffixes).forEach(suffix => {
         const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, index));
-        InputObjects.setValue(objName, page, value);
+        InputObjects.setValueByIndex(objName, page, value);
       });
     });
   });
