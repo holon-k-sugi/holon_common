@@ -207,9 +207,14 @@ function getWrongFormIdentifiers() {
   const addPageIndex = $('div[id^="iftc_cf_inputarea_"]').children().filter((_, el) => /_0$/.test(el.name));
   const formIdentifiers = {};
   addPageIndex.each((_, elm) => {
-    const id = $(elm).attr('id').split('_').slice(1, -2)
+    // id からオブジェクト名を取得
+    // '_ITEXT4000_7_0' -> 'ITEXT4000'
+    const objName = $(elm).attr('id').split('_').slice(1, -2)
       .join('_');
-    const formIdentifier = $(elm).attr('name').replace(id, '').split('_')
+    // form ファイル名から正しい識別子を取得
+    // '_ITEXT5004_8_12' -> 'ITEXT5004_J24J03A00K10p10_0'
+    if ($(elm).attr('name') === objName) return true;
+    const formIdentifier = $(elm).attr('name').replace(objName, '').split('_')
       .slice(1, -1)
       .join('_');
     const parentClass = $(elm).closest('div[class^="iftc_cf_form_"]').attr('class');
@@ -237,14 +242,15 @@ function onLoadExecutives() {
   const MAX_PAGE_NUM = 5;
   const MAX_OBJECTS_NUM = 20;
 
-  [...Array(MAX_PAGE_NUM)].forEach((_, page) => {
-    [...Array(MAX_OBJECTS_NUM)].forEach((_, index) => {
+  [...Array(MAX_PAGE_NUM)].some((_, page) => {
+    [...Array(MAX_OBJECTS_NUM)].some((_, index) => {
       const objName = `${prefix}NAME_${index}`;
-      if (!InputObjects.objExists(objName) || InputObjects.getLengthOfPageListByName(objName) < page) return;
+      if (!InputObjects.objExists(objName) || InputObjects.getLengthOfPageListByName(objName) < page) return true;
       Object.keys(suffixes).forEach(suffix => {
         const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, index));
         InputObjects.setValueByIndex(objName, page, value);
       });
+      return false;
     });
   });
 }
