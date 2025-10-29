@@ -242,17 +242,21 @@ function onLoadExecutives() {
   const MAX_PAGE_NUM = 5;
   const MAX_OBJECTS_NUM = 20;
 
-  [...Array(MAX_PAGE_NUM)].some((_, page) => {
-    [...Array(MAX_OBJECTS_NUM)].some((_, index) => {
-      const objName = `${prefix}NAME_${index}`;
-      if (!InputObjects.objExists(objName) || InputObjects.getLengthOfPageListByName(objName) < page) return true;
+  [...Array(Executives.getNumOfExecutives())].reduce(({ page, obji }, _, num) => {
+    const result = {};
+    [...Array(MAX_PAGE_NUM - page)].some((__, i) => [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
+      const objName = `${prefix}NAME_${obji + j}`;
+      if (!InputObjects.objExists(objName) || InputObjects.getLengthOfPageListByName(objName) < (page + i)) return false;
       Object.keys(suffixes).forEach(suffix => {
-        const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, index));
-        InputObjects.setValueByIndex(objName, page, value);
+        const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
+        InputObjects.setValueByIndex(objName, page + i, value);
       });
-      return false;
-    });
-  });
+      result.page = page + i;
+      result.obji = obji + j + 1;
+      return true;
+    }));
+    return result;
+  }, { page: 0, obji: 0 });
 }
 
 // eslint-disable-next-line no-unused-vars
