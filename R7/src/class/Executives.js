@@ -1,14 +1,12 @@
 class Executives {
   static #list = [];
-  static #numOfexecutives = 0;
 
   static initialize(executivesList) {
     this.#list = JSON.parse(InputObjects.getValue(executivesList) || '[]');
-    this.#numOfexecutives = this.#list.length;
   }
 
   static getNumOfExecutives() {
-    return this.#numOfexecutives;
+    return this.#list.length;
   }
 
   static getValue(type, index) {
