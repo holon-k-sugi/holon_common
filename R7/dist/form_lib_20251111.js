@@ -1504,16 +1504,14 @@ function onLoadExecutives() {
     [...Array(MAX_PAGE_NUM - page)].some((__, i) => [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
       const name = `${prefix}NAME_${obji + j}`;
       if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) < (page + i)) return false;
-      console.log(!InputObjects.objExists(name));
-      console.log(InputObjects.getLengthOfPageListByName(name) < (page + i));
       Object.keys(suffixes).forEach(suffix => {
         const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
         const objName = `${prefix}${suffix}_${obji + j}`;
         if (!InputObjects.objExists(objName)) return;
         InputObjects.setValueByIndex(objName, page + i, value);
       });
-      result.page = page + i;
-      result.obji = obji + j + 1;
+      result.page = i;
+      result.obji = j + 1;
       return true;
     }));
     return result;
