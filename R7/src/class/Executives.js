@@ -10,7 +10,7 @@ class Executives {
   }
 
   static getValue(type, index) {
-    const value = this.#list?.[type]?.[index] || '';
+    const value = this.#list?.[index]?.[type] || '';
     return value || '';
   }
 }
