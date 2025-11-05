@@ -244,19 +244,24 @@ function onLoadExecutives() {
 
   [...Array(Executives.getNumOfExecutives())].reduce(({ page, obji }, _, num) => {
     const result = {};
-    [...Array(MAX_PAGE_NUM - page)].some((__, i) => [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
-      const name = `${prefix}NAME_${obji + j}`;
-      if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) < (page + i)) return false;
-      Object.keys(suffixes).forEach(suffix => {
-        const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
-        const objName = `${prefix}${suffix}_${obji + j}`;
-        if (!InputObjects.objExists(objName)) return;
-        InputObjects.setValueByIndex(objName, page + i, value);
+    [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
+      const tmp = [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
+        const name = `${prefix}NAME_${obji + j}`;
+        if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) < (page + i)) return false;
+        Object.keys(suffixes).forEach(suffix => {
+          const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
+          const objName = `${prefix}${suffix}_${obji + j}`;
+          if (!InputObjects.objExists(objName)) return;
+          InputObjects.setValueByIndex(objName, page + i, value);
+        });
+        result.obji = j + 1;
+        return true;
       });
-      result.page = i;
-      result.obji = j + 1;
+      if (tmp) return true;
+      result.page = i + 1;
+      result.obji = 0;
       return true;
-    }));
+    });
     return result;
   }, { page: 0, obji: 0 });
 }
