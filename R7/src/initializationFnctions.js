@@ -258,7 +258,7 @@ function onLoadExecutives() {
         return true;
       });
       if (tmp) return true;
-      result.page = i + 1;
+      if (MAX_PAGE_NUM - page > 0) result.page = i + 1;
       result.obji = 0;
       return false;
     });
