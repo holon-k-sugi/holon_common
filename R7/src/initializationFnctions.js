@@ -243,7 +243,7 @@ function onLoadExecutives() {
   const MAX_OBJECTS_NUM = 20;
 
   [...Array(Executives.getNumOfExecutives())].reduce(({ page, obji }, _, num) => {
-    const result = {};
+    const result = { page, obji };
     [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
       const tmp = [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
         const name = `${prefix}NAME_${obji + j}`;
