@@ -260,7 +260,7 @@ function onLoadExecutives() {
       if (tmp) return true;
       result.page = i + 1;
       result.obji = 0;
-      return true;
+      return false;
     });
     return result;
   }, { page: 0, obji: 0 });
