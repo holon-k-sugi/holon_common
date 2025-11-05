@@ -255,11 +255,11 @@ function onLoadExecutives() {
           console.log(objName, page + i, value);
           InputObjects.setValueByIndex(objName, page + i, value);
         });
-        result.obji = j + 1;
+        result.obji = obji + j + 1;
         return true;
       });
       if (tmp) return true;
-      if (MAX_PAGE_NUM - page > 0) result.page = i + 1;
+      result.page = page + i + 1;
       result.obji = 0;
       return false;
     });
