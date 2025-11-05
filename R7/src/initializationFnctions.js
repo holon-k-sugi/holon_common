@@ -252,6 +252,7 @@ function onLoadExecutives() {
           const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
           const objName = `${prefix}${suffix}_${obji + j}`;
           if (!InputObjects.objExists(objName)) return;
+          console.log(objName, page + i, value);
           InputObjects.setValueByIndex(objName, page + i, value);
         });
         result.obji = j + 1;
