@@ -247,6 +247,7 @@ function onLoadExecutives() {
     [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
       const tmp = [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
         const name = `${prefix}NAME_${obji + j}`;
+        console.log(page, obji, i, j, num, name);
         if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) < (page + i)) return false;
         Object.keys(suffixes).forEach(suffix => {
           const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
