@@ -1513,11 +1513,11 @@ function onLoadExecutives() {
           console.log(objName, result.page + i, value);
           InputObjects.setValueByIndex(objName, result.page + i, value);
         });
-        result.obji = obji + j + 1;
+        result.obji += j + 1;
         return true;
       });
       if (tmp) return true;
-      result.page = page + i + 1;
+      result.page += i + 1;
       result.obji = 0;
       return false;
     });
