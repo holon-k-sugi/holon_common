@@ -259,9 +259,9 @@ function onLoadExecutives() {
         result.obji += j + 1;
         return true;
       });
+      if (MAX_OBJECTS_NUM === result.obji) result.obji = 0;
       if (tmp) return true;
       result.page += i + 1;
-      result.obji = 0;
       return false;
     });
     return result;
