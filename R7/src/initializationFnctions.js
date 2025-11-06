@@ -256,8 +256,8 @@ function onLoadExecutives() {
           console.log(objName, result.page + i, value);
           InputObjects.setValueByIndex(objName, result.page + i, value);
         });
+        result.page += i;
         result.obji += j + 1;
-        result.page = i;
         return true;
       });
       if (!tmp || MAX_OBJECTS_NUM - obji === result.obji) result.obji = 0;
