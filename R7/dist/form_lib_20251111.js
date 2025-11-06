@@ -1501,17 +1501,17 @@ function onLoadExecutives() {
 
   [...Array(Executives.getNumOfExecutives())].reduce(({ page, obji }, _, num) => {
     const result = { page, obji };
-    [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
-      const tmp = [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
-        const name = `${prefix}NAME_${obji + j}`;
-        console.log(page, obji, i, j, num, name);
-        if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) < (page + i)) return false;
+    [...Array(MAX_PAGE_NUM - result.page)].some((__, i) => {
+      const tmp = [...Array(MAX_OBJECTS_NUM - result.obji)].some((___, j) => {
+        const name = `${prefix}NAME_${result.obji + j}`;
+        console.log(result.page, result.obji, i, j, num, name);
+        if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) < (result.page + i)) return false;
         Object.keys(suffixes).forEach(suffix => {
           const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
-          const objName = `${prefix}${suffix}_${obji + j}`;
+          const objName = `${prefix}${suffix}_${result.obji + j}`;
           if (!InputObjects.objExists(objName)) return;
-          console.log(objName, page + i, value);
-          InputObjects.setValueByIndex(objName, page + i, value);
+          console.log(objName, result.page + i, value);
+          InputObjects.setValueByIndex(objName, result.page + i, value);
         });
         result.obji = obji + j + 1;
         return true;
