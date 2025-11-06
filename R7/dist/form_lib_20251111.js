@@ -1517,7 +1517,6 @@ function onLoadExecutives() {
         result.page = i;
         return true;
       });
-      result.obji = 0;
       if (MAX_OBJECTS_NUM - obji === result.obji) result.obji = 0;
       return tmp;
     });
