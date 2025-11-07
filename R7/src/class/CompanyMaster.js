@@ -124,7 +124,9 @@ class CompanyMaster {
   }
 
   static setMaster(name) {
-    InputObjects.setValueByIndex(name, CompanyMaster.getMaster(name));
+    const value = CompanyMaster.getMaster(name);
+    if (value === '') return;
+    InputObjects.setValueByIndex(name, value);
   }
 
   static getAllObjNameByType(type) {
