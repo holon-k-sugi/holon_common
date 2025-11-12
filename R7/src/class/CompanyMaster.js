@@ -112,6 +112,26 @@ class CompanyMaster {
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
   };
 
+  static #withHyphen = {
+    JGYNSH_POST: '-',
+    JGYNSH_TEL: '-',
+    SHRSH_POST: '-',
+    SHRSH_TEL: '-',
+    OFF_POST: '-',
+    OFF_TEL: '-',
+    TNTSH_TEL: '-',
+    TNTSH_FAX: '-',
+    TNTSH_MAIL: '@',
+    SHRSH_NAME: '　',
+    SHRSH_OWNER: '　',
+    JGYNSH_NAME: '　',
+  };
+
+  static trimHyphen(name) {
+    const value = InputObjects.getValue(CompanyMaster.toMasterName(name));
+    return value === this.#withHyphen[name] ? '' : value;
+  }
+
   static toMasterName(name) {
     const objPrefix = name.split('_')[0];
     if (!(this.#hasObjPrefix.hasOwnProperty(objPrefix))) return this.#notHaveObjPrefix[name];
@@ -120,6 +140,7 @@ class CompanyMaster {
 
   static getMaster(name) {
     if (this.#hasProcessedValue.hasOwnProperty(name)) return this.#hasProcessedValue[name];
+    if (this.#withHyphen.includes(name)) return CompanyMaster.trimHyphen(name);
     return InputObjects.getValueByIndex(CompanyMaster.toMasterName(name));
   }
 
