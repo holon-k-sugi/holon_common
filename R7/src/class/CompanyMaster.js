@@ -140,7 +140,7 @@ class CompanyMaster {
 
   static getMaster(name) {
     if (this.#hasProcessedValue.hasOwnProperty(name)) return this.#hasProcessedValue[name];
-    if (this.#withHyphen.includes(name)) return CompanyMaster.trimHyphen(name);
+    if (this.#withHyphen.hasOwnProperty(name)) return CompanyMaster.trimHyphen(name);
     return InputObjects.getValueByIndex(CompanyMaster.toMasterName(name));
   }
 
