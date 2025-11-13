@@ -110,7 +110,7 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
-    BANK_CODE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? InputObjects.getValue('F_I_CODE') : ''),
+    BANK_CODE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('F_I_CODE')),
   };
 
   static #withHyphen = {
