@@ -1549,7 +1549,7 @@ function onLoadExecutives() {
 }
 
 function setTenantID() {
-  InputObjects.setValueByIndex()('LAST_CREATED_TENANT_ID', InputObjects.getValue('CREATED_TENANT_ID'));
+  InputObjects.setValueByIndex('LAST_CREATED_TENANT_ID', InputObjects.getValue('CREATED_TENANT_ID'));
 }
 
 // eslint-disable-next-line no-unused-vars
