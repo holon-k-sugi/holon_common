@@ -145,13 +145,13 @@ class CompanyMaster {
 
   static #withHyphen = {
     JGYNSH_POST: '-',
-    JGYNSH_TEL: '-',
+    JGYNSH_TEL: '--',
     SHRSH_POST: '-',
-    SHRSH_TEL: '-',
+    SHRSH_TEL: '--',
     OFF_POST: '-',
-    OFF_TEL: '-',
-    TNTSH_TEL: '-',
-    TNTSH_FAX: '-',
+    OFF_TEL: '--',
+    TNTSH_TEL: '--',
+    TNTSH_FAX: '--',
     TNTSH_MAIL: '@',
     SHRSH_NAME: '　',
     SHRSH_OWNER: '　',
