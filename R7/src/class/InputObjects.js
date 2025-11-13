@@ -108,7 +108,6 @@ class InputObjects {
   }
 
   static setValueByIndex(...args) {
-    if (args[0] == 'BANK_TYPE' || args[0] == 'BANK_CODE') console.warn(`${args[0]}に値 ${args[1]} がセットされてます`);
     const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
     const val = args.slice(-1)[0];

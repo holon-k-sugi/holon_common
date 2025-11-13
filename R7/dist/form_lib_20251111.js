@@ -179,7 +179,7 @@ class CompanyMaster {
 
   static setMaster(name) {
     const value = CompanyMaster.getMaster(name);
-    if (value === '') return;
+    if (value === '' && InputObjects.getValue('CREATED_TENANT_ID') !== InputObjects.getValue('LAST_CREATED_TENANT_ID')) return;
     InputObjects.setValueByIndex(name, value);
   }
 
@@ -619,7 +619,6 @@ class InputObjects {
   }
 
   static setValueByIndex(...args) {
-    if (args[0] == 'BANK_TYPE' || args[0] == 'BANK_CODE') console.warn(`${args[0]}に値 ${args[1]} がセットされてます`);
     const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
     const val = args.slice(-1)[0];
@@ -1549,6 +1548,10 @@ function onLoadExecutives() {
   }, { page: 0, obji: 0 });
 }
 
+function setTenantID() {
+  InputObjects.setValueByIndex()('LAST_CREATED_TENANT_ID', InputObjects.getValue('CREATED_TENANT_ID'));
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -1576,4 +1579,5 @@ function executeFuncitonsOnload() {
     showDuplicateObject();
     console.log('---STG用デバッグ情報終了---');
   }
+  setTenantID();
 }

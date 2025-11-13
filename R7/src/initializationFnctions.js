@@ -266,6 +266,10 @@ function onLoadExecutives() {
   }, { page: 0, obji: 0 });
 }
 
+function setTenantID() {
+  InputObjects.setValueByIndex()('LAST_CREATED_TENANT_ID', InputObjects.getValue('CREATED_TENANT_ID'));
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -293,4 +297,5 @@ function executeFuncitonsOnload() {
     showDuplicateObject();
     console.log('---STG用デバッグ情報終了---');
   }
+  setTenantID();
 }
