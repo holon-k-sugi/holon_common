@@ -93,11 +93,9 @@ class CompanyMaster {
     ROUKI_ID: 'LSIO_ID',
     IS_YUCHO: 'IS_USING_JP_BANK',
     BANK_NAME: 'F_I_NAME',
-    BANK_CODE: 'F_I_CODE',
     BANK_BRANCH_NAME: 'F_I_BRANCH_NAME',
     BANK_BRANCH_CODE: 'F_I_BRANCH_CODE',
     BANK_NUM: 'ACCOUNT_NUMBER',
-    BANK_TYPE: 'ACCOUNT_TYPE',
     BANK_HOLDER_KANJI: 'ACCOUNT_HOLDER_NAME_KANJI',
     BANK_HOLDER_KANA: 'ACCOUNT_HOLDER_NAME_KANA',
     YUCHO_SYMBOL: 'JP_POST_SYMBOL',
@@ -110,8 +108,8 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
-    BANK_TYPE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('BANK_TYPE')),
-    BANK_CODE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('BANK_CODE')),
+    BANK_TYPE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('F_I_TYPE')),
+    BANK_CODE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('F_I_CODE')),
   };
 
   static #withHyphen = {
