@@ -139,7 +139,7 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
-    BANK_TYPE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('F_I_TYPE')),
+    BANK_TYPE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('ACCOUNT_TYPE')),
     BANK_CODE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('F_I_CODE')),
   };
 
@@ -619,6 +619,7 @@ class InputObjects {
   }
 
   static setValueByIndex(...args) {
+    if (args[0] == 'BANK_TYPE' || args[0] == 'BANK_CODE') console.warn(`${args[0]}に値 ${args[1]} がセットされてます`);
     const target = args.length === 2 || (args.length === 3 && args[1] === undefined)
       ? InputObjects.getAllIds(args[0]) : InputObjects.getIdsByIndex(args[0], args[1]);
     const val = args.slice(-1)[0];
