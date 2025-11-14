@@ -179,6 +179,7 @@ class CompanyMaster {
 
   static setMaster(name) {
     const value = CompanyMaster.getMaster(name);
+    console.warn(value, InputObjects.getValue('CREATED_TENANT_ID'), InputObjects.getValue('LAST_CREATED_TENANT_ID'));
     if (value === '' && InputObjects.getValue('CREATED_TENANT_ID') === InputObjects.getValue('LAST_CREATED_TENANT_ID')) return;
     InputObjects.setValueByIndex(name, value);
   }
