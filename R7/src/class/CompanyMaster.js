@@ -88,8 +88,6 @@ class CompanyMaster {
     FINANCIALMONTH: 'FINANCIAL_MONTH',
     ROUDOUKYOKU: 'WORKING_AGENCY_HEAD_LOCAL',
     HELLOWORK: 'PUBLIC_EMPLOYMENT_SECURITY_OFFI',
-    TENANT_ID: 'TENANT_ID',
-    CREATED_TENANT_ID: 'CREATED_TENANT_ID',
     ROUKI_ID: 'LSIO_ID',
     IS_YUCHO: 'IS_USING_JP_BANK',
     BANK_NAME: 'F_I_NAME',
@@ -148,8 +146,9 @@ class CompanyMaster {
 
   static setMaster(name) {
     const value = CompanyMaster.getMaster(name);
-    console.warn(value, InputObjects.getValue('CREATED_TENANT_ID'), InputObjects.getValue('LAST_CREATED_TENANT_ID'));
-    if (value === '' && InputObjects.getValue('TENANT_ID') === InputObjects.getValue('LAST_TENANT_ID')) return;
+    const tenantID = InputObjects.getValue('TENANT_ID');
+    const lastTenantID = InputObjects.getValue('LAST_TENANT_ID');
+    if (value === '' && tenantID === lastTenantID) return;
     InputObjects.setValueByIndex(name, value);
   }
 
@@ -165,7 +164,7 @@ class CompanyMaster {
 
   static setAllMaster() {
     Object.keys(this.#hasObjPrefix).forEach(type => {
-      if (type === 'SHRSH' && (getMaster('TENANT_ID') === getMaster('CREATED_TENANT_ID'))) return;
+      if (type === 'SHRSH' && (InputObjects.getValue('TENANT_ID') === InputObjects.getValue('CREATED_TENANT_ID'))) return;
       CompanyMaster.setAllMasterByType(type);
     });
     Object.keys(this.#notHaveObjPrefix).forEach(name => {
