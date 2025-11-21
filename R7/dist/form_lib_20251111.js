@@ -1582,49 +1582,48 @@ function getCharacterWidth($elm) {
 }
 
 /**
- * input要素のmaxlength分の文字を、均等割り付けしつつpadding-leftで中央寄せする
+ * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等中央寄せする
  * @param {string} selector - 対象のinput要素のセレクター
  */
 function applyJustifiedSpacing(selector) {
   const $elm = $(selector);
 
+  // 1. 必要な値の取得
   const elementWidth = $elm.width();
   const maxLength = parseInt($elm.attr('maxlength'), 10);
 
-  if (maxLength <= 0 || Number.isNaN(maxLength)) {
-    $elm.css({ 'letter-spacing': 'normal', 'padding-left': '0px' });
+  // 文字数が1以下の場合は何もしない
+  if (maxLength < 1 || Number.isNaN(maxLength)) {
+    $elm.css({ 'letter-spacing': 'normal', 'text-align': 'center' });
     return;
   }
 
+  // 2. 1文字の幅を測定
   const characterWidth = getCharacterWidth($elm);
-  const spaceCount = maxLength - 1;
 
-  // 1. letter-spacing (L_spacing) の計算 (均等両端揃え)
+  // 3. 計算処理
+  // 文字列全体の占有幅 = 文字の幅 × 文字数
   const totalCharWidth = characterWidth * maxLength;
-  const totalSpaceNeeded = elementWidth - totalCharWidth;
 
-  // 文字間の間隔 (letter-spacing)
-  const letterSpacing = totalSpaceNeeded / spaceCount;
+  // 均等に空けたいスペースの合計 = 要素の幅 - 文字列全体の占有幅
+  const totalSpace = elementWidth - totalCharWidth;
 
-  // 2. padding-left の計算
+  // 左右の端の半間隔を含めた、間隔の総数 = 文字数 (N)
+  const totalMarginUnits = maxLength;
 
-  // letter-spacingを設定した後の文字列全体の視覚的な幅 (W_visual)
-  // W_visual = (C * N) + (L_spacing * (N - 1))
-  const visualWidth = totalCharWidth + (letterSpacing * spaceCount);
+  // letter-spacing = スペースの合計 / 間隔の総数
+  const letterSpacing = totalSpace / totalMarginUnits;
 
-  // 右側にできる余白 (W_elm - W_visual)
-  const rightSideMargin = elementWidth - visualWidth;
+  const paddingLeft = letterSpacing / 2;
 
-  // 中央寄せのために必要な左側のパディング (右側余白の半分)
-  const paddingLeft = rightSideMargin / 2;
-
-  // 3. CSSの適用
+  // 4. CSSの適用
   $elm.css({
     'letter-spacing': `${letterSpacing.toFixed(2)}px`,
-    'text-align': 'left', // 左揃えに戻す
     'padding-left': `${paddingLeft.toFixed(2)}px`,
-    'padding-right': '0px', // 右パディングはリセット
+    'text-align': 'center',
   });
+
+  console.log(`Max Length: ${maxLength}, Spacing: ${letterSpacing.toFixed(2)}px`);
 }
 
 function setEqualSpacing() {
