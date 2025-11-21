@@ -1624,7 +1624,7 @@ function applyJustifiedSpacing(selector) {
 }
 
 function setEqualSpacing() {
-  const allPages = $('div[id^="iftc_cf_inputarea_"]').children().find('[maxlength]');
+  const allPages = $('div[id^="iftc_cf_inputarea_"]').find('[maxlength]');
   allPages.each((_, elm) => {
     applyJustifiedSpacing(elm);
   });
