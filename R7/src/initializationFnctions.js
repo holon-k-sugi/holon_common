@@ -270,6 +270,84 @@ function setTenantID() {
   InputObjects.setValueByIndex('LAST_TENANT_ID', InputObjects.getValue('TENANT_ID'));
 }
 
+/**
+ * 指定された要素のスタイルに基づき、1文字（ここでは半角数字）の幅を測定する関数
+ * @param {jQuery} $elm - スタイルを適用したいinput要素のjQueryオブジェクト
+ * @returns {number} 1文字の幅（px）
+ */
+function getCharacterWidth($elm) {
+  // 測定用の一時的な要素を作成
+  const $measurer = $('<span>0</span>');
+
+  // スタイルをコピー（font-size, font-familyなど）
+  $measurer.css({
+    'font-family': $elm.css('font-family'),
+    'font-size': $elm.css('font-size'),
+    visibility: 'hidden',
+    position: 'absolute',
+    'white-space': 'nowrap',
+    'letter-spacing': '0', // letter-spacingが影響しないようにリセット
+  });
+
+  // bodyに追加して幅を測定
+  $('body').append($measurer);
+  const charWidth = $measurer.width();
+
+  // 測定用要素を削除
+  $measurer.remove();
+
+  return charWidth;
+}
+
+/**
+ * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等中央寄せする
+ * @param {string} selector - 対象のinput要素のセレクター
+ */
+function applyJustifiedSpacing(selector) {
+  const $elm = $(selector);
+
+  // 1. 必要な値の取得
+  const elementWidth = $elm.width();
+  const maxLength = parseInt($elm.attr('maxlength'), 10);
+
+  // 文字数が1以下の場合は何もしない
+  if (maxLength < 1 || isNaN(maxLength)) {
+    $elm.css({ 'letter-spacing': 'normal', 'text-align': 'center' });
+    return;
+  }
+
+  // 2. 1文字の幅を測定
+  const characterWidth = getCharacterWidth($elm);
+
+  // 3. 計算処理
+  // 文字列全体の占有幅 = 文字の幅 × 文字数
+  const totalCharWidth = characterWidth * maxLength;
+
+  // 均等に空けたいスペースの合計 = 要素の幅 - 文字列全体の占有幅
+  const totalSpace = elementWidth - totalCharWidth;
+
+  // 左右の端の半間隔を含めた、間隔の総数 = 文字数 (N)
+  const totalMarginUnits = maxLength;
+
+  // letter-spacing = スペースの合計 / 間隔の総数
+  const letterSpacing = totalSpace / totalMarginUnits;
+
+  // 4. CSSの適用
+  $elm.css({
+    'letter-spacing': `${letterSpacing.toFixed(2)}px`,
+    'text-align': 'center',
+  });
+
+  console.log(`Max Length: ${maxLength}, Spacing: ${letterSpacing.toFixed(2)}px`);
+}
+
+function setEqualSpacing() {
+  const allPages = $('div[id^="iftc_cf_inputarea_"]').children().find('[maxlength]');
+  allPages.each((_, elm) => {
+    applyJustifiedSpacing(elm);
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -290,6 +368,7 @@ function executeFuncitonsOnload() {
   onLoadCompanyMaster();
   linkifyTspanText();
   getWrongFormIdentifiers();
+  setEqualSpacing();
   if (window.location.hostname === 'stg.joseikin-cloud.jp') {
     console.log('---STG用デバッグ情報開始---');
     getUnmappedObjList();
