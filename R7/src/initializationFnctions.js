@@ -247,7 +247,7 @@ function onLoadExecutives() {
     [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
       const tmp = [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
         const name = `${prefix}NAME_${result.obji + j}`;
-        if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) < (result.page + i)) return false;
+        if (!InputObjects.objExists(name) || InputObjects.getLengthOfPageListByName(name) - 1 < (result.page + i)) return false;
         Object.keys(suffixes).forEach(suffix => {
           const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
           const objName = `${prefix}${suffix}_${result.obji + j}`;
