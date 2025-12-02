@@ -1526,8 +1526,8 @@ function onLoadExecutives() {
 
   [...Array(Executives.getNumOfExecutives())].reduce(({ page, obji }, _, num) => {
     const result = { page, obji };
-    const tmp = [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
-      const tmp = [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
+    const existsInPage = [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
+      const existsInIndex = [...Array(MAX_OBJECTS_NUM - obji)].some((___, j) => {
         const name = `${prefix}NAME_${result.obji + j}`;
         if (!InputObjects.objExists(name)) return false;
         if (InputObjects.getLengthOfPageListByName(name) - 1 < (result.page + i)) return false;
@@ -1542,10 +1542,10 @@ function onLoadExecutives() {
         result.obji += j + 1;
         return true;
       });
-      if (!tmp || MAX_OBJECTS_NUM - obji === result.obji) result.obji = 0;
-      return tmp;
+      if (!existsInIndex || MAX_OBJECTS_NUM - obji === result.obji) result.obji = 0;
+      return existsInIndex;
     });
-    if (!tmp && MAX_OBJECTS_NUM - obji === result.obji) result.page += 1;
+    if (!existsInPage && MAX_OBJECTS_NUM - obji === result.obji) result.page += 1;
     return result;
   }, { page: 0, obji: 0 });
 }
