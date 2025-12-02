@@ -1545,7 +1545,7 @@ function onLoadExecutives() {
       if (!existsInIndex || MAX_OBJECTS_NUM - obji === result.obji) result.obji = 0;
       return existsInIndex;
     });
-    if (!existsInPage && MAX_OBJECTS_NUM - obji === result.obji) result.page += 1;
+    if (!existsInPage) result.page += 1;
     return result;
   }, { page: 0, obji: 0 });
 }
