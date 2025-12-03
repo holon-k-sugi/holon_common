@@ -98,6 +98,8 @@ class CompanyMaster {
     BANK_HOLDER_KANA: 'ACCOUNT_HOLDER_NAME_KANA',
     YUCHO_SYMBOL: 'JP_POST_SYMBOL',
     YUCHO_NUM: 'JP_POST_NUMBER',
+    BANK_TYPE: 'ACCOUNT_TYPE',
+    BANK_CODE: 'F_I_CODE',
   };
 
   static #hasProcessedValue = {
@@ -106,8 +108,6 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
-    BANK_TYPE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('ACCOUNT_TYPE')),
-    BANK_CODE: () => (InputObjects.getValue('IS_USING_JP_BANK') === '1' ? '' : InputObjects.getValue('F_I_CODE')),
   };
 
   static #withHyphen = {
