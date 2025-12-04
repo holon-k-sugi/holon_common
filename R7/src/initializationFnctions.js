@@ -354,7 +354,7 @@ function setEqualSpacing() {
 }
 
 function showWrongFileName() {
-  const formFileName = PageList.getFileName();
+  const formFileName = PageList.getFileNameList();
   formFileName.forEach(name => {
     const splitName = name.split('_');
     const isFormInformation = splitName[1].substring(1, 2) === '0';

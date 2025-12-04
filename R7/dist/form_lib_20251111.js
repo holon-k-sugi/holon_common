@@ -793,8 +793,9 @@ class PageList {
     return this.#addPages.length;
   }
 
-  static getFileName() {
-    return $('[id^="iftc_cf_page_"]').each((i, elm) => $(elm).attr('class').split(' ')[0].split('_').slice(3).join('_'));
+  static getFileNameList() {
+    const fileNameList = $('[id^="iftc_cf_page_"]').map((i, elm) => $(elm).attr('class').split(' ')[0].split('_').slice(3).join('_'));
+    return $.makeArray(fileNameList);
   }
 }
 class RadioButtonGroup {
@@ -1641,7 +1642,7 @@ function setEqualSpacing() {
 }
 
 function showWrongFileName() {
-  const formFileName = PageList.getFileName();
+  const formFileName = PageList.getFileNameList();
   formFileName.forEach(name => {
     const splitName = name.split('_');
     const isFormInformation = splitName[1].substring(1, 2) === '0';
