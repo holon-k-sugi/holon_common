@@ -70,4 +70,8 @@ class PageList {
   static getLengthOfAddPage() {
     return this.#addPages.length;
   }
+
+  static getFileName() {
+    return $('[id^="iftc_cf_page_"]').each((i, elm) => $(elm).attr('class').split(' ')[0].split('_').slice(3).join('_'));
+  }
 }

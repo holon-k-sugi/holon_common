@@ -353,6 +353,16 @@ function setEqualSpacing() {
   });
 }
 
+function showWrongFileName() {
+  const formFileName = PageList.getFileName();
+  formFileName.forEach(name => {
+    const splitName = name.split('_');
+    const isFormInformation = splitName[1].substring(1, 2) === '0';
+    const isCover = splitName[2] === 'cover';
+    if (isFormInformation && !isCover) console.warn(`${name} のファイル名が間違っています。様式情報には必ず cover をつけてください。`);
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -379,6 +389,7 @@ function executeFuncitonsOnload() {
     getUnmappedObjList();
     showErrorConfig();
     showDuplicateObject();
+    showWrongFileName();
     console.log('---STG用デバッグ情報終了---');
   }
   setTenantID();

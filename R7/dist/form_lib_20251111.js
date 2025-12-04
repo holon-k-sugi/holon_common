@@ -139,6 +139,7 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
+    CAPITAL_STOCK_PER10K: () => Math.floor(InputObjects.getValue('CAPITAL') / 10000),
   };
 
   static #withHyphen = {
@@ -790,6 +791,10 @@ class PageList {
 
   static getLengthOfAddPage() {
     return this.#addPages.length;
+  }
+
+  static getFileName() {
+    return $('[id^="iftc_cf_page_"]').each((i, elm) => $(elm).attr('class').split(' ')[0].split('_').slice(3).join('_'));
   }
 }
 class RadioButtonGroup {
@@ -1635,6 +1640,16 @@ function setEqualSpacing() {
   });
 }
 
+function showWrongFileName() {
+  const formFileName = PageList.getFileName();
+  formFileName.forEach(name => {
+    const splitName = name.split('_');
+    const isFormInformation = splitName[1].substring(1, 2) === '0';
+    const isCover = splitName[2] === 'cover';
+    if (isFormInformation && !isCover) console.warn(`${name} のファイル名が間違っています。様式情報には必ず cover をつけてください。`);
+  });
+}
+
 // eslint-disable-next-line no-unused-vars
 function initializeInstances() {
   InputObjects.initialize();
@@ -1661,6 +1676,7 @@ function executeFuncitonsOnload() {
     getUnmappedObjList();
     showErrorConfig();
     showDuplicateObject();
+    showWrongFileName();
     console.log('---STG用デバッグ情報終了---');
   }
   setTenantID();
