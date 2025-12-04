@@ -342,8 +342,6 @@ function applyJustifiedSpacing(selector) {
     'padding-left': `${paddingLeft.toFixed(2)}px`,
     'text-align': 'center',
   });
-
-  console.log(`Max Length: ${maxLength}, Spacing: ${letterSpacing.toFixed(2)}px`);
 }
 
 function setEqualSpacing() {
