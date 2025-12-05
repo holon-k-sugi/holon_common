@@ -343,3 +343,13 @@ function shouldRunScriptOnLoad() {
 function getEmployeesValue(index, key) {
   return Employees.getEmployeesValue(index, key);
 }
+
+// eslint-disable-next-line no-unused-vars
+function setPlaceholder(name, text) {
+  // ('ITEXT1000', 'yyyy/mm/dd')
+  if (typeof name === 'string' && typeof text === 'string') $(getSelector(name)).attr('placeholder', text);
+  // (['ITEXT1000', 'ITEXT1001'], 'yyyy/mm/dd')
+  if (Array.isArray(name) && typeof text === 'string') $(makeSelector(name)).attr('placeholder', text);
+  // ([['ITEXT1000', 'yyyy'], ['ITEXT1001', 'mm'], ['ITEXT1002', 'dd']])
+  if (Array.isArray(name) && text === undefined) name.forEach(([n, t]) => $(getSelector(n)).attr('placeholder', t));
+}
