@@ -1427,7 +1427,11 @@ function showDocInfo() {
   const libUrl = $('script[src*="form_lib"]').attr('src').split('?')[0].split('/');
   console.log(`ライブラリ名：${libUrl.find(v => v.indexOf('form_lib_') > -1)} `);
   const ver = libUrl.find(v => v.indexOf('@') > -1);
-  console.log(`ライブラリVer: ${ver === undefined ? 'なし' : ver} `);
+  console.log(`ライブラリVer：${ver === undefined ? 'なし' : ver} `);
+  const amountReceived = InputObjects.getValue('AMOUNT_RECEIVED');
+  console.log(`支給額：${amountReceived === '' ? '未入力' : `${Number(amountReceived).toLocaleString()} 円`} `);
+  const setTargetUserName = InputObjects.getValue('TARGET_USER_NAME');
+  console.log(`対象者氏名：${setTargetUserName === '' ? '未入力' : setTargetUserName} `);
 }
 
 function showErrorConfig() {
