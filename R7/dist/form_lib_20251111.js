@@ -1524,6 +1524,7 @@ function getWrongFormIdentifiers() {
     const correctIdentifier = formFileName.split('_').join('');
 
     if (formIdentifiers[formFileName] === undefined && formIdentifier !== correctIdentifier) formIdentifiers[formFileName] = correctIdentifier;
+    return true;
   });
   Object.keys(formIdentifiers).forEach(formIdentifier => {
     console.warn(`${formIdentifier} の識別子が間違っています。正しい識別子は下記です。`);
@@ -1676,6 +1677,16 @@ function initializeInstances() {
 }
 
 // eslint-disable-next-line no-unused-vars
+function debugOnStg() {
+  console.log('---STG用デバッグ情報開始---');
+  getUnmappedObjList();
+  showErrorConfig();
+  showDuplicateObject();
+  showWrongFileName();
+  console.log('---STG用デバッグ情報終了---');
+}
+
+// eslint-disable-next-line no-unused-vars
 function executeFuncitonsOnload() {
   showDocInfo();
   onLoadRadioButton();
@@ -1684,13 +1695,6 @@ function executeFuncitonsOnload() {
   linkifyTspanText();
   getWrongFormIdentifiers();
   setEqualSpacing();
-  if (window.location.hostname === 'stg.joseikin-cloud.jp') {
-    console.log('---STG用デバッグ情報開始---');
-    getUnmappedObjList();
-    showErrorConfig();
-    showDuplicateObject();
-    showWrongFileName();
-    console.log('---STG用デバッグ情報終了---');
-  }
+  if (window.location.hostname === 'stg.joseikin-cloud.jp') debugOnStg();
   setTenantID();
 }
