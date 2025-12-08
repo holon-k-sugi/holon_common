@@ -1538,13 +1538,15 @@ function onLoadExecutives() {
     NAME: { key: 'full_name', value: x => x },
     NAME_KANA: { key: 'full_name_kana', value: x => x },
     POSITION: { key: 'post', value: x => x },
-    BIRTHDAY_Y: { key: 'birthday', value: x => String(x).slice(0, 4) },
-    BIRTHDAY_M: { key: 'birthday', value: x => String(x).slice(4, 6) },
-    BIRTHDAY_D: { key: 'birthday', value: x => String(x).slice(6, 8) },
+    BIRTHDAY_Y: { key: 'birthday', value: x => Number(String(x).slice(0, 4)) },
+    BIRTHDAY_M: { key: 'birthday', value: x => Number(String(x).slice(4, 6)) },
+    BIRTHDAY_D: { key: 'birthday', value: x => Number(String(x).slice(6, 8)) },
   };
   const MAX_PAGE_NUM = 5;
   const MAX_OBJECTS_NUM = 20;
-
+  const tenantID = InputObjects.getValue('TENANT_ID');
+  const lastTenantID = InputObjects.getValue('LAST_TENANT_ID');
+  const isSameTenant = tenantID === lastTenantID;
   [...Array(Executives.getNumOfExecutives())].reduce(({ page, obji }, _, num) => {
     const result = { page, obji };
     const existsInPage = [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
@@ -1556,7 +1558,7 @@ function onLoadExecutives() {
           const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
           const objName = `${prefix}${suffix}_${result.obji + j}`;
           if (!InputObjects.objExists(objName)) return;
-          if (value === '') return;
+          if (value === '' && isSameTenant) return;
           InputObjects.setValueByIndex(objName, result.page + i, value);
         });
         result.page += i;
