@@ -1538,9 +1538,9 @@ function onLoadExecutives() {
     NAME: { key: 'full_name', value: x => x },
     NAME_KANA: { key: 'full_name_kana', value: x => x },
     POSITION: { key: 'post', value: x => x },
-    BIRTHDAY_Y: { key: 'birthday', value: x => Number(String(x).slice(0, 4)) },
-    BIRTHDAY_M: { key: 'birthday', value: x => Number(String(x).slice(4, 6)) },
-    BIRTHDAY_D: { key: 'birthday', value: x => Number(String(x).slice(6, 8)) },
+    BIRTHDAY_Y: { key: 'birthday', value: x => Number(String(x).slice(0, 4)) || '' },
+    BIRTHDAY_M: { key: 'birthday', value: x => Number(String(x).slice(4, 6)) || '' },
+    BIRTHDAY_D: { key: 'birthday', value: x => Number(String(x).slice(6, 8)) || '' },
   };
   const MAX_PAGE_NUM = 5;
   const MAX_OBJECTS_NUM = 20;
