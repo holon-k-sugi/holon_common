@@ -248,7 +248,14 @@ function onLoadExecutives() {
   const MAX_OBJECTS_NUM = 20;
   const tenantID = InputObjects.getValue('TENANT_ID');
   const lastTenantID = InputObjects.getValue('LAST_TENANT_ID');
-  const isSameTenant = tenantID === lastTenantID;
+  if (tenantID !== lastTenantID) InputObjects.getAllObjNameList().forEach(name => {
+    const splitName = name.split('_');
+    if (splitName[0] === 'EXECUTIVES') {
+      const pageNum = InputObjects.getLengthOfPageListByName(name);
+      [...Array(pageNum)].forEach((_, i) => InputObjects.setValueByIndex(name, i, ''));
+    }
+  });
+
   [...Array(Executives.getNumOfExecutives())].reduce(({ page, obji }, _, num) => {
     const result = { page, obji };
     const existsInPage = [...Array(MAX_PAGE_NUM - page)].some((__, i) => {
@@ -260,7 +267,7 @@ function onLoadExecutives() {
           const value = suffixes[suffix].value(Executives.getValue(suffixes[suffix].key, num));
           const objName = `${prefix}${suffix}_${result.obji + j}`;
           if (!InputObjects.objExists(objName)) return;
-          if (value === '' && isSameTenant) return;
+          if (value === '') return;
           InputObjects.setValueByIndex(objName, result.page + i, value);
         });
         result.page += i;
