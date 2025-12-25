@@ -141,7 +141,7 @@ function showDocInfo() {
   const ver = libUrl.find(v => v.indexOf('@') > -1);
   console.log(`ライブラリVer：${ver === undefined ? 'なし' : ver} `);
   const amountReceived = InputObjects.getValue('AMOUNT_RECEIVED');
-  console.log(`支給額：${amountReceived === '' ? '未入力' : `${Number.isNaN(amountReceived) ? Number(amountReceived).toLocaleString() : amountReceived} 円`} `);
+  console.log(`支給額：${amountReceived === '' ? '未入力' : `${Number.isNaN(amountReceived) ? amountReceived : Number(amountReceived).toLocaleString()} 円`} `);
   const setTargetUserName = InputObjects.getValue('TARGET_USER_NAME');
   console.log(`対象者氏名：${setTargetUserName === '' ? '未入力' : setTargetUserName} `);
 }
