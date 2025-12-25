@@ -346,28 +346,23 @@ function applyJustifiedSpacing(selector) {
   const styleConfig = {
     left: {
       paddingLeft: halfSpacing,
-      paddingRight: 0,
-      marginRight: 0
+      paddingRight: 0
     },
     start: {
       paddingLeft: halfSpacing,
-      paddingRight: 0,
-      marginRight: 0
+      paddingRight: 0
     },
     right: {
       paddingLeft: 0,
-      paddingRight: halfSpacing,
-      marginRight: -letterSpacing
+      paddingRight: halfSpacing
     },
     end: {
       paddingLeft: 0,
-      paddingRight: halfSpacing,
-      marginRight: -letterSpacing
+      paddingRight: halfSpacing
     },
     center: {
       paddingLeft: halfSpacing,
-      paddingRight: halfSpacing,
-      marginRight: 0
+      paddingRight: halfSpacing
     },
   };
 
@@ -378,8 +373,16 @@ function applyJustifiedSpacing(selector) {
     'letter-spacing': `${letterSpacing.toFixed(2)}px`,
     'padding-left': `${config.paddingLeft.toFixed(2)}px`,
     'padding-right': `${config.paddingRight.toFixed(2)}px`,
-    'margin-right': `${config.marginRight.toFixed(2)}px`,
   });
+
+  // 6. 右寄せまたは左寄せの場合、テキストの末尾にletter-spacingをキャンセルする要素を追加
+  if (textAlign === 'right' || textAlign === 'end') {
+    // 既存のキャンセル要素を削除
+    $elm.find('.letter-spacing-cancel').remove();
+
+    // 負のletter-spacingを持つspan要素を追加
+    $elm.append(`<span class="letter-spacing-cancel" style="letter-spacing: ${(-letterSpacing).toFixed(2)}px;">&nbsp;</span>`);
+  } else $elm.find('.letter-spacing-cancel').remove();
 }
 
 function setEqualSpacing() {
