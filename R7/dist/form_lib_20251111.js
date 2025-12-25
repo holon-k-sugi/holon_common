@@ -113,7 +113,7 @@ class CompanyMaster {
     INDUSTRIES_TYPE: 'INDUSTRIES',
     LABOR_DELEGATE: 'WORKING_REPRESENTATIVE_FULL_NAM',
     CUTOFFDATE: 'CUTOFF_DATE',
-    PAYMENT_DATE: 'PAYMENT_DATE',
+    PAYMENTDATE: 'PAYMENT_DATE',
     JGYNSHBIRTHDAY: 'REPRESENTATIVE_BIRTHDAY',
     FOUNDATIONYEAR: 'FOUNDATION_YEAR',
     FINANCIALMONTH: 'FINANCIAL_MONTH',
@@ -1439,7 +1439,7 @@ function showDocInfo() {
   const ver = libUrl.find(v => v.indexOf('@') > -1);
   console.log(`ライブラリVer：${ver === undefined ? 'なし' : ver} `);
   const amountReceived = InputObjects.getValue('AMOUNT_RECEIVED');
-  console.log(`支給額：${amountReceived === '' ? '未入力' : `${Number(amountReceived).toLocaleString()} 円`} `);
+  console.log(`支給額：${amountReceived === '' ? '未入力' : `${Number.isNaN(amountReceived) ? Number(amountReceived).toLocaleString() : amountReceived} 円`} `);
   const setTargetUserName = InputObjects.getValue('TARGET_USER_NAME');
   console.log(`対象者氏名：${setTargetUserName === '' ? '未入力' : setTargetUserName} `);
 }
@@ -1641,11 +1641,14 @@ function applyJustifiedSpacing(selector) {
   const letterSpacing = totalSpace / totalMarginUnits;
 
   // 4. text-alignに応じたpadding設定
+  // letter-spacingは最後の文字の後ろにも適用されるため、
+  // 左寄せ: 左に半間隔、右は letter-spacing でキャンセル
+  // 右寄せ: 右に半間隔、左は 0
   const paddingConfig = {
-    left: { left: letterSpacing, right: 0 },
-    start: { left: letterSpacing, right: 0 },
-    right: { left: 0, right: letterSpacing },
-    end: { left: 0, right: letterSpacing },
+    left: { left: letterSpacing / 2, right: 0 },
+    start: { left: letterSpacing / 2, right: 0 },
+    right: { left: 0, right: letterSpacing / 2 },
+    end: { left: 0, right: letterSpacing / 2 },
     center: { left: letterSpacing / 2, right: letterSpacing / 2 },
   };
 
