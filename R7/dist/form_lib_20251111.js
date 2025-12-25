@@ -1637,28 +1637,46 @@ function applyJustifiedSpacing(selector) {
   // 3. 計算処理
   const totalCharWidth = characterWidth * maxLength;
   const totalSpace = elementWidth - totalCharWidth;
-  const totalMarginUnits = maxLength;
-  const letterSpacing = totalSpace / totalMarginUnits;
+  const letterSpacing = totalSpace / maxLength;
+  const halfSpacing = letterSpacing / 2;
 
-  // 4. text-alignに応じたpadding設定
-  // letter-spacingは最後の文字の後ろにも適用されるため、
-  // 左寄せ: 左に半間隔、右は letter-spacing でキャンセル
-  // 右寄せ: 右に半間隔、左は 0
-  const paddingConfig = {
-    left: { left: letterSpacing / 2, right: 0 },
-    start: { left: letterSpacing / 2, right: 0 },
-    right: { left: 0, right: letterSpacing / 2 },
-    end: { left: 0, right: letterSpacing / 2 },
-    center: { left: letterSpacing / 2, right: letterSpacing / 2 },
+  // 4. text-alignに応じたスタイル設定
+  const styleConfig = {
+    left: {
+      paddingLeft: halfSpacing,
+      paddingRight: 0,
+      marginRight: 0
+    },
+    start: {
+      paddingLeft: halfSpacing,
+      paddingRight: 0,
+      marginRight: 0
+    },
+    right: {
+      paddingLeft: 0,
+      paddingRight: halfSpacing,
+      marginRight: -letterSpacing
+    },
+    end: {
+      paddingLeft: 0,
+      paddingRight: halfSpacing,
+      marginRight: -letterSpacing
+    },
+    center: {
+      paddingLeft: halfSpacing,
+      paddingRight: halfSpacing,
+      marginRight: 0
+    },
   };
 
-  const padding = paddingConfig[textAlign] || paddingConfig.center;
+  const config = styleConfig[textAlign] || styleConfig.center;
 
   // 5. CSSの適用
   $elm.css({
     'letter-spacing': `${letterSpacing.toFixed(2)}px`,
-    'padding-left': `${padding.left.toFixed(2)}px`,
-    'padding-right': `${padding.right.toFixed(2)}px`,
+    'padding-left': `${config.paddingLeft.toFixed(2)}px`,
+    'padding-right': `${config.paddingRight.toFixed(2)}px`,
+    'margin-right': `${config.marginRight.toFixed(2)}px`,
   });
 }
 
