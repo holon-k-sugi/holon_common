@@ -1623,66 +1623,36 @@ function applyJustifiedSpacing(selector) {
   // 1. 必要な値の取得
   const elementWidth = $elm.width();
   const maxLength = parseInt($elm.attr('maxlength'), 10);
-  const textAlign = $elm.css('text-align');
 
   // 文字数が1以下の場合は何もしない
   if (maxLength < 1 || Number.isNaN(maxLength)) {
-    $elm.css({ 'letter-spacing': 'normal' });
+    $elm.css({ 'letter-spacing': 'normal', 'text-align': 'center' });
     return;
   }
 
   // 2. 1文字の幅を測定
   const characterWidth = getCharacterWidth($elm);
 
-  // 3. 計算処理（全パターン共通）
+  // 3. 計算処理
+  // 文字列全体の占有幅 = 文字の幅 × 文字数
   const totalCharWidth = characterWidth * maxLength;
+
+  // 均等に空けたいスペースの合計 = 要素の幅 - 文字列全体の占有幅
   const totalSpace = elementWidth - totalCharWidth;
-  const letterSpacing = totalSpace / maxLength;
-  const halfSpacing = letterSpacing / 2;
 
-  // 4. text-alignに応じたスタイル設定
-  const styleConfig = {
-    left: { 
-      paddingLeft: halfSpacing, 
-      paddingRight: halfSpacing,
-      position: 'relative',
-      left: 0
-    },
-    start: { 
-      paddingLeft: halfSpacing, 
-      paddingRight: halfSpacing,
-      position: 'relative',
-      left: 0
-    },
-    right: { 
-      paddingLeft: halfSpacing, 
-      paddingRight: halfSpacing,
-      position: 'relative',
-      left: -letterSpacing  // 全体を左にシフトしてletter-spacingの最後の余白を相殺
-    },
-    end: { 
-      paddingLeft: halfSpacing, 
-      paddingRight: halfSpacing,
-      position: 'relative',
-      left: -letterSpacing
-    },
-    center: { 
-      paddingLeft: halfSpacing, 
-      paddingRight: halfSpacing,
-      position: 'relative',
-      left: 0
-    },
-  };
+  // 左右の端の半間隔を含めた、間隔の総数 = 文字数 (N)
+  const totalMarginUnits = maxLength;
 
-  const config = styleConfig[textAlign] || styleConfig.center;
+  // letter-spacing = スペースの合計 / 間隔の総数
+  const letterSpacing = totalSpace / totalMarginUnits;
 
-  // 5. CSSの適用
+  const paddingLeft = letterSpacing / 2;
+
+  // 4. CSSの適用
   $elm.css({
     'letter-spacing': `${letterSpacing.toFixed(2)}px`,
-    'padding-left': `${config.paddingLeft.toFixed(2)}px`,
-    'padding-right': `${config.paddingRight.toFixed(2)}px`,
-    'position': config.position,
-    'left': `${config.left.toFixed(2)}px`,
+    'padding-left': `${paddingLeft.toFixed(2)}px`,
+    'text-align': 'center',
   });
 }
 
