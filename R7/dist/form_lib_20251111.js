@@ -1614,7 +1614,7 @@ function getCharacterWidth($elm) {
 }
 
 /**
- * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等中央寄せする
+ * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等配置する関数
  * @param {string} selector - 対象のinput要素のセレクター
  */
 function applyJustifiedSpacing(selector) {
@@ -1623,10 +1623,11 @@ function applyJustifiedSpacing(selector) {
   // 1. 必要な値の取得
   const elementWidth = $elm.width();
   const maxLength = parseInt($elm.attr('maxlength'), 10);
+  const textAlign = $elm.css('text-align');
 
   // 文字数が1以下の場合は何もしない
   if (maxLength < 1 || Number.isNaN(maxLength)) {
-    $elm.css({ 'letter-spacing': 'normal', 'text-align': 'center' });
+    $elm.css({ 'letter-spacing': 'normal' });
     return;
   }
 
@@ -1634,25 +1635,27 @@ function applyJustifiedSpacing(selector) {
   const characterWidth = getCharacterWidth($elm);
 
   // 3. 計算処理
-  // 文字列全体の占有幅 = 文字の幅 × 文字数
   const totalCharWidth = characterWidth * maxLength;
-
-  // 均等に空けたいスペースの合計 = 要素の幅 - 文字列全体の占有幅
   const totalSpace = elementWidth - totalCharWidth;
-
-  // 左右の端の半間隔を含めた、間隔の総数 = 文字数 (N)
   const totalMarginUnits = maxLength;
-
-  // letter-spacing = スペースの合計 / 間隔の総数
   const letterSpacing = totalSpace / totalMarginUnits;
 
-  const paddingLeft = letterSpacing / 2;
+  // 4. text-alignに応じたpadding設定
+  const paddingConfig = {
+    left: { left: letterSpacing, right: 0 },
+    start: { left: letterSpacing, right: 0 },
+    right: { left: 0, right: letterSpacing },
+    end: { left: 0, right: letterSpacing },
+    center: { left: letterSpacing / 2, right: letterSpacing / 2 },
+  };
 
-  // 4. CSSの適用
+  const padding = paddingConfig[textAlign] || paddingConfig.center;
+
+  // 5. CSSの適用
   $elm.css({
     'letter-spacing': `${letterSpacing.toFixed(2)}px`,
-    'padding-left': `${paddingLeft.toFixed(2)}px`,
-    'text-align': 'center',
+    'padding-left': `${padding.left.toFixed(2)}px`,
+    'padding-right': `${padding.right.toFixed(2)}px`,
   });
 }
 
