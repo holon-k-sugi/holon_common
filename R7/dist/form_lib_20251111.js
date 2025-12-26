@@ -139,7 +139,7 @@ class CompanyMaster {
     JGYNSHBIRTHDAY_D: () => InputObjects.getValue('JGYNSHBIRTHDAY').slice(6, 8),
     SHRSH_NUM: () => InputObjects.getValue('LSS_ATTORNEY_REGIST_NUMBER') || InputObjects.getValue('S_LSS_ATTORNEY_REGIST_NUMBER'),
     ROUKI_NAME: () => InputObjects.getValue('LSIO').split('労働基準監督署')[0],
-    CAPITAL_STOCK_PER10K: () => Math.floor(InputObjects.getValue('CAPITAL') / 10000),
+    CAPITAL_STOCK_PER10K: () => (InputObjects.getValue('CAPITAL') === '' ? '' : Math.floor(InputObjects.getValue('CAPITAL') / 10000)),
   };
 
   static #withHyphen = {
@@ -1614,7 +1614,7 @@ function getCharacterWidth($elm) {
 }
 
 /**
- * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等配置する関数
+ * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等中央寄せする
  * @param {string} selector - 対象のinput要素のセレクター
  */
 function applyJustifiedSpacing(selector) {

@@ -316,7 +316,7 @@ function getCharacterWidth($elm) {
 }
 
 /**
- * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等配置する関数
+ * input要素のmaxlength分の文字を、左右に半分の間隔を空けて均等中央寄せする
  * @param {string} selector - 対象のinput要素のセレクター
  */
 function applyJustifiedSpacing(selector) {
