@@ -353,3 +353,36 @@ function setPlaceholder(name, text) {
   // ([['ITEXT1000', 'yyyy'], ['ITEXT1001', 'mm'], ['ITEXT1002', 'dd']])
   if (Array.isArray(name) && text === undefined) name.forEach(([n, t]) => $(getSelector(n)).attr('placeholder', t));
 }
+
+// eslint-disable-next-line no-unused-vars
+function downloadCSV(fileName = 'download.csv') {
+  const objNameList = DMXMapping.getCSVObjList();
+  if (!objNameList || objNameList.length === 0) {
+    console.warn('CSV出力対象のオブジェクトが見つかりませんでした。');
+    return;
+  }
+
+  // 1行目に連番（見出し）、2行目に値を入れる
+  const header = objNameList.map((_, index) => index + 1);
+  const values = objNameList.map(name => {
+    const val = InputObjects.getValueByIndex(name);
+    // 値にカンマや改行、ダブルクォーテーションが含まれる場合はエスケープする
+    if (typeof val === 'string' && (val.includes(',') || val.includes('\n') || val.includes('"'))) {
+      return `"${val.replace(/"/g, '""')}"`;
+    }
+    return val;
+  });
+
+  const data = [header, values];
+  const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+  const csvContent = data.map(row => row.join(',')).join('\n');
+  const blob = new Blob([bom, csvContent], { type: 'text/csv' });
+  const a = document.createElement('a');
+  const url = (window.URL || window.webkitURL).createObjectURL(blob);
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  (window.URL || window.webkitURL).revokeObjectURL(url);
+}
