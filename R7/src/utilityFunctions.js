@@ -374,9 +374,8 @@ function downloadCSV(fileName = 'download.csv') {
   });
 
   const data = [header, values];
-  const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
   const csvContent = data.map(row => row.join(',')).join('\n');
-  const blob = new Blob([bom, csvContent], { type: 'text/csv' });
+  const blob = new Blob([csvContent], { type: 'text/csv' });
   const a = document.createElement('a');
   const url = (window.URL || window.webkitURL).createObjectURL(blob);
   a.href = url;
