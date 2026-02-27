@@ -41,6 +41,7 @@ function onLoadIcon(iconSetting) {
   IconObjects.showIcon(iconSetting);
   onClickCopyPageButton();
   createCSVLabel();
+  onClickDownloadCSVButton();
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -134,7 +135,7 @@ function createCSVLabel() {
 
 // eslint-disable-next-line no-unused-vars
 function onClickDownloadCSVButton() {
-  $(getSelector('DOWNLOAD_CSV_BUTTON')).on('click', () => {
+  $(document).on('click', '#DOWNLOAD_CSV_BUTTON', () => {
     downloadCSV();
   });
 }
