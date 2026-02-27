@@ -40,6 +40,14 @@ class IconObjects {
       isEnabled: () => true,
       getPages: () => [2],
     },
+    downloadCSV: {
+      name: 'DOWNLOAD_CSV_BUTTON',
+      string: 'CSVダウンロード',
+      color: 'rgba(68,201,194,1)',
+      iconType: 'button',
+      isEnabled: () => true,
+      getPages: () => [2],
+    },
   };
 
   static showIcon(iconSetting) {
