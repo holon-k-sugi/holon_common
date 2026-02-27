@@ -1353,12 +1353,11 @@ function downloadCSV(fileName = 'download.csv') {
 
   // Convert to Shift-JIS and download
   const encodeAndDownload = () => {
-    // SJIS非対応文字（?に変換されてしまう文字、ただし元々?の場合は除く）を空文字列に変換する
-    const sanitized = [...csvContent].map(c => {
-      if (c === '?') return c;
-      const sjis = Encoding.convert([c.codePointAt(0)], { to: 'SJIS', from: 'UNICODE' });
-      return (sjis.length === 1 && sjis[0] === 0x3F) ? '' : c;
-    }).join('');
+    // ゼロ幅文字（見た目は空に見えるがSJIS非対応の文字）を空文字列に変換する
+    // U+115F: HANGUL CHOSEONG FILLER, U+200B: ZERO WIDTH SPACE,
+    // U+200C: ZERO WIDTH NON-JOINER, U+200D: ZERO WIDTH JOINER, U+FEFF: BOM
+    const ZERO_WIDTH_CHARS = /[\u115F\u200B\u200C\u200D\uFEFF]/g;
+    const sanitized = csvContent.replace(ZERO_WIDTH_CHARS, '');
     const strArray = [...sanitized].map(c => c.codePointAt(0));
     const sjisBuffer = Encoding.convert(strArray, {
       to: 'SJIS',
