@@ -390,7 +390,13 @@ function downloadCSV(fileName = 'download.csv') {
 
   // Convert to Shift-JIS and download
   const encodeAndDownload = () => {
-    const strArray = csvContent.split('').map(c => c.charCodeAt(0));
+    // SJIS非対応文字（?に変換されてしまう文字、ただし元々?の場合は除く）を空文字列に変換する
+    const sanitized = [...csvContent].map(c => {
+      if (c === '?') return c;
+      const sjis = Encoding.convert([c.codePointAt(0)], { to: 'SJIS', from: 'UNICODE' });
+      return (sjis.length === 1 && sjis[0] === 0x3F) ? '' : c;
+    }).join('');
+    const strArray = [...sanitized].map(c => c.codePointAt(0));
     const sjisBuffer = Encoding.convert(strArray, {
       to: 'SJIS',
       from: 'UNICODE'
