@@ -1339,19 +1339,44 @@ function downloadCSV(fileName = 'download.csv') {
   const data = [header, values];
   const csvContent = data.map(row => row.join(',')).join('\n');
 
-  // Convert standard string to Shift-JIS
-  const sjisEncoding = new TextEncoder('windows-31j', { NONSTANDARD_allowLegacyEncoding: true });
-  const sjisBuffer = sjisEncoding.encode(csvContent);
-  const blob = new Blob([sjisBuffer], { type: 'text/csv' });
+  // Helper to trigger the download
+  const triggerDownload = (blob) => {
+    const a = document.createElement('a');
+    const url = (window.URL || window.webkitURL).createObjectURL(blob);
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    (window.URL || window.webkitURL).revokeObjectURL(url);
+  };
 
-  const a = document.createElement('a');
-  const url = (window.URL || window.webkitURL).createObjectURL(blob);
-  a.href = url;
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  (window.URL || window.webkitURL).revokeObjectURL(url);
+  // Convert to Shift-JIS and download
+  const encodeAndDownload = () => {
+    const strArray = csvContent.split('').map(c => c.charCodeAt(0));
+    const sjisBuffer = Encoding.convert(strArray, {
+      to: 'SJIS',
+      from: 'UNICODE'
+    });
+    const blob = new Blob([new Uint8Array(sjisBuffer)], { type: 'text/csv' });
+    triggerDownload(blob);
+  };
+
+  // Dynamically load encoding.js if not available
+  if (typeof Encoding !== 'undefined') {
+    encodeAndDownload();
+  } else {
+    $.getScript('https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/2.1.0/encoding.min.js')
+      .done(() => {
+        encodeAndDownload();
+      })
+      .fail(() => {
+        console.error('encoding.js の読み込みに失敗したため、UTF-8でダウンロードします。');
+        const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+        const blob = new Blob([bom, csvContent], { type: 'text/csv' });
+        triggerDownload(blob);
+      });
+  }
 }
 // Load 時実行
 // eslint-disable-next-line no-unused-vars
