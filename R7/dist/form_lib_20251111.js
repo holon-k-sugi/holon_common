@@ -1338,7 +1338,12 @@ function downloadCSV(fileName = 'download.csv') {
 
   const data = [header, values];
   const csvContent = data.map(row => row.join(',')).join('\n');
-  const blob = new Blob([csvContent], { type: 'text/csv' });
+
+  // Convert standard string to Shift-JIS
+  const sjisEncoding = new TextEncoder('windows-31j', { NONSTANDARD_allowLegacyEncoding: true });
+  const sjisBuffer = sjisEncoding.encode(csvContent);
+  const blob = new Blob([sjisBuffer], { type: 'text/csv' });
+
   const a = document.createElement('a');
   const url = (window.URL || window.webkitURL).createObjectURL(blob);
   a.href = url;
