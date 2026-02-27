@@ -133,6 +133,13 @@ function createCSVLabel() {
 }
 
 // eslint-disable-next-line no-unused-vars
+function onClickDownloadCSVButton() {
+  $(getSelector('DOWNLOAD_CSV_BUTTON')).on('click', () => {
+    downloadCSV();
+  });
+}
+
+// eslint-disable-next-line no-unused-vars
 function showDocInfo() {
   const formName = $('input[name="jobName"]').val();
   console.log(`フォーム名：${formName.slice(0, 1) === 'J' ? formName.slice(1) : formName} `);
