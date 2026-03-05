@@ -1318,7 +1318,7 @@ function setPlaceholder(name, text) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function downloadCSV(fileName = 'download.csv') {
+function downloadCSV(fileName = `様式入力データ_${new Date().toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(/[^\d]/g, '')}.csv`) {
   const objNameList = DMXMapping.getCSVObjList();
   if (!objNameList || objNameList.length === 0) {
     console.warn('CSV出力対象のオブジェクトが見つかりませんでした。');
