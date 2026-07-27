@@ -1156,8 +1156,7 @@ function setFocusColor() {
       if ($(`#${id} `).attr('tabindex') > 0) return `#${id} `;
       return undefined;
     }).filter(v => v).join()).filter(v => v).join();
-  const focusColor = 'rgba(155,185,225,0.75)';
-  const fieldTabColor = 'rgba(199,218,244,0.5)';
+  const { focusColor = 'rgba(155,185,225,0.75)', fieldTabColor = 'rgba(199,218,244,0.5)' } = LazyEvaluationFunctions.focusSetting?.() || {};
   // 手入力可能なフィールドに色を付ける。
   $(fieldTabIdSelector).css('background', fieldTabColor);
   // フォーカスのあたっているフィールドに色を付ける。
